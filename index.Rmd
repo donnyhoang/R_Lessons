@@ -7,4 +7,4 @@ knit: (function(input_file, encoding) {
  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 ---
 
-Hello, this is a website! Navigate through lessons on the top panel.
+Hello, website is a collection of lessons to learn R. I have created these lessons with my Currie Lab mentees in mind, but anyone is free to use. 

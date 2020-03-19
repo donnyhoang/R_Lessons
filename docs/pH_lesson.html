@@ -509,9 +509,10 @@ $(document).ready(function () {
 <pre class="r"><code>library(ggplot2)
 library(ggpubr)</code></pre>
 <pre><code>## Loading required package: magrittr</code></pre>
+<p>ggplot2 is what we will use to graph the data. ggpubr requires another package, magrittr (which should automatically load). magrittr has an operator we will use later on, “%&gt;%”, and ggpubr is useful for for organizing multiple graphs.</p>
 <p>Load in your data. It should look something like this, depending on where the file is located on your computer.</p>
 <pre class="r"><code>data &lt;- read.csv(&quot;SGH_CR_pH.csv&quot;, header=TRUE)</code></pre>
-<p>Here, you are creating an object called “data” and you are loading in a .csv file. This file has a header, so you must write “head=TRUE”. What happens to your data if you write “header=FALSE”? You can check by typing:</p>
+<p>Here, we are reading in our data, and storing it into an aptly named object called “data”. Of course, you can name it whatever you want. I’m usually lazy and stick with “d”. We are loading in a .csv file with the command read.csv(). This file has a header, so you must write “head=TRUE”. What happens to your data if you write “header=FALSE”? You can check by typing:</p>
 <pre class="r"><code>head(data)</code></pre>
 <pre><code>##       sample treatment day replicate   pH
 ## 1 pH 6_one_A      pH 6   1         A 7.06
@@ -524,9 +525,10 @@ library(ggpubr)</code></pre>
 </div>
 <div id="part-2-organizing-and-sorting-the-data" class="section level1">
 <h1>Part 2: Organizing and sorting the data</h1>
-<p>There are A LOT of comparisons that we could make in this dataset and graphing ALL the data onto the same graph can be overwhelming and obstruct interpretation. For now, let’s focus on specific groups to make our analysis easier. Let’s focus on one treatment at a time. We will only graph data belonging to the CR pH 6 treatment for now. But how can be tell R to only graph a specific portion of our data? R has a nice function, subset(), which we will use to pull out only data that matches your treatment of interest. For example, if I only want CR pH 6 data I will type:</p>
+<p>There are A LOT of comparisons that we could make in this dataset and graphing ALL the data onto the same graph can be overwhelming and obstruct interpretation. For now, let’s focus on specific groups to make our analysis easier. Let’s focus on one treatment at a time. We will only graph data belonging to the CR pH 6 treatment. How can we tell R to only graph a specific portion of our data?</p>
+<p>R has a nice function, subset(), which we will use to pull out only data that matches the treatment of interest. For example, if I only want CR pH 6 data I will type:</p>
 <pre class="r"><code>data1 &lt;- subset(data, data$treatment==&quot;pH 6&quot;)</code></pre>
-<p>Here, we are creating a new object, “data1”, which is a subset of “data”. Here, we have specified R to only add in data if the “treatment” column matches the string “pH 6” which represents our CR pH 6 treatment.</p>
+<p>The the code above, we are storing a subset of “data” into a new object “data1”. Here, we have specified R to only add in data if the “treatment” column matches the string “pH 6” which represents our CR pH 6 treatment.</p>
 </div>
 <div id="part-3-graphing-the-data" class="section level1">
 <h1>Part 3: Graphing the data</h1>
@@ -563,7 +565,7 @@ p1</code></pre>
 </div>
 <div id="part-4-writing-a-function-to-graph-remaining-treatments." class="section level1">
 <h1>Part 4: Writing a function to graph remaining treatments.</h1>
-<p>We only have one treatment graphed. We could copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by “…”), and pipes it (denoted by %&gt;%) to the function we wrote earlier. That is, the “%&gt;%” takes whatever is on the lefthand side, “…” in this case, and puts it through whatever is on the righthand side - our graphing code.</p>
+<p>We only have one treatment graphed. We could copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by “…”), and pipes it (denoted by %&gt;%) to the function we wrote earlier. That is, the “%&gt;%” takes whatever is on the lefthand side, “…” in this case, and puts it through whatever is on the righthand side. In this case, it’s our graphing code.</p>
 <pre class="r"><code>myplotmaker&lt;- function(...){
   return(... %&gt;%
            ggplot(aes(x=day,y=pH,group=replicate))+

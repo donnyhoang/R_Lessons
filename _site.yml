@@ -5,7 +5,7 @@ navbar:
     - text: "Home"
       href: index.html
     - text: "Lesson 1: R basics"
-      href: pH_lesson.html.html
-    - text: "Lesson 2: Data organization in R"
-      href: COD_lesson.html.html
+      href: pH_lesson.html
+    - text: "Lesson 2: Basic Stats in R"
+      href: COD_lesson.html
 
