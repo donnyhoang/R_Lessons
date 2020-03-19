@@ -1,0 +1,147 @@
+---
+title: "pH lesson"
+author: "DQH"
+date: "3/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dataset:
+We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities were used to inoculate CR samples of six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.
+
+Don't forget to downloaded “SGH_CR_pH.csv” that contains the data.
+
+## Excercise:
+
+# Part 1: load in packages and your data
+Create a new R script by navigating to “File” -> “New File” -> “R Script” save and name it as you like, but make sure the extension is “.R”
+
+We will need the packages: ggplot2 and ggpubr. You can load in a package by typing:
+
+```{r}
+library(ggplot2)
+library(ggpubr)
+```
+
+Load in your data. It should look something like this, depending on where the file is located on your computer.
+
+```{r}
+data <- read.csv("SGH_CR_pH.csv", header=TRUE)
+```
+
+Here, you are creating an object called "data" and you are loading in a .csv file. This file has a header, so you must write "head=TRUE". What happens to your data if you write "header=FALSE"? You can check by typing:
+
+```{r}
+head(data)
+```
+
+Don't forget to fix your code before moving forward!
+
+
+# Part 2: Organizing and sorting the data
+
+There are A LOT of comparisons that we could make in this dataset and graphing ALL the data onto the same graph can be overwhelming and obstruct interpretation. For now, let’s focus on specific groups to make our analysis easier. Let’s focus on one treatment at a time. We will only graph data belonging to the CR pH 6 treatment for now. But how can be tell R to only graph a specific portion of our data?
+R has a nice function, subset(), which we will use to pull out only data that matches your treatment of interest. For example, if I only want CR pH 6 data I will type:
+
+```{r}
+data1 <- subset(data, data$treatment=="pH 6")
+```
+
+Here, we are creating a new object, "data1", which is a subset of "data". Here, we have specified R to only add in data if the "treatment" column matches the string "pH 6" which represents our CR pH 6 treatment.
+
+# Part 3: Graphing the data
+We have now subset our data from one treatment. Let’s graph it!
+
+
+```{r}
+p1 <-ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
+  ylim(4,10) +
+  geom_point(aes(shape=replicate))+
+  geom_line() +
+  theme_classic()
+p1
+```
+
+Whoops, looks like we have an error. Since we have more groups than R’s default shape palette, we must explicitly specify more than 6 shapes. This can be done easily. Google “geom_point shapes” to get an idea of what ggplot2 has to offer. I think making shapes identical to the replicate (that is, replicate A will have shape “A”) makes the most sense.
+
+```{r}
+shapeorder <- c(65,66,67,68,69,70,4)
+```
+
+This code creates a list containing the exact shapes we want to use. Now we just need to make a small adjustment to our graph’s code. I added "scale_shape_manual()" to the code, and specified the shapes we wrote above.
+
+```{r}
+p1 <- ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
+  ylim(4,10) +
+  geom_point(aes(shape=replicate))+
+  scale_shape_manual(values=shapeorder)+
+  geom_line() +
+  theme_classic()
+p1
+```
+
+Review what each piece of the command does. What is being added to the graph after every “+”? If you aren’t sure, delete a portion and see how that changes your graph.
+
+You probably noticed that most of these are aesthetic changes, which are up to personal preference. I almost always use “theme_classic()” to remove grid lines and the gray background. I also try to avoid using default ggplot2 colors and try to ensure my color palettes are colorblind friendly, but that’s not relevant in this case.
+
+So, now we have other data graphed. It’s time to interpret!
+
+1)	How does the pH change over time in this pH 6 treatment?
+2)	Are the changes consistent between replicates? Can you think of any reasons that would explain the variation?
+
+# Part 4: Writing a function to graph remaining treatments.
+
+We only have one treatment graphed. We could simply copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly and hard to navigate. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by "..."), and pipes it (denoted by %>%) to the function we wrote earlier. 
+```{r}
+myplotmaker<- function(...){
+  return(... %>%
+           ggplot(aes(x=day,y=pH,group=replicate))+
+           ylim(4,10) +
+           geom_point(aes(shape=replicate))+
+           scale_shape_manual(values=shapeorder)+
+           geom_line() +
+           theme_classic())
+}
+```
+
+Now, we have a function that will create a graph of the data we give it. Feed it the previously subsetted “data1” by typing:
+
+```{r}
+p1 <- myplotmaker(data1)
+p1
+```
+
+This plot should be identical to the graph you created before. Now, we simple need to subset the reamining data, and plot it. I have also added a small code to title each individual graph. 
+
+```{r}
+p1<-myplotmaker(data1)+ggtitle("CR pH 6")
+data2<-subset(data,data$treatment=="pH 6 + MES")
+p2<-myplotmaker(data2)+ggtitle("CR pH6 + MES Buffer")
+data3<-subset(data,data$treatment=="pH 6 + 5% glucose")
+p3<-myplotmaker(data3)+ggtitle("CR pH6 + 5% glucose")
+data4<-subset(data,data$treatment=="pH 6 + 10% glucose")
+p4<-myplotmaker(data4)+ggtitle("CR pH6 + 10% glucose")
+data5<-subset(data,data$treatment=="pH 8")
+p5<-myplotmaker(data5)+ggtitle("CR pH 8")
+data6<-subset(data,data$treatment=="pH 10")
+p6<-myplotmaker(data6)+ggtitle("CR pH 10")
+```
+
+Our graphs are generated. You can look at them individually, but I think looking at all of them together will be more informative. Let's use the ggarrange() function from the package ggpubr.
+
+```{r}
+ggarrange(p1, p2, p3, p4, p5, p6,
+          ncol=3, nrow=2,
+          legend="none")
+```
+
+You probably got a few errors about missing values. That's because I wasn't able to measure the pH of every single sample. You can ignore those messages.
+
+Let’s interpret the data.
+
+1)	The uninoculated control in each data set is replicate “X”. How does it change over the week? Is our data still reliable?
+2)	What conclusions can draw from each treatment? How does the pH change in each one? Are the changes intuitive?
+3)	How does the variation between replicates compare between treatments? What do you think this means?

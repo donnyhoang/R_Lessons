@@ -1,0 +1,8 @@
+name: "R Lessons"
+navbar:
+  title: "My Website"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Lesson 1: pH"
+      href: pH_lesson.html

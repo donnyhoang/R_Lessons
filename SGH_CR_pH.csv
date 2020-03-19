@@ -1,0 +1,295 @@
+sample,treatment,day,replicate,pH
+pH 6_one_A,pH 6,1,A,7.06
+pH 6_one_B,pH 6,1,B,7.4
+pH 6_one_C,pH 6,1,C,7.43
+pH 6_one_D,pH 6,1,D,6.98
+pH 6_one_E,pH 6,1,E,7.1
+pH 6_one_F,pH 6,1,F,6.65
+pH 6_one_X,pH 6,1,X,5.98
+pH 6 + MES_one_A,pH 6 + MES,1,A,5.58
+pH 6 + MES_one_B,pH 6 + MES,1,B,5.63
+pH 6 + MES_one_C,pH 6 + MES,1,C,5.39
+pH 6 + MES_one_D,pH 6 + MES,1,D,5.66
+pH 6 + MES_one_E,pH 6 + MES,1,E,5.77
+pH 6 + MES_one_F,pH 6 + MES,1,F,5.75
+pH 6 + MES_one_X,pH 6 + MES,1,X,5.28
+pH 6 + 5% glucose_one_A,pH 6 + 5% glucose,1,A,NA
+pH 6 + 5% glucose_one_B,pH 6 + 5% glucose,1,B,5.52
+pH 6 + 5% glucose_one_C,pH 6 + 5% glucose,1,C,5
+pH 6 + 5% glucose_one_D,pH 6 + 5% glucose,1,D,5.47
+pH 6 + 5% glucose_one_E,pH 6 + 5% glucose,1,E,6.4
+pH 6 + 5% glucose_one_F,pH 6 + 5% glucose,1,F,6.21
+pH 6 + 5% glucose_one_X,pH 6 + 5% glucose,1,X,5.95
+pH 6 + 10% glucose_one_A,pH 6 + 10% glucose,1,A,5.25
+pH 6 + 10% glucose_one_B,pH 6 + 10% glucose,1,B,5.15
+pH 6 + 10% glucose_one_C,pH 6 + 10% glucose,1,C,5.08
+pH 6 + 10% glucose_one_D,pH 6 + 10% glucose,1,D,5.08
+pH 6 + 10% glucose_one_E,pH 6 + 10% glucose,1,E,5.09
+pH 6 + 10% glucose_one_F,pH 6 + 10% glucose,1,F,5.03
+pH 6 + 10% glucose_one_X,pH 6 + 10% glucose,1,X,6.12
+pH 8_one_A,pH 8,1,A,7.95
+pH 8_one_B,pH 8,1,B,8.3
+pH 8_one_C,pH 8,1,C,8.18
+pH 8_one_D,pH 8,1,D,7.33
+pH 8_one_E,pH 8,1,E,7.62
+pH 8_one_F,pH 8,1,F,6.95
+pH 8_one_X,pH 8,1,X,7.75
+pH 10_one_A,pH 10,1,A,8.48
+pH 10_one_B,pH 10,1,B,8.63
+pH 10_one_C,pH 10,1,C,8.12
+pH 10_one_D,pH 10,1,D,7.56
+pH 10_one_E,pH 10,1,E,8.32
+pH 10_one_F,pH 10,1,F,7.36
+pH 10_one_X,pH 10,1,X,9.44
+pH 6_two_A,pH 6,2,A,7.68
+pH 6_two_B,pH 6,2,B,7.62
+pH 6_two_C,pH 6,2,C,7.69
+pH 6_two_D,pH 6,2,D,7.62
+pH 6_two_E,pH 6,2,E,7.5
+pH 6_two_F,pH 6,2,F,7.53
+pH 6_two_X,pH 6,2,X,5.97
+pH 6 + MES_two_A,pH 6 + MES,2,A,5.87
+pH 6 + MES_two_B,pH 6 + MES,2,B,5.9
+pH 6 + MES_two_C,pH 6 + MES,2,C,5.81
+pH 6 + MES_two_D,pH 6 + MES,2,D,5.89
+pH 6 + MES_two_E,pH 6 + MES,2,E,6.01
+pH 6 + MES_two_F,pH 6 + MES,2,F,5.94
+pH 6 + MES_two_X,pH 6 + MES,2,X,5.29
+pH 6 + 5% glucose_two_A,pH 6 + 5% glucose,2,A,6.19
+pH 6 + 5% glucose_two_B,pH 6 + 5% glucose,2,B,6.07
+pH 6 + 5% glucose_two_C,pH 6 + 5% glucose,2,C,5.3
+pH 6 + 5% glucose_two_D,pH 6 + 5% glucose,2,D,6.58
+pH 6 + 5% glucose_two_E,pH 6 + 5% glucose,2,E,7.66
+pH 6 + 5% glucose_two_F,pH 6 + 5% glucose,2,F,6.95
+pH 6 + 5% glucose_two_X,pH 6 + 5% glucose,2,X,5.95
+pH 6 + 10% glucose_two_A,pH 6 + 10% glucose,2,A,4.9
+pH 6 + 10% glucose_two_B,pH 6 + 10% glucose,2,B,5.03
+pH 6 + 10% glucose_two_C,pH 6 + 10% glucose,2,C,4.8
+pH 6 + 10% glucose_two_D,pH 6 + 10% glucose,2,D,4.96
+pH 6 + 10% glucose_two_E,pH 6 + 10% glucose,2,E,6.32
+pH 6 + 10% glucose_two_F,pH 6 + 10% glucose,2,F,5.89
+pH 6 + 10% glucose_two_X,pH 6 + 10% glucose,2,X,5.98
+pH 8_two_A,pH 8,2,A,8.58
+pH 8_two_B,pH 8,2,B,8.28
+pH 8_two_C,pH 8,2,C,8.33
+pH 8_two_D,pH 8,2,D,8.11
+pH 8_two_E,pH 8,2,E,8.02
+pH 8_two_F,pH 8,2,F,8.14
+pH 8_two_X,pH 8,2,X,7.11
+pH 10_two_A,pH 10,2,A,7.89
+pH 10_two_B,pH 10,2,B,8.9
+pH 10_two_C,pH 10,2,C,8.64
+pH 10_two_D,pH 10,2,D,8.47
+pH 10_two_E,pH 10,2,E,8.49
+pH 10_two_F,pH 10,2,F,8.38
+pH 10_two_X,pH 10,2,X,9.08
+pH 6_three_A,pH 6,3,A,8.45
+pH 6_three_B,pH 6,3,B,8.58
+pH 6_three_C,pH 6,3,C,8.02
+pH 6_three_D,pH 6,3,D,7.92
+pH 6_three_E,pH 6,3,E,7.86
+pH 6_three_F,pH 6,3,F,7.95
+pH 6_three_X,pH 6,3,X,5.96
+pH 6 + MES_three_A,pH 6 + MES,3,A,6.18
+pH 6 + MES_three_B,pH 6 + MES,3,B,6.14
+pH 6 + MES_three_C,pH 6 + MES,3,C,5.87
+pH 6 + MES_three_D,pH 6 + MES,3,D,6.22
+pH 6 + MES_three_E,pH 6 + MES,3,E,6.24
+pH 6 + MES_three_F,pH 6 + MES,3,F,6.24
+pH 6 + MES_three_X,pH 6 + MES,3,X,5.28
+pH 6 + 5% glucose_three_A,pH 6 + 5% glucose,3,A,7.53
+pH 6 + 5% glucose_three_B,pH 6 + 5% glucose,3,B,7.56
+pH 6 + 5% glucose_three_C,pH 6 + 5% glucose,3,C,6.32
+pH 6 + 5% glucose_three_D,pH 6 + 5% glucose,3,D,7.78
+pH 6 + 5% glucose_three_E,pH 6 + 5% glucose,3,E,7.94
+pH 6 + 5% glucose_three_F,pH 6 + 5% glucose,3,F,8.42
+pH 6 + 5% glucose_three_X,pH 6 + 5% glucose,3,X,6.08
+pH 6 + 10% glucose_three_A,pH 6 + 10% glucose,3,A,6
+pH 6 + 10% glucose_three_B,pH 6 + 10% glucose,3,B,6.03
+pH 6 + 10% glucose_three_C,pH 6 + 10% glucose,3,C,4.94
+pH 6 + 10% glucose_three_D,pH 6 + 10% glucose,3,D,5.88
+pH 6 + 10% glucose_three_E,pH 6 + 10% glucose,3,E,7.26
+pH 6 + 10% glucose_three_F,pH 6 + 10% glucose,3,F,8.21
+pH 6 + 10% glucose_three_X,pH 6 + 10% glucose,3,X,6.08
+pH 8_three_A,pH 8,3,A,8.85
+pH 8_three_B,pH 8,3,B,9.12
+pH 8_three_C,pH 8,3,C,8.99
+pH 8_three_D,pH 8,3,D,8.06
+pH 8_three_E,pH 8,3,E,8.24
+pH 8_three_F,pH 8,3,F,8.53
+pH 8_three_X,pH 8,3,X,7.14
+pH 10_three_A,pH 10,3,A,9.22
+pH 10_three_B,pH 10,3,B,9.28
+pH 10_three_C,pH 10,3,C,8.8
+pH 10_three_D,pH 10,3,D,8.32
+pH 10_three_E,pH 10,3,E,8.56
+pH 10_three_F,pH 10,3,F,8.3
+pH 10_three_X,pH 10,3,X,8.88
+pH 6_four_A,pH 6,4,A,8.81
+pH 6_four_B,pH 6,4,B,8.6
+pH 6_four_C,pH 6,4,C,8.25
+pH 6_four_D,pH 6,4,D,8.25
+pH 6_four_E,pH 6,4,E,8.37
+pH 6_four_F,pH 6,4,F,8.24
+pH 6_four_X,pH 6,4,X,5.72
+pH 6 + MES_four_A,pH 6 + MES,4,A,6.06
+pH 6 + MES_four_B,pH 6 + MES,4,B,6.14
+pH 6 + MES_four_C,pH 6 + MES,4,C,6
+pH 6 + MES_four_D,pH 6 + MES,4,D,6.4
+pH 6 + MES_four_E,pH 6 + MES,4,E,6.3
+pH 6 + MES_four_F,pH 6 + MES,4,F,6.28
+pH 6 + MES_four_X,pH 6 + MES,4,X,5.22
+pH 6 + 5% glucose_four_A,pH 6 + 5% glucose,4,A,8.2
+pH 6 + 5% glucose_four_B,pH 6 + 5% glucose,4,B,8
+pH 6 + 5% glucose_four_C,pH 6 + 5% glucose,4,C,7.55
+pH 6 + 5% glucose_four_D,pH 6 + 5% glucose,4,D,8
+pH 6 + 5% glucose_four_E,pH 6 + 5% glucose,4,E,8.22
+pH 6 + 5% glucose_four_F,pH 6 + 5% glucose,4,F,8.6
+pH 6 + 5% glucose_four_X,pH 6 + 5% glucose,4,X,6
+pH 6 + 10% glucose_four_A,pH 6 + 10% glucose,4,A,6.7
+pH 6 + 10% glucose_four_B,pH 6 + 10% glucose,4,B,6.3
+pH 6 + 10% glucose_four_C,pH 6 + 10% glucose,4,C,5.32
+pH 6 + 10% glucose_four_D,pH 6 + 10% glucose,4,D,6.5
+pH 6 + 10% glucose_four_E,pH 6 + 10% glucose,4,E,7.6
+pH 6 + 10% glucose_four_F,pH 6 + 10% glucose,4,F,6.88
+pH 6 + 10% glucose_four_X,pH 6 + 10% glucose,4,X,5.8
+pH 8_four_A,pH 8,4,A,8.85
+pH 8_four_B,pH 8,4,B,8.9
+pH 8_four_C,pH 8,4,C,8.9
+pH 8_four_D,pH 8,4,D,8.7
+pH 8_four_E,pH 8,4,E,8.76
+pH 8_four_F,pH 8,4,F,8.65
+pH 8_four_X,pH 8,4,X,7.25
+pH 10_four_A,pH 10,4,A,9
+pH 10_four_B,pH 10,4,B,9.05
+pH 10_four_C,pH 10,4,C,9
+pH 10_four_D,pH 10,4,D,8.9
+pH 10_four_E,pH 10,4,E,8.9
+pH 10_four_F,pH 10,4,F,8.87
+pH 10_four_X,pH 10,4,X,8.87
+pH 6_five_A,pH 6,5,A,8.5
+pH 6_five_B,pH 6,5,B,8.34
+pH 6_five_C,pH 6,5,C,8.51
+pH 6_five_D,pH 6,5,D,8.3
+pH 6_five_E,pH 6,5,E,8.54
+pH 6_five_F,pH 6,5,F,8.32
+pH 6_five_X,pH 6,5,X,5.61
+pH 6 + MES_five_A,pH 6 + MES,5,A,6.05
+pH 6 + MES_five_B,pH 6 + MES,5,B,5.92
+pH 6 + MES_five_C,pH 6 + MES,5,C,6.06
+pH 6 + MES_five_D,pH 6 + MES,5,D,5.95
+pH 6 + MES_five_E,pH 6 + MES,5,E,6.33
+pH 6 + MES_five_F,pH 6 + MES,5,F,6.56
+pH 6 + MES_five_X,pH 6 + MES,5,X,5.39
+pH 6 + 5% glucose_five_A,pH 6 + 5% glucose,5,A,8.19
+pH 6 + 5% glucose_five_B,pH 6 + 5% glucose,5,B,8.05
+pH 6 + 5% glucose_five_C,pH 6 + 5% glucose,5,C,7.22
+pH 6 + 5% glucose_five_D,pH 6 + 5% glucose,5,D,8.25
+pH 6 + 5% glucose_five_E,pH 6 + 5% glucose,5,E,8.44
+pH 6 + 5% glucose_five_F,pH 6 + 5% glucose,5,F,8.42
+pH 6 + 5% glucose_five_X,pH 6 + 5% glucose,5,X,5.85
+pH 6 + 10% glucose_five_A,pH 6 + 10% glucose,5,A,7.45
+pH 6 + 10% glucose_five_B,pH 6 + 10% glucose,5,B,7.69
+pH 6 + 10% glucose_five_C,pH 6 + 10% glucose,5,C,6.32
+pH 6 + 10% glucose_five_D,pH 6 + 10% glucose,5,D,7.54
+pH 6 + 10% glucose_five_E,pH 6 + 10% glucose,5,E,8.18
+pH 6 + 10% glucose_five_F,pH 6 + 10% glucose,5,F,7.64
+pH 6 + 10% glucose_five_X,pH 6 + 10% glucose,5,X,5.87
+pH 8_five_A,pH 8,5,A,8.78
+pH 8_five_B,pH 8,5,B,8.86
+pH 8_five_C,pH 8,5,C,8.95
+pH 8_five_D,pH 8,5,D,8.91
+pH 8_five_E,pH 8,5,E,8.65
+pH 8_five_F,pH 8,5,F,8.47
+pH 8_five_X,pH 8,5,X,6.65
+pH 10_five_A,pH 10,5,A,8.93
+pH 10_five_B,pH 10,5,B,8.85
+pH 10_five_C,pH 10,5,C,8.6
+pH 10_five_D,pH 10,5,D,8.65
+pH 10_five_E,pH 10,5,E,8.84
+pH 10_five_F,pH 10,5,F,8.66
+pH 10_five_X,pH 10,5,X,8.2
+pH 6_six_A,pH 6,6,A,8.58
+pH 6_six_B,pH 6,6,B,8.5
+pH 6_six_C,pH 6,6,C,8.74
+pH 6_six_D,pH 6,6,D,8.9
+pH 6_six_E,pH 6,6,E,8.82
+pH 6_six_F,pH 6,6,F,8.65
+pH 6_six_X,pH 6,6,X,5.8
+pH 6 + MES_six_A,pH 6 + MES,6,A,6.09
+pH 6 + MES_six_B,pH 6 + MES,6,B,6.24
+pH 6 + MES_six_C,pH 6 + MES,6,C,6.22
+pH 6 + MES_six_D,pH 6 + MES,6,D,6.34
+pH 6 + MES_six_E,pH 6 + MES,6,E,6.37
+pH 6 + MES_six_F,pH 6 + MES,6,F,6.11
+pH 6 + MES_six_X,pH 6 + MES,6,X,5.17
+pH 6 + 5% glucose_six_A,pH 6 + 5% glucose,6,A,8.3
+pH 6 + 5% glucose_six_B,pH 6 + 5% glucose,6,B,8.2
+pH 6 + 5% glucose_six_C,pH 6 + 5% glucose,6,C,7.65
+pH 6 + 5% glucose_six_D,pH 6 + 5% glucose,6,D,8.31
+pH 6 + 5% glucose_six_E,pH 6 + 5% glucose,6,E,8.46
+pH 6 + 5% glucose_six_F,pH 6 + 5% glucose,6,F,8.53
+pH 6 + 5% glucose_six_X,pH 6 + 5% glucose,6,X,5.73
+pH 6 + 10% glucose_six_A,pH 6 + 10% glucose,6,A,8.02
+pH 6 + 10% glucose_six_B,pH 6 + 10% glucose,6,B,8
+pH 6 + 10% glucose_six_C,pH 6 + 10% glucose,6,C,7.13
+pH 6 + 10% glucose_six_D,pH 6 + 10% glucose,6,D,8.26
+pH 6 + 10% glucose_six_E,pH 6 + 10% glucose,6,E,8.4
+pH 6 + 10% glucose_six_F,pH 6 + 10% glucose,6,F,8.27
+pH 6 + 10% glucose_six_X,pH 6 + 10% glucose,6,X,5.85
+pH 8_six_A,pH 8,6,A,8.92
+pH 8_six_B,pH 8,6,B,9.22
+pH 8_six_C,pH 8,6,C,8.9
+pH 8_six_D,pH 8,6,D,8.7
+pH 8_six_E,pH 8,6,E,9
+pH 8_six_F,pH 8,6,F,9
+pH 8_six_X,pH 8,6,X,7
+pH 10_six_A,pH 10,6,A,9.2
+pH 10_six_B,pH 10,6,B,9.2
+pH 10_six_C,pH 10,6,C,9.1
+pH 10_six_D,pH 10,6,D,8.8
+pH 10_six_E,pH 10,6,E,9.1
+pH 10_six_F,pH 10,6,F,9.04
+pH 10_six_X,pH 10,6,X,8.8
+pH 6_seven_A,pH 6,7,A,8.55
+pH 6_seven_B,pH 6,7,B,8.82
+pH 6_seven_C,pH 6,7,C,8.7
+pH 6_seven_D,pH 6,7,D,8.8
+pH 6_seven_E,pH 6,7,E,8.78
+pH 6_seven_F,pH 6,7,F,8.8
+pH 6_seven_X,pH 6,7,X,5.8
+pH 6 + MES_seven_A,pH 6 + MES,7,A,6.3
+pH 6 + MES_seven_B,pH 6 + MES,7,B,6.2
+pH 6 + MES_seven_C,pH 6 + MES,7,C,6.8
+pH 6 + MES_seven_D,pH 6 + MES,7,D,6.3
+pH 6 + MES_seven_E,pH 6 + MES,7,E,6.3
+pH 6 + MES_seven_F,pH 6 + MES,7,F,6.32
+pH 6 + MES_seven_X,pH 6 + MES,7,X,5.26
+pH 6 + 5% glucose_seven_A,pH 6 + 5% glucose,7,A,8.8
+pH 6 + 5% glucose_seven_B,pH 6 + 5% glucose,7,B,8.54
+pH 6 + 5% glucose_seven_C,pH 6 + 5% glucose,7,C,8.28
+pH 6 + 5% glucose_seven_D,pH 6 + 5% glucose,7,D,8.81
+pH 6 + 5% glucose_seven_E,pH 6 + 5% glucose,7,E,8.66
+pH 6 + 5% glucose_seven_F,pH 6 + 5% glucose,7,F,8.84
+pH 6 + 5% glucose_seven_X,pH 6 + 5% glucose,7,X,6.08
+pH 6 + 10% glucose_seven_A,pH 6 + 10% glucose,7,A,8.3
+pH 6 + 10% glucose_seven_B,pH 6 + 10% glucose,7,B,8.4
+pH 6 + 10% glucose_seven_C,pH 6 + 10% glucose,7,C,7.8
+pH 6 + 10% glucose_seven_D,pH 6 + 10% glucose,7,D,NA
+pH 6 + 10% glucose_seven_E,pH 6 + 10% glucose,7,E,8.48
+pH 6 + 10% glucose_seven_F,pH 6 + 10% glucose,7,F,8.55
+pH 6 + 10% glucose_seven_X,pH 6 + 10% glucose,7,X,5.8
+pH 8_seven_A,pH 8,7,A,8.97
+pH 8_seven_B,pH 8,7,B,9
+pH 8_seven_C,pH 8,7,C,9.02
+pH 8_seven_D,pH 8,7,D,9.06
+pH 8_seven_E,pH 8,7,E,NA
+pH 8_seven_F,pH 8,7,F,9.05
+pH 8_seven_X,pH 8,7,X,7
+pH 10_seven_A,pH 10,7,A,9.21
+pH 10_seven_B,pH 10,7,B,9.24
+pH 10_seven_C,pH 10,7,C,9.22
+pH 10_seven_D,pH 10,7,D,9.26
+pH 10_seven_E,pH 10,7,E,9.22
+pH 10_seven_F,pH 10,7,F,9.18
+pH 10_seven_X,pH 10,7,X,8.75
