@@ -4,7 +4,7 @@ knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
  encoding=encoding,
- output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+ output_file=file.path(dirname(input_file), out_dir, 'pH_lesson.html'))})
 author: "DQH"
 date: "3/19/2020"
 output: html_document
@@ -119,7 +119,7 @@ p1 <- myplotmaker(data1)
 p1
 ```
 
-This plot should be identical to the graph you created before. Now, we simple need to subset the reamining data, and plot it. I have also added a small code to title each individual graph. 
+This plot should be identical to the graph you created before. Now, we simply need to subset the reamining data, and plot it. I have also added a small code to title each individual graph. 
 
 ```{r}
 p1<-myplotmaker(data1)+ggtitle("CR pH 6")
