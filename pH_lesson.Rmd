@@ -35,7 +35,7 @@ Good practice includes adding some basic information to our script:
 #Graphing pH data
 ```
 
-Your name, data, and a small blurb about what the script is for is the bare minimum in my opinion (but if I'm completely honest I don't always follow this.) You may notice that I have a "#" before the text. This means 
+Your name, data, and a small blurb about what the script is for is the bare minimum in my opinion (but if I'm completely honest I don't always follow this.) You may notice that I have a "#" before the text. This symbol tells R not to run whatever text is on that line and is useful for taking notes throughout your code.
 
 We will need the packages: ggplot2 and ggpubr. You can load in a package by typing:
 
@@ -44,13 +44,15 @@ library(ggplot2)
 library(ggpubr)
 ```
 
+ggplot2 is what we will use to graph the data. ggpubr requires another package, magrittr (which should automatically load). magrittr has an operator we will use later on, "%>%", and ggpubr is useful for for organizing multiple graphs.
+
 Load in your data. It should look something like this, depending on where the file is located on your computer.
 
 ```{r}
 data <- read.csv("SGH_CR_pH.csv", header=TRUE)
 ```
 
-Here, you are creating an object called "data" and you are loading in a .csv file. This file has a header, so you must write "head=TRUE". What happens to your data if you write "header=FALSE"? You can check by typing:
+Here, we are reading in our data, and storing it into an aptly named object called "data". Of course, you can name it whatever you want. I'm usually lazy and stick with "d". We are loading in a .csv file with the command read.csv(). This file has a header, so you must write "head=TRUE". What happens to your data if you write "header=FALSE"? You can check by typing:
 
 ```{r}
 head(data)
@@ -61,14 +63,15 @@ Don't forget to fix your code before moving forward!
 
 # Part 2: Organizing and sorting the data
 
-There are A LOT of comparisons that we could make in this dataset and graphing ALL the data onto the same graph can be overwhelming and obstruct interpretation. For now, let’s focus on specific groups to make our analysis easier. Let’s focus on one treatment at a time. We will only graph data belonging to the CR pH 6 treatment for now. But how can be tell R to only graph a specific portion of our data?
-R has a nice function, subset(), which we will use to pull out only data that matches your treatment of interest. For example, if I only want CR pH 6 data I will type:
+There are A LOT of comparisons that we could make in this dataset and graphing ALL the data onto the same graph can be overwhelming and obstruct interpretation. For now, let’s focus on specific groups to make our analysis easier. Let’s focus on one treatment at a time. We will only graph data belonging to the CR pH 6 treatment. How can we tell R to only graph a specific portion of our data?
+
+R has a nice function, subset(), which we will use to pull out only data that matches the treatment of interest. For example, if I only want CR pH 6 data I will type:
 
 ```{r}
 data1 <- subset(data, data$treatment=="pH 6")
 ```
 
-Here, we are creating a new object, "data1", which is a subset of "data". Here, we have specified R to only add in data if the "treatment" column matches the string "pH 6" which represents our CR pH 6 treatment.
+The the code above, we are storing a subset of "data" into a new object "data1". Here, we have specified R to only add in data if the "treatment" column matches the string "pH 6" which represents our CR pH 6 treatment.
 
 # Part 3: Graphing the data
 We have now subset our data from one treatment. Let’s graph it!
@@ -112,7 +115,8 @@ Now we have some data graphed. It’s time to interpret!
 
 # Part 4: Writing a function to graph remaining treatments.
 
-We only have one treatment graphed. We could simply copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by "..."), and pipes it (denoted by %>%) to the function we wrote earlier. 
+We only have one treatment graphed. We could copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by "..."), and pipes it (denoted by %>%) to the function we wrote earlier. That is, the "%>%" takes whatever is on the lefthand side, "..." in this case, and puts it through whatever is on the righthand side. In this case, it's our graphing code.
+
 ```{r}
 myplotmaker<- function(...){
   return(... %>%
@@ -133,18 +137,23 @@ p1 <- myplotmaker(data1)
 p1
 ```
 
-This plot should be identical to the graph you created before. Now, we simply need to subset the reamining data, and plot it. I have also added a small code to title each individual graph. 
+This plot should be identical to the graph you created before. Now, we need to subset the reamining data, and plot it. I have also added a small code to title each individual graph. 
 
 ```{r}
 p1<-myplotmaker(data1)+ggtitle("CR pH 6")
+
 data2<-subset(data,data$treatment=="pH 6 + MES")
 p2<-myplotmaker(data2)+ggtitle("CR pH6 + MES Buffer")
+
 data3<-subset(data,data$treatment=="pH 6 + 5% glucose")
 p3<-myplotmaker(data3)+ggtitle("CR pH6 + 5% glucose")
+
 data4<-subset(data,data$treatment=="pH 6 + 10% glucose")
 p4<-myplotmaker(data4)+ggtitle("CR pH6 + 10% glucose")
+
 data5<-subset(data,data$treatment=="pH 8")
 p5<-myplotmaker(data5)+ggtitle("CR pH 8")
+
 data6<-subset(data,data$treatment=="pH 10")
 p6<-myplotmaker(data6)+ggtitle("CR pH 10")
 ```
