@@ -4,5 +4,6 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Lesson 1: pH"
-      href: pH_lesson.html
+    - text: "Lesson 1: R basics"
+      href: pH_lesson.html.html
+

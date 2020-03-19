@@ -1,11 +1,11 @@
 ---
-title: "pH lesson"
+title: "Lesson 1: R basics"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
  encoding=encoding,
  output_file=file.path(dirname(input_file), out_dir, 'pH_lesson.html'))})
-author: "DQH"
+author: "Donny Hoang"
 date: "3/19/2020"
 output: html_document
 ---
@@ -13,16 +13,29 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+## Goal:
+The goal of this lesson is to familiarize yourself with basic R commands. We will do achieve this goal by graphing pH data from our CR communities.
+
 
 ## Dataset:
-We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities were used to inoculate CR samples of six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.
+We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities were used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.
 
-Don't forget to downloaded “SGH_CR_pH.csv” that contains the data.
+Don't forget to downloaded “SGH_CR_pH.csv” which is out data file.
 
 ## Excercise:
 
 # Part 1: load in packages and your data
 Create a new R script by navigating to “File” -> “New File” -> “R Script” save and name it as you like, but make sure the extension is “.R”
+
+Good practice includes adding some basic information to our script:
+
+```{r}
+#Donny Hoang
+#3.19.2020
+#Graphing pH data
+```
+
+Your name, data, and a small blurb about what the script is for is the bare minimum in my opinion (but if I'm completely honest I don't always follow this.) You may notice that I have a "#" before the text. This means 
 
 We will need the packages: ggplot2 and ggpubr. You can load in a package by typing:
 
@@ -70,13 +83,13 @@ p1 <-ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
 p1
 ```
 
-Whoops, looks like we have an error. Since we have more groups than R’s default shape palette, we must explicitly specify more than 6 shapes. This can be done easily. Google “geom_point shapes” to get an idea of what ggplot2 has to offer. I think making shapes identical to the replicate (that is, replicate A will have shape “A”) makes the most sense.
+Whoops, looks like we have an error. Since we have more groups than R’s default shape palette, we must explicitly specify more than 6 shapes. If you look at the legend, you may notice how our "X" replicate does not have a symbol to represent it. This can be done easily. Google “geom_point shapes” to get an idea of what ggplot2 has to offer. I think making shapes identical to the replicate (that is, replicate A will have shape “A”) makes the most sense.
 
 ```{r}
 shapeorder <- c(65,66,67,68,69,70,4)
 ```
 
-This code creates a list containing the exact shapes we want to use. Now we just need to make a small adjustment to our graph’s code. I added "scale_shape_manual()" to the code, and specified the shapes we wrote above.
+This code creates an object, that contains a list of the exact shapes we want to use. Now we just need to make a small adjustment to our graph’s code. I added "scale_shape_manual()" to the code, and specified the "shapeorder" object we wrote above.
 
 ```{r}
 p1 <- ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
@@ -92,14 +105,14 @@ Review what each piece of the command does. What is being added to the graph aft
 
 You probably noticed that most of these are aesthetic changes, which are up to personal preference. I almost always use “theme_classic()” to remove grid lines and the gray background. I also try to avoid using default ggplot2 colors and try to ensure my color palettes are colorblind friendly, but that’s not relevant in this case.
 
-So, now we have other data graphed. It’s time to interpret!
+Now we have some data graphed. It’s time to interpret!
 
 1)	How does the pH change over time in this pH 6 treatment?
 2)	Are the changes consistent between replicates? Can you think of any reasons that would explain the variation?
 
 # Part 4: Writing a function to graph remaining treatments.
 
-We only have one treatment graphed. We could simply copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly and hard to navigate. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by "..."), and pipes it (denoted by %>%) to the function we wrote earlier. 
+We only have one treatment graphed. We could simply copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by "..."), and pipes it (denoted by %>%) to the function we wrote earlier. 
 ```{r}
 myplotmaker<- function(...){
   return(... %>%
@@ -111,6 +124,7 @@ myplotmaker<- function(...){
            theme_classic())
 }
 ```
+
 
 Now, we have a function that will create a graph of the data we give it. Feed it the previously subsetted “data1” by typing:
 
@@ -135,7 +149,7 @@ data6<-subset(data,data$treatment=="pH 10")
 p6<-myplotmaker(data6)+ggtitle("CR pH 10")
 ```
 
-Our graphs are generated. You can look at them individually, but I think looking at all of them together will be more informative. Let's use the ggarrange() function from the package ggpubr.
+Our graphs are generated. You can look at them individually, but I think looking at all of them together will be more informative. Let's use the ggarrange() function from the package ggpubr. Can you figure out what each piece of the code is doing?
 
 ```{r}
 ggarrange(p1, p2, p3, p4, p5, p6,
@@ -150,3 +164,6 @@ Let’s interpret the data.
 1)	The uninoculated control in each data set is replicate “X”. How does it change over the week? Is our data still reliable?
 2)	What conclusions can draw from each treatment? How does the pH change in each one? Are the changes intuitive?
 3)	How does the variation between replicates compare between treatments? What do you think this means?
+
+
+Congrats! You made it through the first lesson. Hopefully, you feel a bit more familiar with the R language. It's OK if you don't feel completely comfortable yet. We will work on that together.
