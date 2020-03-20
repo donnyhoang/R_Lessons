@@ -20,7 +20,7 @@ The goal of this lesson is to familiarize yourself with basic R commands. We wil
 ## Dataset:
 We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities were used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.
 
-Don't forget to downloaded “SGH_CR_pH.csv” which is out data file.
+Don't forget to downloaded “SGH_CR_pH.csv” which is our data file.
 
 ## Excercise:
 
