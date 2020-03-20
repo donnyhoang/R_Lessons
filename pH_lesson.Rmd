@@ -40,6 +40,9 @@ Your name, data, and a small blurb about what the script is for is the bare mini
 We will need the packages: ggplot2 and ggpubr. You can load in a package by typing:
 
 ```{r}
+## if the packages are not installed, use these commands to install them
+#install.packages('ggpubr')
+#install.packages('ggplot2')
 library(ggplot2)
 library(ggpubr)
 ```
@@ -56,6 +59,10 @@ Here, we are reading in our data, and storing it into an aptly named object call
 
 ```{r}
 head(data)
+# Read more about head by typing ?head
+str(data) ## has a little more information about the columns class
+# What's the difference between a Factor, integer, and numeric class?
+summary(data)
 ```
 
 Don't forget to fix your code before moving forward!
@@ -69,6 +76,8 @@ R has a nice function, subset(), which we will use to pull out only data that ma
 
 ```{r}
 data1 <- subset(data, data$treatment=="pH 6")
+head(data1)
+summary(data1)
 ```
 
 In the code above, we are storing a subset of "data" into a new object "data1". Here, we have specified R to only add in data if the "treatment" column matches the string "pH 6" which represents our CR pH 6 treatment.
@@ -78,18 +87,18 @@ We have now subset our data from one treatment. Let’s graph it!
 
 
 ```{r}
-p1 <-ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
-  ylim(4,10) +
-  geom_point(aes(shape=replicate))+
-  geom_line() +
-  theme_classic()
-p1
+p1 <-ggplot(data=data1, aes(x=day, y=pH, group=replicate)) + ## initialize our plotting object
+  ylim(4, 10) + ## set the y-axis limits
+  geom_point(aes(shape=replicate)) + ## specify that we what to plot points
+  geom_line() + ## specify that we also want lines
+  theme_classic() ## make it pretty
+p1 ## return the plotting object
 ```
 
 Whoops, looks like we have an error. Since we have more groups (our replicates in this case) than R’s default shape palette, we must explicitly specify more than 6 shapes. If you look at the legend, you may notice how our "X" replicate does not have a symbol to represent it. This error can be fixed easily. Google “geom_point shapes” to get an idea of what symbols or shapes ggplot2 has to offer. I think making shapes identical to the replicate (that is, replicate A will have shape “A”) makes the most sense.
 
 ```{r}
-shapeorder <- c(65,66,67,68,69,70,4)
+shapeorder <- c(65, 66, 67, 68, 69, 70,  4)
 ```
 
 This code creates an object, that contains a list of the exact shapes we want to use. Now we just need to make a small adjustment to our graph’s code. I added "scale_shape_manual()" to the code, and specified the "shapeorder" object we wrote above.
@@ -98,7 +107,7 @@ This code creates an object, that contains a list of the exact shapes we want to
 p1 <- ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
   ylim(4,10) +
   geom_point(aes(shape=replicate))+
-  scale_shape_manual(values=shapeorder)+
+  scale_shape_manual(values=shapeorder)+ ## what shapes we want to use
   geom_line() +
   theme_classic()
 p1
@@ -140,22 +149,22 @@ p1
 This plot should be identical to the graph you created before. Now, we need to subset the reamining data, and plot it. I have also added a small code to title each individual graph. 
 
 ```{r}
-p1<-myplotmaker(data1)+ggtitle("CR pH 6")
+p1    <- myplotmaker(data1) + ggtitle("CR pH 6")
 
-data2<-subset(data,data$treatment=="pH 6 + MES")
-p2<-myplotmaker(data2)+ggtitle("CR pH6 + MES Buffer")
+data2 <- subset(data, data$treatment=="pH 6 + MES")
+p2    <- myplotmaker(data2) + ggtitle("CR pH6 + MES Buffer")
 
-data3<-subset(data,data$treatment=="pH 6 + 5% glucose")
-p3<-myplotmaker(data3)+ggtitle("CR pH6 + 5% glucose")
+data3 <- subset(data, data$treatment=="pH 6 + 5% glucose")
+p3    <- myplotmaker(data3) + ggtitle("CR pH6 + 5% glucose")
 
-data4<-subset(data,data$treatment=="pH 6 + 10% glucose")
-p4<-myplotmaker(data4)+ggtitle("CR pH6 + 10% glucose")
+data4 <- subset(data, data$treatment=="pH 6 + 10% glucose")
+p4    <- myplotmaker(data4) + ggtitle("CR pH6 + 10% glucose")
 
-data5<-subset(data,data$treatment=="pH 8")
-p5<-myplotmaker(data5)+ggtitle("CR pH 8")
+data5 <- subset(data, data$treatment=="pH 8")
+p5    <- myplotmaker(data5) + ggtitle("CR pH 8")
 
-data6<-subset(data,data$treatment=="pH 10")
-p6<-myplotmaker(data6)+ggtitle("CR pH 10")
+data6 <- subset(data, data$treatment=="pH 10")
+p6    <- myplotmaker(data6) + ggtitle("CR pH 10")
 ```
 
 Our graphs are generated. You can look at them individually, but I think looking at all of them together will be more informative. Let's use the ggarrange() function from the package ggpubr. Can you figure out what each piece of the code is doing?
