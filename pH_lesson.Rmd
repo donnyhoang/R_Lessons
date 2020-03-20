@@ -13,9 +13,10 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-## Goal:
-The goal of this lesson is to familiarize yourself with basic R commands. We will do achieve this goal by graphing pH data from our CR communities.
+## Goals:
+Goal 1: Familiarize yourself with basic R commands. We will achieve this goal by graphing our pH data.
 
+Goal 2: Understand how pH changes over time in our CR communitties.
 
 ## Dataset:
 We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities are used as "biological replicates" for the experiment. Each community was used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.

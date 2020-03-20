@@ -14,15 +14,16 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Goal
+## Goals:
+Goal 1: Learn how to organize data, and perform simple statistical analysis in R.
 
-Last time, you learned how to make graphs using ggplot2. We will use the same skills here, and also perform statistical analysis using ggpubr.
+Goal 2: Assess the function (based on COD) of our CR communities.
 
-## Dataset
+## Dataset:
 
 We are using data collected from the same experiment as the last lesson. Howevever, instead of pH, I measured the chemical oxygen demand, or COD of all samples from Day 4 of the experiment. COD assays measures the amount of oxygen consumed by a reaction. Thus, if a sample has more COD if has more organic material in it. We are using COD as an approximation for how well communities function. A good performing community will use up more organic material and have less COD. A poor performing community will use up less organic material and have more COD. Here, we want to see if our treatments significantly altered a communities ability to degrade COD.
 
-## Excercise
+## Excercises:
 # Part 1: load in packages and your data
 
 ```{r}
@@ -54,7 +55,9 @@ summary(data)
 
 What I hope you notice is that we have the same biological replicates as before (A, B, C, etc.) but we also have technical replicate measurements for each sample. That is, every sample has three COD measurements. Additionally, these measurements are expressed as a percentage. This will be important for our interpretation later on.
 
-Grahping the data as is can be cumbersome. When we tell ggplot2 to graph data we normally only give it out set of y-values. But we have three columns! We also don't have any average or standard deviation information, we will have to do this ourselves. First, let's collapse our columns "percent_1","percent_2", and "percent_3". To do this, we need the melt() function from the reshape2 package.
+## Part 2: Organizing the data.
+
+Graphing the data as is can be cumbersome, as it's raw data and we haven't yet calculated the mean or standard deviation.  First, let's collapse our columns "percent_1","percent_2", and "percent_3". To do this, we need the melt() function from the reshape2 package.
 
 ```{r}
 data<-melt(data,id=c("Sample","Treatment","replicate","day"))
@@ -62,9 +65,9 @@ data<-melt(data,id=c("Sample","Treatment","replicate","day"))
 head(data) ## take a peak at the new data
 ```
 
-Here, we've collapsed the columns "percent_1","percent_2", and "percent_3" into a new column, "variable" and their values are in the new column "value". This will make plotting the data much easier, as we will have to specify just one column for y-values, and another for x-values.
+Here, we've collapsed the columns "percent_1","percent_2", and "percent_3" into a new column, "variable" and their values are in the new column "value". 
 
-Our next step is to calculate the average and sd for our groups.However, if we do the calculations now, R will take the mean and sd of ALL the values. This calculation isn't useful, because we are trying to compare the means and sd between groups. Thus, we must first specify our groups. We can do this using the group_by() function from dplyr, and our friend from last lesson, %>%, from magrittr.
+Our next step is to calculate the mean and sd for our groups.However, if we do the calculations now, R will take the mean and sd of ALL the values. This calculation isn't useful, because we are trying to compare the means between groups. Thus, we must first specify our groups. We can do this using the group_by() function from dplyr, and our friend from last lesson, %>%, from magrittr.
 
 ```{r}
 data<-data %>%
@@ -76,7 +79,8 @@ data<-data %>%
 head(data) #take a peak at the data
 ```
 
-Great! The data is almost ready to be graphed. I'm just going to make a quick aesthetic code. R's default color palette isn't that pretty, imo. I like to manually specify my colors to ensure that they're harmonious and colorblind friendly. Additionally, R will want to order our treatments alphabetically. That order isn't always how we'll want it, so we will specify the order we want.
+## Part 3: Graphing the data.
+Great! The data is almost ready to be graphed. I'm going to make a couple quick aesthetic code. R's default color palette isn't that pretty, imo. I like to manually specify my colors to ensure that they're harmonious and colorblind friendly. Additionally, R will want to order our treatments alphabetically. That order isn't always how we'll want it, so we will specify the order we want.
 
 ```{r}
 palette <-c( "#56B4E9", "#999999","#E69F00","#0072B2", "#F0E442","#CC79A7") #does this code look similar to something you've seen before?
@@ -89,7 +93,6 @@ Alright, let's graph!
 
 ```{r}
 plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+ #initialize the graph
-  ylim(0,100) + #set y-axis limits
   geom_point()+ #add points
   scale_colour_manual(values=palette) + #specify colors
   geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),width=.2, position=position_dodge(.05))+ #add error bars
@@ -100,37 +103,28 @@ plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+ #initialize the gra
 plot
 ```
 
-Not the prettiest graph, but good enough for now! It looks like there are some differences, but we want to know if they are significant.
+Not the prettiest graph, but good enough for now! It looks like there are some differences, but we want to know if they are significant. Remember that we want to know whether any of the treatments result in significantly different remaining COD compared to our control, CR pH 6. That sounds like a t-test, which ggpubr can do and place onto our graph.
+
+## Part 4: Perform a t-test.
+
+First, we must specify our comparisons. Then, we can adjust our graph above with a new line of code.
 
 ```{r}
+my_comparisons<-list(c("pH 6", "pH 6 + MES"), c("pH 6", "pH 6 + 5% glucose"), c("pH 6", "pH 6 + 10% glucose"), c("pH 6", "pH 8"),  c("pH 6", "pH 10"))
 
+plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+
+  geom_point()+ 
+  scale_colour_manual(values=palette) + 
+  geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),width=.2, position=position_dodge(.05))+ 
+  labs(title="Day 4", y = "Percent remaining COD mg O2/L") +
+  theme_classic() + 
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  stat_compare_means(comparisons=my_comparisons,method="t.test", label="p.signif") #adding significance
+
+plot
 ```
 
-```{r}
-
-```
-
-
-
-
-```{r}
-
-```
-
-
-
-```{r}
-
-```
-
-
-
-
-```{r}
-
-```
-
-
+You can play around with the comparisons, but the most important comparisons, to me, are pairwise comparisons between CR pH 6 and the other treatments. 
 
 ```{r}
 
@@ -138,6 +132,8 @@ Not the prettiest graph, but good enough for now! It looks like there are some d
 
 
 
+
 ```{r}
 
 ```
+
