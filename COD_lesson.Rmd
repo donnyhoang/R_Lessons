@@ -16,6 +16,127 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Goal
 
+Last time, you learned how to make graphs using ggplot2. We will use the same skills here, and also perform statistical analysis using ggpubr.
+
 ## Dataset
 
+We are using data collected from the same experiment as the last lesson. Howevever, instead of pH, I measured the chemical oxygen demand, or COD of all samples from Day 4 of the experiment. COD assays measures the amount of oxygen consumed by a reaction. Thus, if a sample has more COD if has more organic material in it. We are using COD as an approximation for how well communities function. A good performing community will use up more organic material and have less COD. A poor performing community will use up less organic material and have more COD. Here, we want to see if our treatments significantly altered a communities ability to degrade COD.
+
 ## Excercise
+# Part 1: load in packages and your data
+
+```{r}
+#Donny Hoang
+#3.20.2020
+#Graphing COD data
+
+## if the packages are not installed, use these commands to install them
+#install.packages('ggpubr')
+#install.packages('ggplot2')
+#install.packages('dplyr')
+#install.packages('reshape2')
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
+library(reshape2)
+
+
+data<-read.csv("COD_day4_percent.csv",header=TRUE)
+
+```
+
+Don't forget to write some descriptive notes at the top of your script. We are also loading in two new packages, dplyr and reshape2. We will need functions from these packages to manipulate our data later on. Let's take a look at the data so far.
+
+```{r}
+head(data)
+summary(data)
+```
+
+What I hope you notice is that we have the same biological replicates as before (A, B, C, etc.) but we also have technical replicate measurements for each sample. That is, every sample has three COD measurements. Additionally, these measurements are expressed as a percentage. This will be important for our interpretation later on.
+
+Grahping the data as is can be cumbersome. When we tell ggplot2 to graph data we normally only give it out set of y-values. But we have three columns! We also don't have any average or standard deviation information, we will have to do this ourselves. First, let's collapse our columns "percent_1","percent_2", and "percent_3". To do this, we need the melt() function from the reshape2 package.
+
+```{r}
+data<-melt(data,id=c("Sample","Treatment","replicate","day"))
+
+head(data) ## take a peak at the new data
+```
+
+Here, we've collapsed the columns "percent_1","percent_2", and "percent_3" into a new column, "variable" and their values are in the new column "value". This will make plotting the data much easier, as we will have to specify just one column for y-values, and another for x-values.
+
+Our next step is to calculate the average and sd for our groups.However, if we do the calculations now, R will take the mean and sd of ALL the values. This calculation isn't useful, because we are trying to compare the means and sd between groups. Thus, we must first specify our groups. We can do this using the group_by() function from dplyr, and our friend from last lesson, %>%, from magrittr.
+
+```{r}
+data<-data %>%
+  group_by(Treatment,replicate) %>%
+  summarise(count=n(),
+            mean=mean(value),
+            sd=sd(value))
+
+head(data) #take a peak at the data
+```
+
+Great! The data is almost ready to be graphed. I'm just going to make a couple aesthetic codes before plotting.
+
+```{r}
+shapeorder<-c(65,66,67,68,69,70) #Remember this from code from last time?
+palette <-c( "#56B4E9", "#999999","#E69F00","#0072B2", "#F0E442","#CC79A7") #similar to the code above, but this specifies a color palette. I chose those colors because they're colorblind friendly. There are other ways to manually set colors, and we will explore them in future lessons.
+```
+
+Alright, let's graph!
+
+```{r}
+plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+ #initialize the graph
+  ylim(0,100) + #set y-axis limits
+  geom_point(aes(size=0.5,shape=replicate))+ #add points, make them bigger
+  scale_shape_manual(values=shapeorder)+ #specify shapes
+  scale_colour_manual(values=palette) + #specify colors
+  geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),width=.2, position=position_dodge(.05))+ #add error bars
+  labs(title="Day 4", y = "Percent remaining COD mg O2/L") + #add labels
+  theme_classic() + #make it pretty
+  theme(axis.text.x=element_text(angle=45,hjust=1)) #rotate x-axis labels so they don't overlap
+
+plot
+```
+
+Not the prettiest graph, but good enough for now! 
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
