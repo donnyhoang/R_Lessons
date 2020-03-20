@@ -71,7 +71,7 @@ R has a nice function, subset(), which we will use to pull out only data that ma
 data1 <- subset(data, data$treatment=="pH 6")
 ```
 
-The the code above, we are storing a subset of "data" into a new object "data1". Here, we have specified R to only add in data if the "treatment" column matches the string "pH 6" which represents our CR pH 6 treatment.
+In the code above, we are storing a subset of "data" into a new object "data1". Here, we have specified R to only add in data if the "treatment" column matches the string "pH 6" which represents our CR pH 6 treatment.
 
 # Part 3: Graphing the data
 We have now subset our data from one treatment. Let’s graph it!
@@ -86,7 +86,7 @@ p1 <-ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
 p1
 ```
 
-Whoops, looks like we have an error. Since we have more groups than R’s default shape palette, we must explicitly specify more than 6 shapes. If you look at the legend, you may notice how our "X" replicate does not have a symbol to represent it. This can be done easily. Google “geom_point shapes” to get an idea of what ggplot2 has to offer. I think making shapes identical to the replicate (that is, replicate A will have shape “A”) makes the most sense.
+Whoops, looks like we have an error. Since we have more groups (our replicates in this case) than R’s default shape palette, we must explicitly specify more than 6 shapes. If you look at the legend, you may notice how our "X" replicate does not have a symbol to represent it. This error can be fixed easily. Google “geom_point shapes” to get an idea of what symbols or shapes ggplot2 has to offer. I think making shapes identical to the replicate (that is, replicate A will have shape “A”) makes the most sense.
 
 ```{r}
 shapeorder <- c(65,66,67,68,69,70,4)
@@ -170,8 +170,8 @@ You probably got a few errors about missing values. That's because I wasn't able
 
 Let’s interpret the data.
 
-1)	The uninoculated control in each data set is replicate “X”. How does it change over the week? Is our data still reliable?
-2)	What conclusions can draw from each treatment? How does the pH change in each one? Are the changes intuitive?
+1)	The uninoculated control in each data set is replicate “X”. How does it change over the week? Is our data still reliable? What does this data suggest about the CR media itself?
+2)	What conclusions can draw from each treatment? How does the pH change in each one? Are the changes consistent between treatments?
 3)	How does the variation between replicates compare between treatments? What do you think this means?
 
 
