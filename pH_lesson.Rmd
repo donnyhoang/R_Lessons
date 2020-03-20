@@ -18,7 +18,7 @@ The goal of this lesson is to familiarize yourself with basic R commands. We wil
 
 
 ## Dataset:
-We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities were used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.
+We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities are used as "biological replicates" for the experiment. Each community was used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.
 
 Don't forget to download “SGH_CR_pH.csv” which is our data file.
 
@@ -35,7 +35,7 @@ Good practice includes adding some basic information to our script:
 #Graphing pH data
 ```
 
-Your name, data, and a small blurb about what the script is for is the bare minimum in my opinion (but if I'm completely honest I don't always follow this.) You may notice that I have a "#" before the text. This symbol tells R not to run whatever text is on that line and is useful for taking notes throughout your code.
+Your name, date, and a small blurb about what the script is for is the bare minimum in my opinion (but if I'm completely honest I don't always follow this.) You may notice that I have a "#" before the text. This symbol tells R not to run whatever text is on that line and is useful for taking notes throughout your code. If I'm working through an online lesson or tutorial (like this one) I would also comment the link to make it easy to find in the future.
 
 We will need the packages: ggplot2 and ggpubr. You can load in a package by typing:
 

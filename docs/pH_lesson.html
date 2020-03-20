@@ -491,7 +491,7 @@ $(document).ready(function () {
 </div>
 <div id="dataset" class="section level2">
 <h2>Dataset:</h2>
-<p>We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities were used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.</p>
+<p>We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities are used as “biological replicates” for the experiment. Each community was used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.</p>
 <p>Don’t forget to download “SGH_CR_pH.csv” which is our data file.</p>
 </div>
 <div id="excercise" class="section level2">
@@ -504,7 +504,7 @@ $(document).ready(function () {
 <pre class="r"><code>#Donny Hoang
 #3.19.2020
 #Graphing pH data</code></pre>
-<p>Your name, data, and a small blurb about what the script is for is the bare minimum in my opinion (but if I’m completely honest I don’t always follow this.) You may notice that I have a “#” before the text. This symbol tells R not to run whatever text is on that line and is useful for taking notes throughout your code.</p>
+<p>Your name, date, and a small blurb about what the script is for is the bare minimum in my opinion (but if I’m completely honest I don’t always follow this.) You may notice that I have a “#” before the text. This symbol tells R not to run whatever text is on that line and is useful for taking notes throughout your code. If I’m working through an online lesson or tutorial (like this one) I would also comment the link to make it easy to find in the future.</p>
 <p>We will need the packages: ggplot2 and ggpubr. You can load in a package by typing:</p>
 <pre class="r"><code>## if the packages are not installed, use these commands to install them
 #install.packages(&#39;ggpubr&#39;)
