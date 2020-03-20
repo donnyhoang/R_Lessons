@@ -6,7 +6,7 @@ knit: (function(input_file, encoding) {
  encoding=encoding,
  output_file=file.path(dirname(input_file), out_dir, 'COD_lesson.html'))})
 author: "Donny Hoang"
-date: "3/19/2020"
+date: "3/20/2020"
 output: html_document
 ---
 
@@ -76,11 +76,13 @@ data<-data %>%
 head(data) #take a peak at the data
 ```
 
-Great! The data is almost ready to be graphed. I'm just going to make a couple aesthetic codes before plotting.
+Great! The data is almost ready to be graphed. I'm just going to make a quick aesthetic code. R's default color palette isn't that pretty, imo. I like to manually specify my colors to ensure that they're harmonious and colorblind friendly. Additionally, R will want to order our treatments alphabetically. That order isn't always how we'll want it, so we will specify the order we want.
 
 ```{r}
-shapeorder<-c(65,66,67,68,69,70) #Remember this from code from last time?
-palette <-c( "#56B4E9", "#999999","#E69F00","#0072B2", "#F0E442","#CC79A7") #similar to the code above, but this specifies a color palette. I chose those colors because they're colorblind friendly. There are other ways to manually set colors, and we will explore them in future lessons.
+palette <-c( "#56B4E9", "#999999","#E69F00","#0072B2", "#F0E442","#CC79A7") #does this code look similar to something you've seen before?
+
+data$Treatment<-factor(data$Treatment, levels = c("pH 6","pH 6 + MES","pH 6 + 5% glucose",
+                                                  "pH 6 + 10% glucose","pH 8","pH 10"))
 ```
 
 Alright, let's graph!
@@ -88,8 +90,7 @@ Alright, let's graph!
 ```{r}
 plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+ #initialize the graph
   ylim(0,100) + #set y-axis limits
-  geom_point(aes(size=0.5,shape=replicate))+ #add points, make them bigger
-  scale_shape_manual(values=shapeorder)+ #specify shapes
+  geom_point()+ #add points
   scale_colour_manual(values=palette) + #specify colors
   geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),width=.2, position=position_dodge(.05))+ #add error bars
   labs(title="Day 4", y = "Percent remaining COD mg O2/L") + #add labels
@@ -99,7 +100,7 @@ plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+ #initialize the gra
 plot
 ```
 
-Not the prettiest graph, but good enough for now! 
+Not the prettiest graph, but good enough for now! It looks like there are some differences, but we want to know if they are significant.
 
 ```{r}
 
