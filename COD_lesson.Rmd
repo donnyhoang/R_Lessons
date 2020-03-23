@@ -60,7 +60,7 @@ What I hope you notice is that we have the same biological replicates as before 
 Graphing the data as is can be cumbersome, as it's raw data and we haven't yet calculated the mean or standard deviation.  First, let's collapse our columns "percent_1","percent_2", and "percent_3". To do this, we need the melt() function from the reshape2 package.
 
 ```{r}
-data<-melt(data,id=c("Sample","Treatment","replicate","day"))
+data<-melt(data,id=c("Sample", "Treatment", "replicate", "day"))
 
 head(data) ## take a peak at the new data
 ```
@@ -71,7 +71,7 @@ Our next step is to calculate the mean and sd for our groups.However, if we do t
 
 ```{r}
 data<-data %>%
-  group_by(Treatment,replicate) %>%
+  group_by(Treatment, replicate) %>%
   summarise(count=n(),
             mean=mean(value),
             sd=sd(value))
@@ -92,13 +92,13 @@ data$Treatment<-factor(data$Treatment, levels = c("pH 6","pH 6 + MES","pH 6 + 5%
 Alright, let's graph!
 
 ```{r}
-plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+ #initialize the graph
+plot <-ggplot(data,aes(x=Treatment, y=mean, color=Treatment))+ #initialize the graph
   geom_point()+ #add points
   scale_colour_manual(values=palette) + #specify colors
-  geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),width=.2, position=position_dodge(.05))+ #add error bars
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd),width=.2, position=position_dodge(.05))+ #add error bars
   labs(title="Day 4", y = "Percent remaining COD mg O2/L") + #add labels
   theme_classic() + #make it pretty
-  theme(axis.text.x=element_text(angle=45,hjust=1)) #rotate x-axis labels so they don't overlap
+  theme(axis.text.x=element_text(angle=45, hjust=1)) #rotate x-axis labels so they don't overlap
 
 plot
 ```
@@ -112,28 +112,29 @@ First, we must specify our comparisons. Then, we can adjust our graph above with
 ```{r}
 my_comparisons<-list(c("pH 6", "pH 6 + MES"), c("pH 6", "pH 6 + 5% glucose"), c("pH 6", "pH 6 + 10% glucose"), c("pH 6", "pH 8"),  c("pH 6", "pH 10"))
 
-plot <-ggplot(data,aes(x=Treatment,y=mean,color=Treatment))+
+plot <-ggplot(data,aes(x=Treatment, y=mean, color=Treatment))+
   geom_point()+ 
   scale_colour_manual(values=palette) + 
-  geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),width=.2, position=position_dodge(.05))+ 
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd),width=.2, position=position_dodge(.05))+ 
   labs(title="Day 4", y = "Percent remaining COD mg O2/L") +
   theme_classic() + 
-  theme(axis.text.x=element_text(angle=45,hjust=1)) +
-  stat_compare_means(comparisons=my_comparisons,method="t.test", label="p.signif") #adding significance
+  theme(axis.text.x=element_text(angle=45, hjust=1)) +
+  stat_compare_means(comparisons=my_comparisons, method="t.test", label="p.signif") #adding significance
 
 plot
 ```
 
 You can play around with the comparisons, but the most important comparisons, to me, are pairwise comparisons between CR pH 6 and the other treatments. 
 
-```{r}
+We're ready to interpret the data!
 
-```
+1) How did altering the CR affect the communitys' ability to degrade CR? Which of those changes are "significant"?
+
+2) Describe the variation in each treatment. What do you think is happening in these communities?
+
+3) We are making a couple assumptions which the data here. Can you think of some caveats to our interpretation? Hint: COD is a proxy for ALL organic material in the media. We spun down the cells and measured the supernantant, so what's left?
+
+4) The data is expressed as a percentage of remaining COD. How does that limit your interpretation? What kind of measurements or experiments should we do to get past those limitations?
 
 
-
-
-```{r}
-
-```
-
+I hope you are getting a bit more comfortable with R. We will do one more lesson graphing+stats lesson, before moving on to doing actual sequence analysis.
