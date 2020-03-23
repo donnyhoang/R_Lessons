@@ -80,7 +80,7 @@ head(data) #take a peak at the data
 ```
 
 ## Part 3: Graphing the data.
-Great! The data is almost ready to be graphed. I'm going to make a couple quick aesthetic code. R's default color palette isn't that pretty, imo. I like to manually specify my colors to ensure that they're harmonious and colorblind friendly. Additionally, R will want to order our treatments alphabetically. That order isn't always how we'll want it, so we will specify the order we want.
+Great! The data is almost ready to be graphed. I'm going to write a couple aesthetic codes. R's default color palette isn't that pretty, imo. I like to manually specify my colors to ensure that they're harmonious and colorblind friendly. Additionally, R will want to order our treatments alphabetically. That order isn't always how we'll want it, so we will specify the order we want.
 
 ```{r}
 palette <-c( "#56B4E9", "#999999","#E69F00","#0072B2", "#F0E442","#CC79A7") #does this code look similar to something you've seen before?
@@ -103,7 +103,7 @@ plot <-ggplot(data,aes(x=Treatment, y=mean, color=Treatment))+ #initialize the g
 plot
 ```
 
-Not the prettiest graph, but good enough for now! It looks like there are some differences, but we want to know if they are significant. Remember that we want to know whether any of the treatments result in significantly different remaining COD compared to our control, CR pH 6. That sounds like a t-test, which ggpubr can do and place onto our graph.
+Almost done! It looks like there are some differences, but we want to know if they are significant. Remember that we want to know whether any of the treatments result in significantly different remaining COD compared to our control, CR pH 6. That sounds like a t-test, which ggpubr can do and place onto our graph.
 
 ## Part 4: Perform a t-test.
 
@@ -137,4 +137,4 @@ We're ready to interpret the data!
 4) The data is expressed as a percentage of remaining COD. How does that limit your interpretation? What kind of measurements or experiments should we do to get past those limitations?
 
 
-I hope you are getting a bit more comfortable with R. We will do one more lesson graphing+stats lesson, before moving on to doing actual sequence analysis.
+I hope you are getting a bit more comfortable with R. We will do one more lesson graphing lesson before moving on to sequence analysis.
