@@ -19,7 +19,7 @@ In lesson 2, most people correctly pointed out that COD measurements are limited
 
 ## Dataset
 
-We are using the same dataset as the last two lessons, but here we are using High performance liquid chromatograph (HPLC) data. Briefly, HPLC can identiy and quantify compounds of a liquid solution. However, this current dataset is still limited because we have only measured a small set of compounds. Unlike the previous dataset, we have data for every sample from every day of the experiment. Lastly, the compounds are expressed grams/L in the datafile.
+We are using the same dataset as the last two lessons, but here we are using High performance liquid chromatograph (HPLC) data. Briefly, HPLC can identiy and quantify compounds of a liquid solution. However, this current dataset is still limited because we have only measured a small set of compounds. Unlike the previous dataset, we have data for every sample from every day of the experiment. Lastly, the compounds are expressed as grams/L in the datafile.
 
 ## Excercises
 # Part 1: Load in packages and data.
@@ -44,7 +44,7 @@ library(RColorBrewer)
 data<-read.csv("HPLC_CR.csv",header=TRUE)
 ```
 
-Let's take a quick look at the data. What compounds were measure?
+Let's take a quick look at the data. What compounds were measured?
 
 ```{r}
 head(data)
@@ -78,9 +78,11 @@ p4
 
 ```
 
-Before we start interpreting the data, I want to make a couple aesthetic changes. First, these colors are awful. Having a gradient of color for categorical variables can make interpretation difficult. Closeness in color can imply closeness in value - which doesn't make sense for discrete variables. However, I don't want to manually type in colors for all 11 of our variables. We can get around this with RColorBrewer, which is a popular color palette package in R. Many of the color palettes are colorblind friendly (though we won't be using one is it doesn't have enough colors for us).
+Before we start interpreting the data, I want to make a couple aesthetic changes. First, these colors aren't great for representing our data. Having a gradient of colors for categorical variables can make interpretation difficult. Closeness in color can imply closeness in value - which doesn't make sense for discrete categories. However, I don't want to manually type in colors for all 11 of our compounds. We can get around this with RColorBrewer, which is a popular color palette package in R. Many of the color palettes are colorblind friendly (though we won't be using one here because it doesn't have enough colors for us).
 
-Second, R has reordered all our samples alphabetically, which isn't that useful for presenting our data in this situation. Let's tackle the colors first.
+Second, R has reordered all our samples alphabetically, which isn't that useful for presenting our data in this situation. 
+
+Let's tackle the colors first.
 
 ```{r}
 colorCount <-length(unique(data$variable)) #count how many different colors we will need
@@ -89,7 +91,7 @@ getPalette = colorRampPalette(brewer.pal(11, "Set3")) #a function for getting ou
 
 Can you figure out what the getPalette function is doing? Try Googling colorRampPalette() and brewer.pal(). Also, Set3 is my favorite color palette, but feel free to change it to [other palettes RColorBrewer has.](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) I recommend focusing on qualitative palettes for this dataset. Why would sequential or diverging palettes not work for our current data?
 
-Next, R has automatically reordered our samples to be alphabetical. I don't think this representation is useful, so we must reorder the samples ourselves. You've done this before in previous lessons, where we ordered our factors (Treatments) so that the pH 6 treatment would be graphed first. Since the data is organized in the order I want it in the data file, that is the order I will have R order it.
+Next, R has automatically reordered our samples to be alphabetical. I don't think this representation is useful, so we must reorder the samples ourselves. You've done this before in previous lessons, where we ordered our factors (Treatments) so that the pH 6 treatment would be graphed first. Since the data is "in order" in our original data file, that is the order I will have R order it.
 
 ```{r}
 data$Sample <- factor(data$Sample, levels = unique(data$Sample)) # Tell R what order my samples go in
@@ -98,7 +100,7 @@ data$Sample <- factor(data$Sample, levels = unique(data$Sample)) # Tell R what o
 Now that we're done with the aesthetic changes, let's run our graph again.
 
 ```{r}
-day4 <- subset(data, data$Day=="4") #subset the data
+day4 <- subset(data, data$Day=="4") #subset the data. Our previous day4 object has not been ordered.
 
 p4 <-ggplot()+ #initialize the graph
            geom_bar(data=day4, aes(y=value,x=Sample,fill=variable),stat="identity") + #specify that we want a bar graph
@@ -168,7 +170,7 @@ ggarrange(p1, p2, p3, p4, p5, p6, p7, #add all the graphs we want
           common.legend=TRUE) # these graphs all have the same legend, so tell R that
 ```
 
-This graph can be hard to interpret as is, but you can zoom into the plot on RStudio if you wish. Since this is an exploratory analysis, let's look at each graph individually.
+This graph can be hard to interpret as is, but you can zoom into the plot on RStudio if you wish. Since this is an exploratory analysis, we could also look at each graph individually.
 
 ```{r}
 p1
@@ -179,6 +181,8 @@ p5
 p6
 p7
 ```
+
+Whatever you chose to do, review the questions:
 
 1) How do the controls look? Do they look the same across time?
 2) Are there any samples that stand out to you? For example, are there any samples where the measured compounds don't make sense?
