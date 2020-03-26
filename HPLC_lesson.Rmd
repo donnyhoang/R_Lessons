@@ -44,7 +44,7 @@ library(RColorBrewer)
 data<-read.csv("HPLC_CR.csv",header=TRUE)
 ```
 
-Let's take a quick look at the data. What compounds did we measure?
+Let's take a quick look at the data. What compounds were measure?
 
 ```{r}
 head(data)
