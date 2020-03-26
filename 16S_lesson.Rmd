@@ -1,0 +1,27 @@
+---
+title: "16S_Lesson"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, '16S_lesson.html'))})
+author: "Donny Hoang"
+date: "3/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goal: Familiarize yourself with 16S Amplicon sequence analysis.
+
+We will achive this goal by following along the [dada2 pipeline.](https://benjjneb.github.io/dada2/tutorial.html) I have copied it here, but with our own data, so following along should be easier.
+
+## Dataset
+
+A former Currie Lab graduate student, Dr. Gina Lewin, experimentally evolved a bacterial community to degrade cellulose more quickly. These communities were transferred approxiamtely every 3-4 days for the first 73 transfers, then every 7 days following that.We wanted to know if these communities followed different successional patterns throughout the course of their maintenance. Lindsay and I regrew this community from freeezer stocks at transfer 56 (before the change), 73 (at the change), 94 (after the change), and 110 (way after the change). Then, we destructively sampled over the course of one week. You will analyze one set of samples (to save space on your computer) and we will compare our results to each other at the end of this lesson.
+
+## Excercise
+
+# Part 1: 

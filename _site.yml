@@ -8,4 +8,8 @@ navbar:
       href: pH_lesson.html
     - text: "Lesson 2: Basic Stats in R"
       href: COD_lesson.html
+    - text: "Lesson 3: Basic Stats in R"
+      href: HPLC_lesson.html
+    - text: "Lesson 4: 16S Analysis in R"
+      href: 16S_lesson.html
 
