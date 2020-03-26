@@ -593,10 +593,10 @@ p4</code></pre>
 <pre class="r"><code>colorCount &lt;-length(unique(data$variable)) #count how many different colors we will need
 getPalette = colorRampPalette(brewer.pal(11, &quot;Set3&quot;)) #a function for getting our palette.</code></pre>
 <p>Can you figure out what the getPalette function is doing? Try Googling colorRampPalette() and brewer.pal(). Also, Set3 is my favorite color palette, but feel free to change it to <a href="https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html">other palettes RColorBrewer has.</a> I recommend focusing on qualitative palettes for this dataset. Why would sequential or diverging palettes not work for our current data?</p>
-<p>Next, R has automatically reordered our samples to be alphabetical. I don’t think this representation is useful, so we must reorder the samples ourselves. You’ve done this before in previous lessons, where we ordered our factors (Treatments) so that the pH 6 treatment would be graphed first. Since the data is “in order” in our original data file, that is the order I will have R order it.</p>
+<p>Next, R has automatically reordered our samples to be alphabetical. I don’t think this representation is useful, so we must reorder the samples ourselves. You’ve done factor reordering in previous lessons, so the code below may look familiar to you. Since the data is “in order” in our original data file, that is the order I will have R order it.</p>
 <pre class="r"><code>data$Sample &lt;- factor(data$Sample, levels = unique(data$Sample)) # Tell R what order my samples go in</code></pre>
 <p>Now that we’re done with the aesthetic changes, let’s run our graph again.</p>
-<pre class="r"><code>day4 &lt;- subset(data, data$Day==&quot;4&quot;) #subset the data. Our previous day4 object has not been ordered.
+<pre class="r"><code>day4 &lt;- subset(data, data$Day==&quot;4&quot;) #Our previous day4 object was not ordered, so subset again.
 
 p4 &lt;-ggplot()+ #initialize the graph
            geom_bar(data=day4, aes(y=value,x=Sample,fill=variable),stat=&quot;identity&quot;) + #specify that we want a bar graph
