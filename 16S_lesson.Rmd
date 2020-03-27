@@ -16,12 +16,180 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Goal: Familiarize yourself with 16S Amplicon sequence analysis.
 
-We will achive this goal by following along the [dada2 pipeline.](https://benjjneb.github.io/dada2/tutorial.html) I have copied it here, but with our own data, so following along should be easier.
+We will achieve this goal by following along the [dada2 pipeline.](https://benjjneb.github.io/dada2/tutorial.html) I have copied it here, but with our own data, so following along should be easier. Tbh, a lot of the nitty-gritty is over my head, but I'll try my best to answer your questions as you go through this. If you are curious, I recommend checking [their paper.](https://www.nature.com/articles/nmeth.3869#methods)
 
 ## Dataset
 
-A former Currie Lab graduate student, Dr. Gina Lewin, experimentally evolved a bacterial community to degrade cellulose more quickly. These communities were transferred approxiamtely every 3-4 days for the first 73 transfers, then every 7 days following that.We wanted to know if these communities followed different successional patterns throughout the course of their maintenance. Lindsay and I regrew this community from freeezer stocks at transfer 56 (before the change), 73 (at the change), 94 (after the change), and 110 (way after the change). Then, we destructively sampled over the course of one week. You will analyze one set of samples (to save space on your computer) and we will compare our results to each other at the end of this lesson.
+A former Currie Lab graduate student, Dr. Gina Lewin, experimentally evolved a bacterial community to degrade cellulose more quickly. These communities were transferred approxiamtely every 3-4 days for the first 73 transfers, then every 7 days following that. We wanted to know if these communities followed different successional patterns throughout the course of their maintenance. Lindsay and I regrew this community from freeezer stocks at transfer 56 (before the change), 73 (at the change), 94 (after the change), and 110 (way after the change). Then, we destructively sampled over the course of one week starting on Day 2. These samples were sent out for 16S amplicon sequencing using Illumina MiSeq 2x300 bp. You will analyze one set of samples (to save space on your computer) and we will compare our results to each other at the end of this lesson.
 
 ## Excercise
+# Load dada2 and your data
 
-# Part 1: 
+
+Your output may look different than what is presented here, because you will be working with different sets of data.
+
+We have a lot more data than we did the previous lessons. My data is stored in a folder called "110_16S". I recommend storing your data in it's own folder accessible from your working directory.
+```{r}
+library(dada2) #load dada2 package
+path <-"110_16S/" #set path to folder containing data files
+list.files(path) #view files
+```
+
+What I hope you notice is that every sample has two files: a forward read, and a reverse read. This is denoted by "_R1_001.fastq.gz" and "_R2_001.fastq.gz" respectively.
+
+Next, let's import the files.
+
+```{r}
+fnFs <- sort(list.files(path, pattern="_R1_001.fastq.gz", full.names = TRUE)) #import forward reads
+fnRs <- sort(list.files(path, pattern="_R2_001.fastq.gz", full.names = TRUE)) #import reverse reads
+sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1) #remove unnecessary part of filenames
+```
+
+# Quality check our reads
+
+```{r}
+plotQualityProfile(fnFs[1:2]) #plot quality score of forward reads
+```
+
+Here, the y-axis represents the frequency of the quality at the base position. The x-axis is the base position of the sequenced fragment. The dotted green line represents mean quality score, and the dotted orange line represents the quartiles of the the quality score distribubtion. The important thing to note from this graph is where along the sequence the quality score drops. For the forward reads the quality score drops around basepair 280. 
+
+
+Let's look at the reverse reads.
+```{r}
+plotQualityProfile(fnRs[1:2]) #plot quality score of reverse reads
+```
+
+lol these are so much worse. I'm gonna chop it off at the 225 position. Your data will have the same cutoffs as they were done on the same sequencing run.
+
+#Trim and merge our reads
+```{r}
+filtFs <- file.path(path, "filtered", paste0(sample.names, "_F_filt.fastq.gz")) #create object holding filtered F reads.
+filtRs <- file.path(path, "filtered", paste0(sample.names, "_R_filt.fastq.gz")) #create object holding filtered R reads
+names(filtFs) <- sample.names #name
+names(filtRs) <- sample.names #name
+
+
+#This following step will take a few minutes. Get a drink or take a small break!
+out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, #specify input+output
+                     truncLen=c(280,225), #where we are cutting off our sequences
+                     trimLeft = c(17,21), #explanation below
+                     maxN=0, maxEE=c(2,2), truncQ=2, rm.phix=TRUE, #default parameters
+                     compress=TRUE, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you're on a MAC
+
+head(out)
+```
+
+trimLeft() will trim off any primer sequences from our amplicon, because primers can disrupt downstream processing. I ran through this pipeline a couple times with different numbers, and (17,21) seems to work best for this particular dataset. Some datasets may not require any trimming, and others many require more or less trimming.
+
+
+Looks like I've kept most of my reads. Great! Let's move on to learning error rates.
+
+#Learn error rates
+```{r}
+
+#The following steps will take a few minutes. Relax and enjoy the downtime!
+
+errF <- learnErrors(filtFs, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you're on a MAC
+errR <- learnErrors(filtRs, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you're on a MAC
+
+plotErrors(errF, nominalQ=TRUE)
+```
+
+Here, we estimated error rates. The y-axis is error rate frequency, and the x-axis represents the consensus quality score. The black line is our estimated error rate, and the dots are the observed error rate.The estimated error rate seems like a good fit for our observed error rates. Let's move forward.
+
+# Sample inference
+```{r}
+#This step also takes a couple minutes. Hope you're comfortable!
+
+dadaFs <- dada(filtFs, err=errF, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you're on a MAC
+dadaRs <- dada(filtRs, err=errR, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you're on a MAC
+dadaFs[[1]]
+```
+
+The dada2 algorithm has inferred that I have 45 "true sequence variants", which are inferred from the 5064 sequences in inputted.
+
+# Merge paired reads.
+```{r}
+mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=FALSE) #merge paired reads
+head(mergers[[1]]) # inspect the merger data.frame from the first sample
+```
+
+The mergers object we created contains a list of data.frames. Each data.frame contains a column for the merged sequence, its abundance, and the indices of the F and R sequence varients that got merged.
+
+#Construct sequence table and remove chimeras
+```{r}
+seqtab <- makeSequenceTable(mergers) #create sequence table that is imput for chimera removing function
+dim(seqtab) #Check number of ASV's before chimera removal
+
+seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus", multithread=FALSE, verbose=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you're on a MAC
+
+dim(seqtab.nochim)#check number of ASV's after chimera removal
+
+sum(seqtab.nochim)/sum(seqtab) #check abundance of chimeras
+```
+
+In my 18 samples, I had 375 ASVs before removing chimeras and 107 ASVs after removing chimeras. That means approximately 72% of my unique sequence variants are chimeras. However, they make about 1% of my sequences in terms of abundance. The number of chimeras seems high initially, but they make up such a small proportion of the ASVs that I'm not worried about them. Additionally, this number can vary depending on the dataset.
+
+
+# Track reads through the pipeline
+
+For progress' sake, let's check how many reads we've lost throughout this process.
+
+```{r}
+getN <- function(x) sum(getUniques(x))
+track <- cbind(out, sapply(dadaFs, getN), sapply(dadaRs, getN), sapply(mergers, getN), rowSums(seqtab.nochim))
+
+colnames(track) <- c("input", "filtered", "denoisedF", "denoisedR", "merged", "nonchim")
+rownames(track) <- sample.names
+head(track)
+```
+
+Looks like we've kept most of our reads throughout this process. I don't see a step where we ended up losing a majority of our reads.
+
+# Assign taxonomy
+
+We have identied all our unqiue ASVs and their abundance. Now it's time to assign taxonomy to their sequences, and see what microbes they came from.
+
+```{r}
+#This step takes a few minutes.
+
+taxa <- assignTaxonomy(seqtab.nochim, "tax/silva_nr_v132_train_set.fa.gz", multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you're on a MAC
+taxa.print <- taxa # Removing sequence rownames for display only
+rownames(taxa.print) <- NULL
+head(taxa.print)
+```
+
+The majority of my reads are from Cellvibrio, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community. We will dig into the data we generated more on Wednesday. This is the end of part one. We will pick up with visualizing our data next lesson. For now, save your script and the R Workspace image so all your progress is saved.
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
