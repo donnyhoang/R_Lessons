@@ -14,16 +14,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Goal: Familiarize yourself with 16S Amplicon sequence analysis.
+# Goal: Familiarize yourself with 16S Amplicon sequence analysis.
 
 We will achieve this goal by following along the [dada2 pipeline.](https://benjjneb.github.io/dada2/tutorial.html) I have copied it here, but with our own data, so following along should be easier. Tbh, a lot of the nitty-gritty is over my head, but I'll try my best to answer your questions as you go through this. If you are curious, I recommend checking [their paper.](https://www.nature.com/articles/nmeth.3869#methods)
 
-## Dataset
+Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.
+
+# Dataset
 
 A former Currie Lab graduate student, Dr. Gina Lewin, experimentally evolved a bacterial community to degrade cellulose more quickly. These communities were transferred approxiamtely every 3-4 days for the first 73 transfers, then every 7 days following that. We wanted to know if these communities followed different successional patterns throughout the course of their maintenance. Lindsay and I regrew this community from freeezer stocks at transfer 56 (before the change), 73 (at the change), 94 (after the change), and 110 (way after the change). Then, we destructively sampled over the course of one week starting on Day 2. These samples were sent out for 16S amplicon sequencing using Illumina MiSeq 2x300 bp. You will analyze one set of samples (to save space on your computer) and we will compare our results to each other at the end of this lesson.
 
-## Excercise
-# Load dada2 and your data
+# Excercise
+## Load dada2 and your data
 
 
 Your output may look different than what is presented here, because you will be working with different sets of data.
@@ -42,10 +44,11 @@ Next, let's import the files.
 ```{r}
 fnFs <- sort(list.files(path, pattern="_R1_001.fastq.gz", full.names = TRUE)) #import forward reads
 fnRs <- sort(list.files(path, pattern="_R2_001.fastq.gz", full.names = TRUE)) #import reverse reads
-sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1) #remove unnecessary part of filenames
+sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1) #extract sample names
 ```
+Here, we are storing our F and R reads into their own object, and storing sample names. Can you figure out what the sapply() function is doing? We are extracting sample names only from the fnFs object because the fnRs object woul have the same name.
 
-# Quality check our reads
+## Quality check our reads
 
 ```{r}
 plotQualityProfile(fnFs[1:2]) #plot quality score of forward reads
@@ -61,7 +64,7 @@ plotQualityProfile(fnRs[1:2]) #plot quality score of reverse reads
 
 lol these are so much worse. I'm gonna chop it off at the 225 position. Your data will have the same cutoffs as they were done on the same sequencing run.
 
-#Trim and merge our reads
+## Trim and merge our reads
 ```{r}
 filtFs <- file.path(path, "filtered", paste0(sample.names, "_F_filt.fastq.gz")) #create object holding filtered F reads.
 filtRs <- file.path(path, "filtered", paste0(sample.names, "_R_filt.fastq.gz")) #create object holding filtered R reads
@@ -84,7 +87,7 @@ trimLeft() will trim off any primer sequences from our amplicon, because primers
 
 Looks like I've kept most of my reads. Great! Let's move on to learning error rates.
 
-#Learn error rates
+## Learn error rates
 ```{r}
 
 #The following steps will take a few minutes. Relax and enjoy the downtime!
@@ -95,9 +98,9 @@ errR <- learnErrors(filtRs, multithread=FALSE) #my multitread is set to FALSE bc
 plotErrors(errF, nominalQ=TRUE)
 ```
 
-Here, we estimated error rates. The y-axis is error rate frequency, and the x-axis represents the consensus quality score. The black line is our estimated error rate, and the dots are the observed error rate.The estimated error rate seems like a good fit for our observed error rates. Let's move forward.
+Here, we estimated error rates. The y-axis is error rate frequency, and the x-axis represents the consensus quality score. The black line is our estimated error rate, and the dots are the observed error rate. Importantly, the estimated error rate seems like a good fit for our observed error rates. Let's move forward.
 
-# Sample inference
+## Sample inference
 ```{r}
 #This step also takes a couple minutes. Hope you're comfortable!
 
@@ -106,9 +109,9 @@ dadaRs <- dada(filtRs, err=errR, multithread=FALSE) #my multitread is set to FAL
 dadaFs[[1]]
 ```
 
-The dada2 algorithm has inferred that I have 45 "true sequence variants", which are inferred from the 5064 sequences in inputted.
+The dada2 algorithm has inferred that I have 45 "true sequence variants", which are inferred from the 4041 sequences in inputted. What does your output say?
 
-# Merge paired reads.
+## Merge paired reads.
 ```{r}
 mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=FALSE) #merge paired reads
 head(mergers[[1]]) # inspect the merger data.frame from the first sample
@@ -116,7 +119,7 @@ head(mergers[[1]]) # inspect the merger data.frame from the first sample
 
 The mergers object we created contains a list of data.frames. Each data.frame contains a column for the merged sequence, its abundance, and the indices of the F and R sequence varients that got merged.
 
-#Construct sequence table and remove chimeras
+## Construct sequence table and remove chimeras
 ```{r}
 seqtab <- makeSequenceTable(mergers) #create sequence table that is imput for chimera removing function
 dim(seqtab) #Check number of ASV's before chimera removal
@@ -130,8 +133,9 @@ sum(seqtab.nochim)/sum(seqtab) #check abundance of chimeras
 
 In my 18 samples, I had 375 ASVs before removing chimeras and 107 ASVs after removing chimeras. That means approximately 72% of my unique sequence variants are chimeras. However, they make about 1% of my sequences in terms of abundance. The number of chimeras seems high initially, but they make up such a small proportion of the ASVs that I'm not worried about them. Additionally, this number can vary depending on the dataset.
 
+How do your numbers compare? How many of your ASVs were chimeras? What was their abundance?
 
-# Track reads through the pipeline
+## Track reads through the pipeline
 
 For progress' sake, let's check how many reads we've lost throughout this process.
 
@@ -146,7 +150,9 @@ head(track)
 
 Looks like we've kept most of our reads throughout this process. I don't see a step where we ended up losing a majority of our reads.
 
-# Assign taxonomy
+How do your numbers compare? Are they similar? Do you see any points along the pipeline where you lost a bunch of reads?
+
+## Assign taxonomy
 
 We have identied all our unqiue ASVs and their abundance. Now it's time to assign taxonomy to their sequences, and see what microbes they came from.
 
@@ -159,7 +165,11 @@ rownames(taxa.print) <- NULL
 head(taxa.print)
 ```
 
-The majority of my reads are from Cellvibrio, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community. We will dig into the data we generated more on Wednesday. This is the end of part one. We will pick up with visualizing our data next lesson. For now, save your script and the R Workspace image so all your progress is saved.
+The majority of my reads are from *Cellvibrio*, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community. What are the most common genera of bacteria in your dataset? Do they match what your partner(s) got?
+
+
+
+We will dig into the data we generated more on Wednesday. This is the end of part one. We will pick up with visualizing our data next lesson. For now, save your script and the R Workspace image so all your progress is saved.
 
 ```{r}
 
