@@ -19,7 +19,7 @@ In lesson 2, most people correctly pointed out that COD measurements are limited
 
 ## Dataset
 
-We are using the same dataset as the last two lessons, but here we are using High performance liquid chromatograph (HPLC) data. Briefly, HPLC can identiy and quantify compounds of a liquid solution. However, this current dataset is still limited because we have only measured a small set of compounds. Unlike the previous dataset, we have data for every sample from every day of the experiment. Lastly, the compounds are expressed as grams/L in the datafile.
+We are using the same dataset as the last two lessons, but here we are using High Performance Liquid Chromatograph (HPLC) data. Briefly, HPLC can identiy and quantify compounds of a liquid solution. However, this current dataset is still limited because we have only measured a small set of compounds. Unlike the previous dataset, we have data for every sample from every day of the experiment. Lastly, the compounds are expressed as grams/L in the datafile.
 
 ## Excercises
 # Part 1: Load in packages and data.
@@ -37,8 +37,9 @@ We are using the same dataset as the last two lessons, but here we are using Hig
 
 library(ggplot2)
 library(reshape2)
-library(ggpubr)
 library(RColorBrewer)
+library(ggpubr)
+
 
 
 data<-read.csv("HPLC_CR.csv",header=TRUE)
@@ -57,13 +58,13 @@ Similar to the last lesson, our data is spread across 11 columns. Let's melt() i
 
 ```{r}
 data<-melt(data,id=c("Sample","Treatment","Replicate","Day"))
-head(data) # quickly check that it worked
-str(data)
+head(data) # quicklycheck that it worked
+str(data) #quickly check that it worked
 ```
 
 # Part 3: Graph the data
 
-Since we have almost 300 samples, let's focus on just Day 4 samples. That way, we can compare the data to our COD data and ask if it provides anymore information on how the communities are behaving.
+Since we have almost 300 samples, let's focus on just Day 4 samples. That way, we can compare the data to our COD data and ask if it provides anymore information on how the communities are behaving. Let's subset() the data, as we've done before.
 
 ```{r}
 day4 <- subset(data, data$Day=="4") #subset the data
@@ -73,12 +74,12 @@ p4 <-ggplot()+ #initialize the graph
            theme_classic() + #make it pretty
            theme(axis.text.x=element_text(angle=45, hjust=1)) + #rotate the x-axis labels so we can read it
            ylab("g/L") +  #add a descriptive y-axis label
-           labs(fill='Compound') #change the legend title
+           labs(fill='Compound') #change the legend title to be descriptive
 p4
 
 ```
 
-Before we start interpreting the data, I want to make a couple aesthetic changes. First, these colors aren't great for representing our data. Having a gradient of colors for categorical variables can make interpretation difficult. Closeness in color can imply closeness in value - which doesn't make sense for discrete categories. However, I don't want to manually type in colors for all 11 of our compounds. We can get around this with RColorBrewer, which is a popular color palette package in R. Many of the color palettes are colorblind friendly (though we won't be using one here because it doesn't have enough colors for us).
+Before we start interpreting the data, I want to make a couple aesthetic changes. First, these colors aren't great for representing our data. Having a gradient of colors for categorical variables can make interpretation difficult. Closeness in color can imply closeness in value - which doesn't make sense for discrete categories. However, I don't want to manually type in colors for all 11 of our compounds. We can get around this with RColorBrewer, which is a popular color palette package in R. Many of their color palettes are colorblind friendly (though we won't be using one here because it doesn't have enough colors for us).
 
 Second, R has reordered all our samples alphabetically, which isn't that useful for presenting our data in this situation. 
 
@@ -91,7 +92,7 @@ getPalette = colorRampPalette(brewer.pal(11, "Set3")) #a function for getting ou
 
 Can you figure out what the getPalette function is doing? Try Googling colorRampPalette() and brewer.pal(). Also, Set3 is my favorite color palette, but feel free to change it to [other palettes RColorBrewer has.](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) I recommend focusing on qualitative palettes for this dataset. Why would sequential or diverging palettes not work for our current data?
 
-Next, R has automatically reordered our samples to be alphabetical. I don't think this representation is useful, so we must reorder the samples ourselves. You've done factor reordering in previous lessons, so the code below may look familiar to you. Since the data is "in order" in our original data file, that is the order I will have R order it.
+Next, R has automatically reordered our samples to be alphabetical. I don't think this representation is useful, so we must reorder the samples ourselves. You've done factor reordering in previous lessons, so the code below may look familiar to you. Since the data is already "in order" in our original data file, that is the order I will have R order it.
 
 ```{r}
 data$Sample <- factor(data$Sample, levels = unique(data$Sample)) # Tell R what order my samples go in
@@ -190,9 +191,4 @@ Whatever you chose to do, review the questions:
 4) What biological conclusions can we take from this data? Are the communities behaving differently with the measured compounds based on their treatmeant?
 
 
-I hope everyone is feeling more comfortable with R. Next week we will begin 16S amplicon sequence analysis with a different dataset.
-
-
-```{r}
-
-```
+I hope everyone is feeling more comfortable with R. Next week we will begin 16S amplicon sequence analysis with a dataset that was generated last year.
