@@ -14,18 +14,22 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Goal: Familiarize yourself with 16S Amplicon sequence analysis.
+## Goal: Familiarize yourself with 16S Amplicon sequence analysis.
 
 We will achieve this goal by following along the [dada2 pipeline.](https://benjjneb.github.io/dada2/tutorial.html) I have copied it here, but with our own data, so following along should be easier. Tbh, a lot of the nitty-gritty is over my head, but I'll try my best to answer your questions as you go through this. If you are curious, I recommend checking [their paper.](https://www.nature.com/articles/nmeth.3869#methods)
 
 Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.
 
-# Dataset
+## Dataset
+
+We are working with a 16S rRNA sequencing dataset. This technique is based on the amplification of hypervariable regions with the 16S rRNA gene, and these sequences can be compared to databases for taxonomic identification. 16S amplicon sequencing is typically used to survey the bacterial and/or archael composition of a sample.
 
 A former Currie Lab graduate student, Dr. Gina Lewin, experimentally evolved a bacterial community to degrade cellulose more quickly. These communities were transferred approxiamtely every 3-4 days for the first 73 transfers, then every 7 days following that. We wanted to know if these communities followed different successional patterns throughout the course of their maintenance. Lindsay and I regrew this community from freeezer stocks at transfer 56 (before the change), 73 (at the change), 94 (after the change), and 110 (way after the change). Then, we destructively sampled over the course of one week starting on Day 2. These samples were sent out for 16S amplicon sequencing using Illumina MiSeq 2x300 bp. You will analyze one set of samples (to save space on your computer) and we will compare our results to each other at the end of this lesson.
 
-# Excercise
-## Load dada2 and your data
+Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.
+
+## Excercise
+### Load dada2 and your data
 
 
 Your output may look different than what is presented here, because you will be working with different sets of data.
@@ -48,7 +52,7 @@ sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1) #extract sample na
 ```
 Here, we are storing our F and R reads into their own object, and storing sample names. Can you figure out what the sapply() function is doing? We are extracting sample names only from the fnFs object because the fnRs object woul have the same name.
 
-## Quality check our reads
+### Quality check our reads
 
 ```{r}
 plotQualityProfile(fnFs[1:2]) #plot quality score of forward reads
@@ -64,7 +68,7 @@ plotQualityProfile(fnRs[1:2]) #plot quality score of reverse reads
 
 lol these are so much worse. I'm gonna chop it off at the 225 position. Your data will have the same cutoffs as they were done on the same sequencing run.
 
-## Trim and merge our reads
+### Trim and merge our reads
 ```{r}
 filtFs <- file.path(path, "filtered", paste0(sample.names, "_F_filt.fastq.gz")) #create object holding filtered F reads.
 filtRs <- file.path(path, "filtered", paste0(sample.names, "_R_filt.fastq.gz")) #create object holding filtered R reads
@@ -87,7 +91,7 @@ trimLeft() will trim off any primer sequences from our amplicon, because primers
 
 Looks like I've kept most of my reads. Great! Let's move on to learning error rates.
 
-## Learn error rates
+### Learn error rates
 ```{r}
 
 #The following steps will take a few minutes. Relax and enjoy the downtime!
@@ -100,7 +104,7 @@ plotErrors(errF, nominalQ=TRUE)
 
 Here, we estimated error rates. The y-axis is error rate frequency, and the x-axis represents the consensus quality score. The black line is our estimated error rate, and the dots are the observed error rate. Importantly, the estimated error rate seems like a good fit for our observed error rates. Let's move forward.
 
-## Sample inference
+### Sample inference
 ```{r}
 #This step also takes a couple minutes. Hope you're comfortable!
 
@@ -111,7 +115,7 @@ dadaFs[[1]]
 
 The dada2 algorithm has inferred that I have 45 "true sequence variants", which are inferred from the 4041 sequences in inputted. What does your output say?
 
-## Merge paired reads.
+### Merge paired reads.
 ```{r}
 mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=FALSE) #merge paired reads
 head(mergers[[1]]) # inspect the merger data.frame from the first sample
@@ -119,7 +123,7 @@ head(mergers[[1]]) # inspect the merger data.frame from the first sample
 
 The mergers object we created contains a list of data.frames. Each data.frame contains a column for the merged sequence, its abundance, and the indices of the F and R sequence varients that got merged.
 
-## Construct sequence table and remove chimeras
+### Construct sequence table and remove chimeras
 ```{r}
 seqtab <- makeSequenceTable(mergers) #create sequence table that is imput for chimera removing function
 dim(seqtab) #Check number of ASV's before chimera removal
@@ -135,7 +139,7 @@ In my 18 samples, I had 375 ASVs before removing chimeras and 107 ASVs after rem
 
 How do your numbers compare? How many of your ASVs were chimeras? What was their abundance?
 
-## Track reads through the pipeline
+### Track reads through the pipeline
 
 For progress' sake, let's check how many reads we've lost throughout this process.
 
@@ -152,7 +156,7 @@ Looks like we've kept most of our reads throughout this process. I don't see a s
 
 How do your numbers compare? Are they similar? Do you see any points along the pipeline where you lost a bunch of reads?
 
-## Assign taxonomy
+### Assign taxonomy
 
 We have identied all our unqiue ASVs and their abundance. Now it's time to assign taxonomy to their sequences, and see what microbes they came from.
 
@@ -169,37 +173,40 @@ The majority of my reads are from *Cellvibrio*, a known cellulose degrader. I th
 
 
 
-We will dig into the data we generated more on Wednesday. This is the end of part one. We will pick up with visualizing our data next lesson. For now, save your script and the R Workspace image so all your progress is saved.
+One last thing before we finish for today. Let's save our outputs so we can use them for the next lesson. We want:
+
+1) The fasta file has each of our ASVs, and their corresponding sequence.
+
+2) The count table tells us how many of each sequence we have in each sample.
+
+3) The taxonomy table tells us the taxonomic assignment of each ASV.
+
 
 ```{r}
+#give seq headers more manageable names (ASV_1, ASV_2...)
+seqs <- colnames(seqtab.nochim)
+headers <- vector(dim(seqtab.nochim)[2], mode="character")
 
+for (i in 1:dim(seqtab.nochim)[2]) {
+  headers[i] <- paste(">ASV", i, sep="_")
+}
+
+#fasta file
+fasta <- c(rbind(headers, seqs)) #make fasta file
+write(fasta, "110_seqs.fa") #write out as .fasta file
+
+#count table
+count_tab <- t(seqtab.nochim) #make count table
+row.names(count_tab) <- sub(">", "", headers) #replace rownames with something that is easy to follow
+write.csv(count_tab, "110_counts.csv", row.names=TRUE) #write out as .csv file
+
+
+# tax table:
+tax <- taxa #make taxonomy table
+row.names(tax) <- sub(">", "", headers) #replace rownames with something that is easy to follow
+write.csv(tax, "110_taxonomy.csv", row.names=TRUE) #write out as .csv file
 ```
 
-```{r}
+You should now have three files written out to your working directory. Click on each of them to see what they contain. These are plain text documents, so you will be able to open them with Notepad or some equivalent.
 
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
-
+Please email me your files, and I'll look them over before next lesson.
