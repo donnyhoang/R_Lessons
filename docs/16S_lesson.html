@@ -494,7 +494,7 @@ $(document).ready(function () {
 <div id="goal-familiarize-yourself-with-16s-amplicon-sequence-analysis." class="section level2">
 <h2>Goal: Familiarize yourself with 16S Amplicon sequence analysis.</h2>
 <p>We will achieve this goal by following along the <a href="https://benjjneb.github.io/dada2/tutorial.html">dada2 pipeline.</a> I have copied it here, but with our own data, so following along should be easier. Tbh, a lot of the nitty-gritty is over my head, but I’ll try my best to answer your questions as you go through this. If you are curious, I recommend checking <a href="https://www.nature.com/articles/nmeth.3869#methods">their paper.</a></p>
-<p>Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.</p>
+<p>We are working with raw sequences. Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.</p>
 </div>
 <div id="dataset" class="section level2">
 <h2>Dataset</h2>
@@ -529,8 +529,7 @@ list.files(path) #view files</code></pre>
 ## [29] &quot;110-6C_S140_L001_R1_001.fastq.gz&quot; &quot;110-6C_S140_L001_R2_001.fastq.gz&quot;
 ## [31] &quot;110-7A_S141_L001_R1_001.fastq.gz&quot; &quot;110-7A_S141_L001_R2_001.fastq.gz&quot;
 ## [33] &quot;110-7B_S142_L001_R1_001.fastq.gz&quot; &quot;110-7B_S142_L001_R2_001.fastq.gz&quot;
-## [35] &quot;110-7C_S143_L001_R1_001.fastq.gz&quot; &quot;110-7C_S143_L001_R2_001.fastq.gz&quot;
-## [37] &quot;filtered&quot;</code></pre>
+## [35] &quot;110-7C_S143_L001_R1_001.fastq.gz&quot; &quot;110-7C_S143_L001_R2_001.fastq.gz&quot;</code></pre>
 <p>What I hope you notice is that every sample has two files: a forward read, and a reverse read. This is denoted by &quot;_R1_001.fastq.gz&quot; and &quot;_R2_001.fastq.gz&quot; respectively.</p>
 <p>Next, let’s import the files.</p>
 <pre class="r"><code>fnFs &lt;- sort(list.files(path, pattern=&quot;_R1_001.fastq.gz&quot;, full.names = TRUE)) #import forward reads
@@ -561,9 +560,9 @@ out &lt;- filterAndTrim(fnFs, filtFs, fnRs, filtRs, #specify input+output
                      truncLen=c(280,225), #where we are cutting off our sequences
                      trimLeft = c(17,21), #explanation below
                      maxN=0, maxEE=c(2,2), truncQ=2, rm.phix=TRUE, #default parameters
-                     compress=TRUE, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC
-
-head(out)</code></pre>
+                     compress=TRUE, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC</code></pre>
+<pre><code>## Creating output directory: 110_16S//filtered</code></pre>
+<pre class="r"><code>head(out)</code></pre>
 <pre><code>##                                  reads.in reads.out
 ## 110-2A_S126_L001_R1_001.fastq.gz    59243     51665
 ## 110-2B_S127_L001_R1_001.fastq.gz    72317     63230
@@ -713,7 +712,7 @@ head(taxa.print)</code></pre>
 ## [4,] &quot;Chitinophagaceae&quot; &quot;Terrimonas&quot;   
 ## [5,] &quot;Pseudomonadaceae&quot; &quot;Pseudomonas&quot;  
 ## [6,] &quot;Caulobacteraceae&quot; &quot;Asticcacaulis&quot;</code></pre>
-<p>The majority of my reads are from <em>Cellvibrio</em>, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community. What are the most common genera of bacteria in your dataset? Do they match what your partner(s) got?</p>
+<p>The majority of my reads are from <em>Cellvibrio</em>, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community.</p>
 <p>One last thing before we finish for today. Let’s save our outputs so we can use them for the next lesson. We want:</p>
 <ol style="list-style-type: decimal">
 <li><p>The fasta file has each of our ASVs, and their corresponding sequence.</p></li>
@@ -743,6 +742,11 @@ tax &lt;- taxa #make taxonomy table
 row.names(tax) &lt;- sub(&quot;&gt;&quot;, &quot;&quot;, headers) #replace rownames with something that is easy to follow
 write.csv(tax, &quot;110_taxonomy.csv&quot;, row.names=TRUE) #write out as .csv file</code></pre>
 <p>You should now have three files written out to your working directory. Click on each of them to see what they contain. These are plain text documents, so you will be able to open them with Notepad or some equivalent.</p>
+<ol style="list-style-type: decimal">
+<li><p>What are the top 5 most abundant microbes in your samples? Do they match what your partner(s) got?</p></li>
+<li><p>Do the abundant microbes make sense? Google the genus real quick if you are unfamiliar.</p></li>
+<li><p>Do these top 5 change over time in your set? Don’t look to closely, we will look more closely next lesson.</p></li>
+</ol>
 <p>Please email me your files, and I’ll look them over before next lesson.</p>
 </div>
 </div>

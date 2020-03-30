@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 We will achieve this goal by following along the [dada2 pipeline.](https://benjjneb.github.io/dada2/tutorial.html) I have copied it here, but with our own data, so following along should be easier. Tbh, a lot of the nitty-gritty is over my head, but I'll try my best to answer your questions as you go through this. If you are curious, I recommend checking [their paper.](https://www.nature.com/articles/nmeth.3869#methods)
 
-Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.
+We are working with raw sequences. Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.
 
 ## Dataset
 
@@ -169,8 +169,7 @@ rownames(taxa.print) <- NULL
 head(taxa.print)
 ```
 
-The majority of my reads are from *Cellvibrio*, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community. What are the most common genera of bacteria in your dataset? Do they match what your partner(s) got?
-
+The majority of my reads are from *Cellvibrio*, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community. 
 
 
 One last thing before we finish for today. Let's save our outputs so we can use them for the next lesson. We want:
@@ -208,5 +207,12 @@ write.csv(tax, "110_taxonomy.csv", row.names=TRUE) #write out as .csv file
 ```
 
 You should now have three files written out to your working directory. Click on each of them to see what they contain. These are plain text documents, so you will be able to open them with Notepad or some equivalent.
+
+1) What are the top 5 most abundant microbes in your samples? Do they match what your partner(s) got?
+
+2) Do the abundant microbes make sense? Google the genus real quick if you are unfamiliar.
+
+3) Do these top 5 change over time in your set? Don't look to closely, we will look more closely next lesson.
+
 
 Please email me your files, and I'll look them over before next lesson.
