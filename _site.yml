@@ -1,6 +1,6 @@
 name: "R Lessons"
 navbar:
-  title: "My Website"
+  title: "A website"
   left:
     - text: "Home"
       href: index.html
