@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Donny Hoang" />
+
+
+<title>Lesson 2: Basic Stats in R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="pH_lesson.html">1: R basics</a>
+</li>
+<li>
+  <a href="COD_lesson.html">2: Basic Stats in R</a>
+</li>
+<li>
+  <a href="HPLC_lesson.html">3: Exploratory HPLC Analysis</a>
+</li>
+<li>
+  <a href="16S_lesson.html">4: 16S Amplicon Analysis</a>
+</li>
+<li>
+  <a href="alpha_div.html">5: Community Analysis: Alpha Diversity</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Lesson 2: Basic Stats in R</h1>
+<h4 class="author">Donny Hoang</h4>
+<h4 class="date">3/20/2020</h4>
+
+</div>
+
+
+<div id="goals" class="section level2">
+<h2>Goals:</h2>
+<p>Goal 1: Learn how to organize data, and perform simple statistical analysis in R.</p>
+<p>Goal 2: Assess the function (based on COD) of our CR communities.</p>
+</div>
+<div id="dataset" class="section level2">
+<h2>Dataset:</h2>
+<p>We are using data collected from the same experiment as the last lesson. Howevever, instead of pH, I measured the chemical oxygen demand, or COD of all samples from Day 4 of the experiment. COD assays measures the amount of oxygen consumed by a reaction. Thus, if a sample has more COD if has more organic material in it. We are using COD as an approximation for how well communities function. A good performing community will use up more organic material and have less COD. A poor performing community will use up less organic material and have more COD. Here, we want to see if our treatments significantly altered a communities ability to degrade COD.</p>
+</div>
+<div id="excercises" class="section level2">
+<h2>Excercises:</h2>
+</div>
+<div id="part-1-load-in-packages-and-your-data" class="section level1">
+<h1>Part 1: load in packages and your data</h1>
+<pre class="r"><code>#Donny Hoang
+#3.20.2020
+#Graphing COD data
+
+## if the packages are not installed, use these commands to install them
+#install.packages(&#39;ggpubr&#39;)
+#install.packages(&#39;ggplot2&#39;)
+#install.packages(&#39;dplyr&#39;)
+#install.packages(&#39;reshape2&#39;)
+library(ggplot2)
+library(ggpubr)</code></pre>
+<pre><code>## Loading required package: magrittr</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(reshape2)
+
+
+data&lt;-read.csv(&quot;COD_day4_percent.csv&quot;,header=TRUE)</code></pre>
+<p>Don’t forget to write some descriptive notes at the top of your script. We are also loading in two new packages, dplyr and reshape2. We will need functions from these packages to manipulate our data later on. Let’s take a look at the data so far.</p>
+<pre class="r"><code>head(data)</code></pre>
+<pre><code>##   Sample Treatment replicate  day percent_1 percent_2 percent_3
+## 1 pH6_4A      pH 6         A four  30.00000  26.51163  28.60465
+## 2 pH6_4B      pH 6         B four  26.51163  24.41860  25.81395
+## 3 pH6_4C      pH 6         C four  22.32558  25.81395  27.20930
+## 4 pH6_4D      pH 6         D four  26.51163  25.11628  23.72093
+## 5 pH6_4E      pH 6         E four  23.02326  24.41860  29.30233
+## 6 pH6_4F      pH 6         F four  26.51163  27.90698  28.60465</code></pre>
+<pre class="r"><code>summary(data)</code></pre>
+<pre><code>##             Sample                Treatment replicate   day       percent_1       percent_2    
+##  10%_glucose_4A: 1   pH 10             :6   A:6       four:36   Min.   :22.33   Min.   :24.42  
+##  10%_glucose_4B: 1   pH 6              :6   B:6                 1st Qu.:29.76   1st Qu.:29.17  
+##  10%_glucose_4C: 1   pH 6 + 10% glucose:6   C:6                 Median :34.68   Median :33.96  
+##  10%_glucose_4D: 1   pH 6 + 5% glucose :6   D:6                 Mean   :38.88   Mean   :38.47  
+##  10%_glucose_4E: 1   pH 6 + MES        :6   E:6                 3rd Qu.:46.51   3rd Qu.:44.88  
+##  10%_glucose_4F: 1   pH 8              :6   F:6                 Max.   :66.53   Max.   :68.98  
+##  (Other)       :30                                                                             
+##    percent_3    
+##  Min.   :23.72  
+##  1st Qu.:29.70  
+##  Median :34.17  
+##  Mean   :39.30  
+##  3rd Qu.:44.01  
+##  Max.   :71.02  
+## </code></pre>
+<p>What I hope you notice is that we have the same biological replicates as before (A, B, C, etc.) but we also have technical replicate measurements for each sample. That is, every sample has three COD measurements. Additionally, these measurements are expressed as a percentage. This will be important for our interpretation later on.</p>
+<div id="part-2-organizing-the-data." class="section level2">
+<h2>Part 2: Organizing the data.</h2>
+<p>Graphing the data as is can be cumbersome, as it’s raw data and we haven’t yet calculated the mean or standard deviation. First, let’s collapse our columns “percent_1”,“percent_2”, and “percent_3”. To do this, we need the melt() function from the reshape2 package.</p>
+<pre class="r"><code>data&lt;-melt(data,id=c(&quot;Sample&quot;, &quot;Treatment&quot;, &quot;replicate&quot;, &quot;day&quot;))
+
+head(data) ## take a peak at the new data</code></pre>
+<pre><code>##   Sample Treatment replicate  day  variable    value
+## 1 pH6_4A      pH 6         A four percent_1 30.00000
+## 2 pH6_4B      pH 6         B four percent_1 26.51163
+## 3 pH6_4C      pH 6         C four percent_1 22.32558
+## 4 pH6_4D      pH 6         D four percent_1 26.51163
+## 5 pH6_4E      pH 6         E four percent_1 23.02326
+## 6 pH6_4F      pH 6         F four percent_1 26.51163</code></pre>
+<p>Here, we’ve collapsed the columns “percent_1”,“percent_2”, and “percent_3” into a new column, “variable” and their values are in the new column “value”.</p>
+<p>Our next step is to calculate the mean and sd for our groups.However, if we do the calculations now, R will take the mean and sd of ALL the values. This calculation isn’t useful, because we are trying to compare the means between groups. Thus, we must first specify our groups. We can do this using the group_by() function from dplyr, and our friend from last lesson, %&gt;%, from magrittr.</p>
+<pre class="r"><code>data&lt;-data %&gt;%
+  group_by(Treatment, replicate) %&gt;%
+  summarise(count=n(),
+            mean=mean(value),
+            sd=sd(value))
+
+head(data) #take a peak at the data</code></pre>
+<pre><code>## # A tibble: 6 x 5
+## # Groups:   Treatment [1]
+##   Treatment replicate count  mean    sd
+##   &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 pH 10     A             3  34.4 2.22 
+## 2 pH 10     B             3  39.0 3.26 
+## 3 pH 10     C             3  34.7 0.690
+## 4 pH 10     D             3  31.7 2.87 
+## 5 pH 10     E             3  32.8 1.05 
+## 6 pH 10     F             3  42.2 1.83</code></pre>
+</div>
+<div id="part-3-graphing-the-data." class="section level2">
+<h2>Part 3: Graphing the data.</h2>
+<p>Great! The data is almost ready to be graphed. I’m going to write a couple aesthetic codes. R’s default color palette isn’t that pretty, imo. I like to manually specify my colors to ensure that they’re harmonious and colorblind friendly. Additionally, R will want to order our treatments alphabetically. That order isn’t always how we’ll want it, so we will specify the order we want.</p>
+<pre class="r"><code>palette &lt;-c( &quot;#56B4E9&quot;, &quot;#999999&quot;,&quot;#E69F00&quot;,&quot;#0072B2&quot;, &quot;#F0E442&quot;,&quot;#CC79A7&quot;) #does this code look similar to something you&#39;ve seen before?
+
+data$Treatment&lt;-factor(data$Treatment, levels = c(&quot;pH 6&quot;,&quot;pH 6 + MES&quot;,&quot;pH 6 + 5% glucose&quot;,
+                                                  &quot;pH 6 + 10% glucose&quot;,&quot;pH 8&quot;,&quot;pH 10&quot;))</code></pre>
+<p>Alright, let’s graph!</p>
+<pre class="r"><code>plot &lt;-ggplot(data,aes(x=Treatment, y=mean, color=Treatment))+ #initialize the graph
+  geom_point()+ #add points
+  scale_colour_manual(values=palette) + #specify colors
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd),width=.2, position=position_dodge(.05))+ #add error bars
+  labs(title=&quot;Day 4&quot;, y = &quot;Percent remaining COD mg O2/L&quot;) + #add labels
+  theme_classic() + #make it pretty
+  theme(axis.text.x=element_text(angle=45, hjust=1)) #rotate x-axis labels so they don&#39;t overlap
+
+plot</code></pre>
+<p><img src="COD_lesson_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Almost done! It looks like there are some differences, but we want to know if they are significant. Remember that we want to know whether any of the treatments result in significantly different remaining COD compared to our control, CR pH 6. That sounds like a t-test, which ggpubr can do and place onto our graph.</p>
+</div>
+<div id="part-4-perform-a-t-test." class="section level2">
+<h2>Part 4: Perform a t-test.</h2>
+<p>First, we must specify our comparisons. Then, we can adjust our graph above with a new line of code.</p>
+<pre class="r"><code>my_comparisons&lt;-list(c(&quot;pH 6&quot;, &quot;pH 6 + MES&quot;), c(&quot;pH 6&quot;, &quot;pH 6 + 5% glucose&quot;), c(&quot;pH 6&quot;, &quot;pH 6 + 10% glucose&quot;), c(&quot;pH 6&quot;, &quot;pH 8&quot;),  c(&quot;pH 6&quot;, &quot;pH 10&quot;))
+
+plot &lt;-ggplot(data,aes(x=Treatment, y=mean, color=Treatment))+
+  geom_point()+ 
+  scale_colour_manual(values=palette) + 
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd),width=.2, position=position_dodge(.05))+ 
+  labs(title=&quot;Day 4&quot;, y = &quot;Percent remaining COD mg O2/L&quot;) +
+  theme_classic() + 
+  theme(axis.text.x=element_text(angle=45, hjust=1)) +
+  stat_compare_means(comparisons=my_comparisons, method=&quot;t.test&quot;, label=&quot;p.signif&quot;) #adding significance
+
+plot</code></pre>
+<p><img src="COD_lesson_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>You can play around with the comparisons, but the most important comparisons, to me, are pairwise comparisons between CR pH 6 and the other treatments.</p>
+<p>We’re ready to interpret the data!</p>
+<ol style="list-style-type: decimal">
+<li><p>How did altering the CR affect the communitys’ ability to degrade CR? Which of those changes are “significant”?</p></li>
+<li><p>Describe the variation in each treatment. What do you think is happening in these communities?</p></li>
+<li><p>We are making a couple assumptions which the data here. Can you think of some caveats to our interpretation? Hint: COD is a proxy for ALL organic material in the media. We spun down the cells and measured the supernantant, so what’s left?</p></li>
+<li><p>The data is expressed as a percentage of remaining COD. How does that limit your interpretation? What kind of measurements or experiments should we do to get past those limitations?</p></li>
+</ol>
+<p>I hope you are getting a bit more comfortable with R. We will do one more lesson graphing lesson before moving on to sequence analysis.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Donny Hoang" />
+
+
+<title>Community Analysis: Alpha Diversity</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="pH_lesson.html">1: R basics</a>
+</li>
+<li>
+  <a href="COD_lesson.html">2: Basic Stats in R</a>
+</li>
+<li>
+  <a href="HPLC_lesson.html">3: Exploratory HPLC Analysis</a>
+</li>
+<li>
+  <a href="16S_lesson.html">4: 16S Amplicon Analysis</a>
+</li>
+<li>
+  <a href="alpha_div.html">5: Community Analysis: Alpha Diversity</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Community Analysis: Alpha Diversity</h1>
+<h4 class="author">Donny Hoang</h4>
+<h4 class="date">3/31/2020</h4>
+
+</div>
+
+
+<div id="goal-learn-fundamental-alpha-diversity-metrics-and-how-to-visualize-them" class="section level2">
+<h2>Goal: Learn fundamental alpha diversity metrics, and how to visualize them</h2>
+<p>Today, we will do some surface analysis on the 16S data you worked on last time. We will work mostly in phyloseq, which is a great package for visualizing community data. Throughout this analysis, we work towards answering the following question:</p>
+<p>How does diversity change in these communities over time? In terms of time across transfers, and time within a transfer.</p>
+</div>
+<div id="dataset" class="section level2">
+<h2>Dataset</h2>
+<p>We are working with the same dataset as last lesson. However, I have rerun the analysis on every sample and have sent you my outputs for that run.</p>
+</div>
+<div id="excercise" class="section level2">
+<h2>Excercise</h2>
+</div>
+<div id="load-packages-and-data." class="section level1">
+<h1>Load packages and data.</h1>
+<pre class="r"><code>library(phyloseq)
+library(ggplot2)</code></pre>
+<pre><code>## Need help getting started? Try the R Graphics Cookbok: https://r-graphics.org</code></pre>
+<pre class="r"><code>library(RColorBrewer)
+
+tax &lt;- read.csv(&quot;taxonomy.csv&quot;, header=TRUE, row.names=1)
+counts &lt;- read.csv(&quot;counts.csv&quot;, header=TRUE, row.names = 1)
+metadata &lt;- read.csv(&quot;metadata.csv&quot;, header=TRUE)</code></pre>
+<p>You have three data files. What’s in each one?</p>
+<p>We need a manipulate our metadata file a bit. This file contains information about our samples that we can use to better visualise and analye the data. Currently, our variables like “source” and “day” are numeric, but we want to make them characters. That will make downstream graphing a lot easier. Lastly, we want to order our factors.</p>
+<pre class="r"><code>#these three lines will make our numeric values into characters
+metadata$source &lt;- as.character(metadata$source)
+metadata$day &lt;- as.character(metadata$day)
+metadata$broke &lt;- as.character(metadata$broke)
+
+#reorder our &quot;source&quot; variable so it graphs in an intuitive way
+metadata$source &lt;- factor(metadata$source, levels = c(&quot;56&quot;, &quot;73&quot;, &quot;94&quot;, &quot;110&quot;))</code></pre>
+</div>
+<div id="create-phyloseq-object" class="section level1">
+<h1>Create phyloseq object</h1>
+<p>We are working exclusively with phyloseq this lesson, since it’s so easy to use. In order to use the tools in phyloseq, we need to create a “phyloseq” object from our data.</p>
+<pre class="r"><code>count.ps &lt;- otu_table(as.matrix(counts),taxa_are_rows = TRUE) #define our count table as our otu table
+tax.ps &lt;- tax_table(as.matrix(tax)) #define our taxonomy table as a taxonomy table for phyloseq to use
+meta.ps &lt;- sample_data(metadata) #define our metadata as sample information
+ps &lt;- phyloseq(count.ps, tax.ps, meta.ps) #put them all together into a phyloseq object</code></pre>
+</div>
+<div id="alpha-diversity" class="section level1">
+<h1>Alpha diversity</h1>
+<p>Before we begin plotting, let’s talk about alpha diversity. Alpha diversity is a local measure of diversity or the average species/OTUs/ASVs diversity in a specific habitat or sample.</p>
+<p>There are two main points when it comes to alphadiversity: richness and evenness. Richness refers simply to how many different species/OTUs/ASVs we have. Evenness is how even their distribution in that sample is.</p>
+<p><img src="images/two_ecosystems.png" alt="An imagine I found" /><a href="http://sciencebitz.com/?page_id=1186">from the web.</a></p>
+<p>Both A and B have the same richness, or the same number of different things. However, A is more even than B because the different things are more evenly distributed.</p>
+<p>When we analyze our dataset for alpha diversity, we want to choose diversity metrics that consider both evenness and richness in their calculation. I personally think it’s best to use at least two diversity metrics. Below we will use the Chao1 index, and Shannon index. Chao1 is an index that places more weight on richness, while Shannon considers evenness.</p>
+<p>Now, let’s try to answer the question: How does diversity change across time in our dataset? We have two different timelines we can focus on: time across transfers, or time across sampling. To make analysis easier, let’s focus on just richness.</p>
+</div>
+<div id="plotting-diversity-metrics" class="section level1">
+<h1>Plotting diversity metrics</h1>
+<pre class="r"><code>theme_set(theme_classic()) #set theme for graphs so they are pretty
+plot_richness(ps,&quot;day&quot;, color=&quot;day&quot;, measures=c(&quot;Chao1&quot;)) +
+  facet_grid(. ~ source, scales=&quot;free_x&quot;)</code></pre>
+<p><img src="alpha_div_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Look at the graph, try to answer the following questions:</p>
+<ol style="list-style-type: decimal">
+<li><p>How does richness (Chao1) change across transfers? Does this make sense? You can just eyeball the values between transfers.</p></li>
+<li><p>How does the richness (Chao1) change throughout one week within each community set? Are the changes consistent? If not, how do they compare?</p></li>
+<li><p>Together, what do these observations say about how the microbial community is changing in richness? What can you conclude about the composition in terms of richness?</p></li>
+</ol>
+<p>If you feel comfortable with your answers, feel free to move forward. Let’s take a look at diveristy when evenness is considered.</p>
+<pre class="r"><code>plot_richness(ps,&quot;day&quot;, color=&quot;day&quot;, measures=c(&quot;Shannon&quot;)) +
+  facet_grid(. ~ source, scales=&quot;free_x&quot;)</code></pre>
+<p><img src="alpha_div_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<ol style="list-style-type: decimal">
+<li><p>How does evenness change across transfers? Does this make sense? You can just eyeball the values between transfers.</p></li>
+<li><p>How does the evenness change throughout one week within each community set? Are the changes consistent? If not, how do they compare?</p></li>
+<li><p>What can you conclude about the composition of this community across transfers, and within a week? What do you think that says about the biology of this system?</p></li>
+</ol>
+</div>
+<div id="plotting-the-relative-abundance" class="section level1">
+<h1>Plotting the relative abundance</h1>
+<p>I think it’s important to evaluate the alpha diversity of a dataset before moving onto relative abundance graphs. By examining how the community holistically changes over time, we can get a sense of what to expect from the relative abundance data - which can often be overwhelming to look at.</p>
+<p>Again, we will use phyloseq to plot this data. Before we begin, we will need to take our abundance data and turn it into relatve abundance. We also want to only graph the 20 most abundant microbes (or anything less that the 70-ish unique genera we have now) for easier visualization. Most of the groups are less than 1% abundant so they would not impact the graph much.</p>
+<pre class="r"><code>top20 &lt;- names(sort(taxa_sums(ps), decreasing=TRUE))[1:20] #store value of 20 most abundance ASVs
+ps.top20 &lt;- transform_sample_counts(ps, function(OTU) OTU/sum(OTU)) #format data into relative abundance
+ps.top20 &lt;- prune_taxa(top20, ps.top20) #create a new phyloseq object with only the top 20
+
+
+colorCount &lt;- 20 #remember this code? I&#39;m storing the value 20, because we&#39;re only looking at 20 groups.
+getPalette = colorRampPalette(brewer.pal(12, &quot;Set3&quot;)) #worth noting that this palette isn&#39;t perfect. We have so many groups that some colors will inevitably look too similar. Still better than a gradient palette though.</code></pre>
+<p>Our data is formatted, and our color palette has been set. Let’s take a look! Zoom in on your graph if that helps.</p>
+<pre class="r"><code>plot_bar(ps.top20, x=&quot;sample&quot;, fill=&quot;Genus&quot;) + #initialie graph
+  geom_bar(aes(fill= Genus), stat = &quot;identity&quot;, position=&quot;stack&quot;) + #specify a stacked bar graph
+  scale_fill_manual(values=getPalette(colorCount)) + #our colors
+  theme(legend.position=&quot;bottom&quot;) + #move legend to bottom
+  facet_grid(. ~ source, scales = &quot;free_x&quot;) #split up data by community so we can see more easily</code></pre>
+<p><img src="alpha_div_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<ol style="list-style-type: decimal">
+<li><p>Does this data support your conclusions from the observing the Chao1 and Shannon diversity indices?</p></li>
+<li><p>Why don’t these relative abundance bars reach all the way up to 1?</p></li>
+<li><p>Describe how the most abundant genus is changing across time within each transfer. Do the dynamics differ across transfers?</p></li>
+<li><p>What do this data suggest about community succession in this system?</p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

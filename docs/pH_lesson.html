@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Donny Hoang" />
+
+
+<title>Lesson 1: R basics</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="pH_lesson.html">1: R basics</a>
+</li>
+<li>
+  <a href="COD_lesson.html">2: Basic Stats in R</a>
+</li>
+<li>
+  <a href="HPLC_lesson.html">3: Exploratory HPLC Analysis</a>
+</li>
+<li>
+  <a href="16S_lesson.html">4: 16S Amplicon Analysis</a>
+</li>
+<li>
+  <a href="alpha_div.html">5: Community Analysis: Alpha Diversity</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Lesson 1: R basics</h1>
+<h4 class="author">Donny Hoang</h4>
+<h4 class="date">3/19/2020</h4>
+
+</div>
+
+
+<div id="goals" class="section level2">
+<h2>Goals:</h2>
+<p>Goal 1: Familiarize yourself with basic R commands. We will achieve this goal by graphing our pH data.</p>
+<p>Goal 2: Understand how pH changes over time in our CR communitties.</p>
+</div>
+<div id="dataset" class="section level2">
+<h2>Dataset:</h2>
+<p>We recently completed an experiment where we expanded one community (8A transfer 44) into six communities: A, B, C, D, E, F. There is an uninoculated negative control, X. These six communities are used as “biological replicates” for the experiment. Each community was used to inoculate CR manipulated into six different treatments: CR pH 6, CR pH 6 + MES Buffer, CR pH 6 + 5% glucose, CR pH 6 + 10% glucose, CR pH 8, and CR pH 10. Thus, each treatment has six replicates and the replicates are communities A, B, C, etc. These communities were sampled daily for seven days, and we measured the pH of (almost) every sample.</p>
+<p>Don’t forget to download “SGH_CR_pH.csv” which is our data file.</p>
+</div>
+<div id="excercise" class="section level2">
+<h2>Excercise:</h2>
+</div>
+<div id="part-1-load-in-packages-and-your-data" class="section level1">
+<h1>Part 1: load in packages and your data</h1>
+<p>Create a new R script by navigating to “File” -&gt; “New File” -&gt; “R Script” save and name it as you like, but make sure the extension is “.R”</p>
+<p>Good practice includes adding some basic information to our script:</p>
+<pre class="r"><code>#Donny Hoang
+#3.19.2020
+#Graphing pH data</code></pre>
+<p>Your name, date, and a small blurb about what the script is for is the bare minimum in my opinion (but if I’m completely honest I don’t always follow this.) You may notice that I have a “#” before the text. This symbol tells R not to run whatever text is on that line and is useful for taking notes throughout your code. If I’m working through an online lesson or tutorial (like this one) I would also comment the link to make it easy to find in the future.</p>
+<p>We will need the packages: ggplot2 and ggpubr. You can load in a package by typing:</p>
+<pre class="r"><code>## if the packages are not installed, use these commands to install them
+#install.packages(&#39;ggpubr&#39;)
+#install.packages(&#39;ggplot2&#39;)
+library(ggplot2)
+library(ggpubr)</code></pre>
+<p>ggplot2 is what we will use to graph the data. ggpubr requires another package, magrittr (which should automatically load). magrittr has an operator we will use later on, “%&gt;%”, and ggpubr is useful for for organizing multiple graphs.</p>
+<p>Load in your data. It should look something like this, depending on where the file is located on your computer.</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;SGH_CR_pH.csv&quot;, header=TRUE)</code></pre>
+<p>Here, we are reading in our data, and storing it into an aptly named object called “data”. Of course, you can name it whatever you want. I’m usually lazy and stick with “d”. We are loading in a .csv file with the command read.csv(). This file has a header, so you must write “head=TRUE”. What happens to your data if you write “header=FALSE”? You can check by typing:</p>
+<pre class="r"><code>head(data)</code></pre>
+<pre><code>##       sample treatment day replicate   pH
+## 1 pH 6_one_A      pH 6   1         A 7.06
+## 2 pH 6_one_B      pH 6   1         B 7.40
+## 3 pH 6_one_C      pH 6   1         C 7.43
+## 4 pH 6_one_D      pH 6   1         D 6.98
+## 5 pH 6_one_E      pH 6   1         E 7.10
+## 6 pH 6_one_F      pH 6   1         F 6.65</code></pre>
+<pre class="r"><code># Read more about head by typing ?head
+str(data) ## has a little more information about the columns class</code></pre>
+<pre><code>## &#39;data.frame&#39;:    294 obs. of  5 variables:
+##  $ sample   : Factor w/ 294 levels &quot;pH 10_five_A&quot;,..: 211 212 213 214 215 216 217 162 163 164 ...
+##  $ treatment: Factor w/ 6 levels &quot;pH 10&quot;,&quot;pH 6&quot;,..: 2 2 2 2 2 2 2 5 5 5 ...
+##  $ day      : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ replicate: Factor w/ 7 levels &quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,..: 1 2 3 4 5 6 7 1 2 3 ...
+##  $ pH       : num  7.06 7.4 7.43 6.98 7.1 6.65 5.98 5.58 5.63 5.39 ...</code></pre>
+<pre class="r"><code># What&#39;s the difference between a Factor, integer, and numeric class?
+summary(data)</code></pre>
+<pre><code>##           sample                 treatment       day    replicate       pH       
+##  pH 10_five_A:  1   pH 10             :49   Min.   :1   A:42      Min.   :4.800  
+##  pH 10_five_B:  1   pH 6              :49   1st Qu.:2   B:42      1st Qu.:6.185  
+##  pH 10_five_C:  1   pH 6 + 10% glucose:49   Median :4   C:42      Median :7.940  
+##  pH 10_five_D:  1   pH 6 + 5% glucose :49   Mean   :4   D:42      Mean   :7.480  
+##  pH 10_five_E:  1   pH 6 + MES        :49   3rd Qu.:6   E:42      3rd Qu.:8.635  
+##  pH 10_five_F:  1   pH 8              :49   Max.   :7   F:42      Max.   :9.440  
+##  (Other)     :288                                       X:42      NA&#39;s   :3</code></pre>
+<p>Don’t forget to fix your code before moving forward!</p>
+</div>
+<div id="part-2-organizing-and-sorting-the-data" class="section level1">
+<h1>Part 2: Organizing and sorting the data</h1>
+<p>There are A LOT of comparisons that we could make in this dataset and graphing ALL the data onto the same graph can be overwhelming and obstruct interpretation. For now, let’s focus on specific groups to make our analysis easier. Let’s focus on one treatment at a time. We will only graph data belonging to the CR pH 6 treatment. How can we tell R to only graph a specific portion of our data?</p>
+<p>R has a nice function, subset(), which we will use to pull out only data that matches the treatment of interest. For example, if I only want CR pH 6 data I will type:</p>
+<pre class="r"><code>data1 &lt;- subset(data, data$treatment==&quot;pH 6&quot;)
+head(data1)</code></pre>
+<pre><code>##       sample treatment day replicate   pH
+## 1 pH 6_one_A      pH 6   1         A 7.06
+## 2 pH 6_one_B      pH 6   1         B 7.40
+## 3 pH 6_one_C      pH 6   1         C 7.43
+## 4 pH 6_one_D      pH 6   1         D 6.98
+## 5 pH 6_one_E      pH 6   1         E 7.10
+## 6 pH 6_one_F      pH 6   1         F 6.65</code></pre>
+<pre class="r"><code>summary(data1)</code></pre>
+<pre><code>##          sample                treatment       day    replicate       pH       
+##  pH 6_five_A: 1   pH 10             : 0   Min.   :1   A:7       Min.   :5.610  
+##  pH 6_five_B: 1   pH 6              :49   1st Qu.:2   B:7       1st Qu.:7.430  
+##  pH 6_five_C: 1   pH 6 + 10% glucose: 0   Median :4   C:7       Median :8.250  
+##  pH 6_five_D: 1   pH 6 + 5% glucose : 0   Mean   :4   D:7       Mean   :7.828  
+##  pH 6_five_E: 1   pH 6 + MES        : 0   3rd Qu.:6   E:7       3rd Qu.:8.580  
+##  pH 6_five_F: 1   pH 8              : 0   Max.   :7   F:7       Max.   :8.900  
+##  (Other)    :43                                       X:7</code></pre>
+<p>In the code above, we are storing a subset of “data” into a new object “data1”. Here, we have specified R to only add in data if the “treatment” column matches the string “pH 6” which represents our CR pH 6 treatment.</p>
+</div>
+<div id="part-3-graphing-the-data" class="section level1">
+<h1>Part 3: Graphing the data</h1>
+<p>We have now subset our data from one treatment. Let’s graph it!</p>
+<pre class="r"><code>p1 &lt;-ggplot(data=data1, aes(x=day, y=pH, group=replicate)) + ## initialize our plotting object
+  ylim(4, 10) + ## set the y-axis limits
+  geom_point(aes(shape=replicate)) + ## specify that we what to plot points
+  geom_line() + ## specify that we also want lines
+  theme_classic() ## make it pretty
+p1 ## return the plotting object</code></pre>
+<pre><code>## Warning: The shape palette can deal with a maximum of 6 discrete values because more than 6
+## becomes difficult to discriminate; you have 7. Consider specifying shapes manually if
+## you must have them.</code></pre>
+<pre><code>## Warning: Removed 7 rows containing missing values (geom_point).</code></pre>
+<p><img src="pH_lesson_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Whoops, looks like we have an error. Since we have more groups (our replicates in this case) than R’s default shape palette, we must explicitly specify more than 6 shapes. If you look at the legend, you may notice how our “X” replicate does not have a symbol to represent it. This error can be fixed easily. Google “geom_point shapes” to get an idea of what symbols or shapes ggplot2 has to offer. I think making shapes identical to the replicate (that is, replicate A will have shape “A”) makes the most sense.</p>
+<pre class="r"><code>shapeorder &lt;- c(65, 66, 67, 68, 69, 70,  4)</code></pre>
+<p>This code creates an object, that contains a list of the exact shapes we want to use. Now we just need to make a small adjustment to our graph’s code. I added “scale_shape_manual()” to the code, and specified the “shapeorder” object we wrote above.</p>
+<pre class="r"><code>p1 &lt;- ggplot(data=data1,aes(x=day,y=pH,group=replicate))+
+  ylim(4,10) +
+  geom_point(aes(shape=replicate))+
+  scale_shape_manual(values=shapeorder)+ ## what shapes we want to use
+  geom_line() +
+  theme_classic()
+p1</code></pre>
+<p><img src="pH_lesson_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Review what each piece of the command does. What is being added to the graph after every “+”? If you aren’t sure, delete a portion and see how that changes your graph.</p>
+<p>You probably noticed that most of these are aesthetic changes, which are up to personal preference. I almost always use “theme_classic()” to remove grid lines and the gray background. I also try to avoid using default ggplot2 colors and try to ensure my color palettes are colorblind friendly, but that’s not relevant in this case.</p>
+<p>Now we have some data graphed. It’s time to interpret!</p>
+<ol style="list-style-type: decimal">
+<li>How does the pH change over time in this pH 6 treatment?</li>
+<li>Are the changes consistent between replicates? Can you think of any reasons that would explain the variation?</li>
+</ol>
+</div>
+<div id="part-4-writing-a-function-to-graph-remaining-treatments." class="section level1">
+<h1>Part 4: Writing a function to graph remaining treatments.</h1>
+<p>We only have one treatment graphed. We could copy+paste our graph code five more times and make manual edits, but manual edits potentially introduce errors. Also, that would make the script look ugly. This step is quite easy, as you’ve done most of the writing already. We simply need to write a function that takes in whatever data we feed it (denoted by “…”), and pipes it (denoted by %&gt;%) to the function we wrote earlier. That is, the “%&gt;%” takes whatever is on the lefthand side, “…” in this case, and puts it through whatever is on the righthand side. In this case, it’s our graphing code.</p>
+<pre class="r"><code>myplotmaker&lt;- function(...){
+  return(... %&gt;%
+           ggplot(aes(x=day,y=pH,group=replicate))+
+           ylim(4,10) +
+           geom_point(aes(shape=replicate))+
+           scale_shape_manual(values=shapeorder)+
+           geom_line() +
+           theme_classic())
+}</code></pre>
+<p>Now, we have a function that will create a graph of the data we give it. Feed it the previously subsetted “data1” by typing:</p>
+<pre class="r"><code>p1 &lt;- myplotmaker(data1)
+p1</code></pre>
+<p><img src="pH_lesson_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>This plot should be identical to the graph you created before. Now, we need to subset the remaining data, and plot it. I have also added a small code to title each individual graph.</p>
+<pre class="r"><code>p1    &lt;- myplotmaker(data1) + ggtitle(&quot;CR pH 6&quot;)
+
+data2 &lt;- subset(data, data$treatment==&quot;pH 6 + MES&quot;)
+p2    &lt;- myplotmaker(data2) + ggtitle(&quot;CR pH6 + MES Buffer&quot;)
+
+data3 &lt;- subset(data, data$treatment==&quot;pH 6 + 5% glucose&quot;)
+p3    &lt;- myplotmaker(data3) + ggtitle(&quot;CR pH6 + 5% glucose&quot;)
+
+data4 &lt;- subset(data, data$treatment==&quot;pH 6 + 10% glucose&quot;)
+p4    &lt;- myplotmaker(data4) + ggtitle(&quot;CR pH6 + 10% glucose&quot;)
+
+data5 &lt;- subset(data, data$treatment==&quot;pH 8&quot;)
+p5    &lt;- myplotmaker(data5) + ggtitle(&quot;CR pH 8&quot;)
+
+data6 &lt;- subset(data, data$treatment==&quot;pH 10&quot;)
+p6    &lt;- myplotmaker(data6) + ggtitle(&quot;CR pH 10&quot;)</code></pre>
+<p>Our graphs are generated. You can look at them individually, but I think looking at all of them together will be more informative. Let’s use the ggarrange() function from the package ggpubr. Can you figure out what each piece of the code is doing?</p>
+<pre class="r"><code>ggarrange(p1, p2, p3, p4, p5, p6,
+          ncol=3, nrow=2,
+          legend=&quot;none&quot;)</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1 row(s) containing missing values (geom_path).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1 row(s) containing missing values (geom_path).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1 row(s) containing missing values (geom_path).</code></pre>
+<p><img src="pH_lesson_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>You probably got a few errors about missing values. That’s because I wasn’t able to measure the pH of every single sample. You can ignore those messages.</p>
+<p>Let’s interpret the data.</p>
+<ol style="list-style-type: decimal">
+<li>The uninoculated control in each data set is replicate “X”. How does it change over the week? Is our data still reliable? What does this data suggest about the CR media itself?</li>
+<li>What conclusions can draw from each treatment? How does the pH change in each one? Are the changes consistent between treatments?</li>
+<li>How does the variation between replicates compare between treatments? What do you think this means?</li>
+</ol>
+<p>Congrats! You made it through the first lesson. Hopefully, you feel a bit more familiar with the R language. It’s OK if you don’t feel completely comfortable yet. We will work on that together.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Donny Hoang" />
+
+
+<title>HPLC data visualization</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="pH_lesson.html">1: R basics</a>
+</li>
+<li>
+  <a href="COD_lesson.html">2: Basic Stats in R</a>
+</li>
+<li>
+  <a href="HPLC_lesson.html">3: Exploratory HPLC Analysis</a>
+</li>
+<li>
+  <a href="16S_lesson.html">4: 16S Amplicon Analysis</a>
+</li>
+<li>
+  <a href="alpha_div.html">5: Community Analysis: Alpha Diversity</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">HPLC data visualization</h1>
+<h4 class="author">Donny Hoang</h4>
+<h4 class="date">3/26/2020</h4>
+
+</div>
+
+
+<div id="goals" class="section level2">
+<h2>Goals</h2>
+<p>In lesson 2, most people correctly pointed out that COD measurements are limited because we do not know how specific compounds are changing. In this lesson, we will visualize HPLC data from the same experiment and try to better assess how the communities are behaving.</p>
+</div>
+<div id="dataset" class="section level2">
+<h2>Dataset</h2>
+<p>We are using the same dataset as the last two lessons, but here we are using High Performance Liquid Chromatograph (HPLC) data. Briefly, HPLC can identiy and quantify compounds of a liquid solution. However, this current dataset is still limited because we have only measured a small set of compounds. Unlike the previous dataset, we have data for every sample from every day of the experiment. Lastly, the compounds are expressed as grams/L in the datafile.</p>
+</div>
+<div id="excercises" class="section level2">
+<h2>Excercises</h2>
+</div>
+<div id="part-1-load-in-packages-and-data." class="section level1">
+<h1>Part 1: Load in packages and data.</h1>
+<pre class="r"><code>#Donny Hoang
+#3.26.2020
+#Graphing HPLC data
+
+## if the packages are not installed, use these commands to install them
+#install.packages(&#39;ggplot2&#39;)
+#install.packages(&#39;reshape2&#39;)
+#install.packages(&#39;ggpubr&#39;)
+#install.packages(&#39;RColorBrewer&#39;)
+
+library(ggplot2)
+library(reshape2)
+library(RColorBrewer)
+library(ggpubr)
+
+
+
+data&lt;-read.csv(&quot;HPLC_CR.csv&quot;,header=TRUE)</code></pre>
+<p>Let’s take a quick look at the data. What compounds were measured?</p>
+<pre class="r"><code>head(data)</code></pre>
+<pre><code>##   Sample Treatment Replicate Day     Glucose    Xylose   Pyruvate    Xylitol   Succinate
+## 1 pH6_1A      pH 6         A   1 0.008984579 0.6556312 0.01625147 0.08534173 0.004430737
+## 2 pH6_1B      pH 6         B   1 0.014645206 0.4245917 0.01725271 0.00000000 0.002633407
+## 3 pH6_1C      pH 6         C   1 0.011016784 0.3111429 0.01777931 0.00000000 0.005824199
+## 4 pH6_1D      pH 6         D   1 0.010146611 0.6742083 0.01997993 0.08112577 0.003999708
+## 5 pH6_1E      pH 6         E   1 0.009916006 0.6827537 0.00000000 0.10896392 0.004077648
+## 6 pH6_1F      pH 6         F   1 0.008654886 0.7047733 0.01965587 0.08871329 0.005206588
+##      Lactate   Glycerol     Formate   Acetate    Ethanol Cellobiose
+## 1 0.13369223 0.04337623 0.004867212 0.7779366 0.00000000 0.00000000
+## 2 0.04396264 0.03002779 0.000000000 0.3595236 0.00000000 0.00000000
+## 3 0.05744762 0.03095145 0.000000000 0.3121196 0.00000000 0.00000000
+## 4 0.09067183 0.04230154 0.007445813 0.8949222 0.00000000 0.00000000
+## 5 0.23143624 0.05278046 0.000000000 0.7729899 0.09681288 0.08647779
+## 6 0.08893598 0.04016782 0.015557680 1.1108060 0.00000000 0.00000000</code></pre>
+<pre class="r"><code>str(data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    292 obs. of  15 variables:
+##  $ Sample    : Factor w/ 292 levels &quot;10%_g_1A&quot;,&quot;10%_g_1B&quot;,..: 196 197 198 199 200 201 202 98 99 100 ...
+##  $ Treatment : Factor w/ 6 levels &quot;pH 10&quot;,&quot;pH 6&quot;,..: 2 2 2 2 2 2 2 5 5 5 ...
+##  $ Replicate : Factor w/ 7 levels &quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,..: 1 2 3 4 5 6 7 1 2 3 ...
+##  $ Day       : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ Glucose   : num  0.00898 0.01465 0.01102 0.01015 0.00992 ...
+##  $ Xylose    : num  0.656 0.425 0.311 0.674 0.683 ...
+##  $ Pyruvate  : num  0.0163 0.0173 0.0178 0.02 0 ...
+##  $ Xylitol   : num  0.0853 0 0 0.0811 0.109 ...
+##  $ Succinate : num  0.00443 0.00263 0.00582 0.004 0.00408 ...
+##  $ Lactate   : num  0.1337 0.044 0.0574 0.0907 0.2314 ...
+##  $ Glycerol  : num  0.0434 0.03 0.031 0.0423 0.0528 ...
+##  $ Formate   : num  0.00487 0 0 0.00745 0 ...
+##  $ Acetate   : num  0.778 0.36 0.312 0.895 0.773 ...
+##  $ Ethanol   : num  0 0 0 0 0.0968 ...
+##  $ Cellobiose: num  0 0 0 0 0.0865 ...</code></pre>
+</div>
+<div id="part-2-organizing-the-data." class="section level1">
+<h1>Part 2: Organizing the data.</h1>
+<p>Similar to the last lesson, our data is spread across 11 columns. Let’s melt() it into one column.</p>
+<pre class="r"><code>data&lt;-melt(data,id=c(&quot;Sample&quot;,&quot;Treatment&quot;,&quot;Replicate&quot;,&quot;Day&quot;))
+head(data) # quicklycheck that it worked</code></pre>
+<pre><code>##   Sample Treatment Replicate Day variable       value
+## 1 pH6_1A      pH 6         A   1  Glucose 0.008984579
+## 2 pH6_1B      pH 6         B   1  Glucose 0.014645206
+## 3 pH6_1C      pH 6         C   1  Glucose 0.011016784
+## 4 pH6_1D      pH 6         D   1  Glucose 0.010146611
+## 5 pH6_1E      pH 6         E   1  Glucose 0.009916006
+## 6 pH6_1F      pH 6         F   1  Glucose 0.008654886</code></pre>
+<pre class="r"><code>str(data) #quickly check that it worked</code></pre>
+<pre><code>## &#39;data.frame&#39;:    3212 obs. of  6 variables:
+##  $ Sample   : Factor w/ 292 levels &quot;10%_g_1A&quot;,&quot;10%_g_1B&quot;,..: 196 197 198 199 200 201 202 98 99 100 ...
+##  $ Treatment: Factor w/ 6 levels &quot;pH 10&quot;,&quot;pH 6&quot;,..: 2 2 2 2 2 2 2 5 5 5 ...
+##  $ Replicate: Factor w/ 7 levels &quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,..: 1 2 3 4 5 6 7 1 2 3 ...
+##  $ Day      : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ variable : Factor w/ 11 levels &quot;Glucose&quot;,&quot;Xylose&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ value    : num  0.00898 0.01465 0.01102 0.01015 0.00992 ...</code></pre>
+</div>
+<div id="part-3-graph-the-data" class="section level1">
+<h1>Part 3: Graph the data</h1>
+<p>Since we have almost 300 samples, let’s focus on just Day 4 samples. That way, we can compare the data to our COD data and ask if it provides anymore information on how the communities are behaving. Let’s subset() the data, as we’ve done before.</p>
+<pre class="r"><code>day4 &lt;- subset(data, data$Day==&quot;4&quot;) #subset the data
+
+p4 &lt;-ggplot()+ #initialize the graph
+           geom_bar(data=day4, aes(y=value,x=Sample,fill=variable),stat=&quot;identity&quot;) + #specify that we want a bar graph
+           theme_classic() + #make it pretty
+           theme(axis.text.x=element_text(angle=45, hjust=1)) + #rotate the x-axis labels so we can read it
+           ylab(&quot;g/L&quot;) +  #add a descriptive y-axis label
+           labs(fill=&#39;Compound&#39;) #change the legend title to be descriptive
+p4</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Before we start interpreting the data, I want to make a couple aesthetic changes. First, these colors aren’t great for representing our data. Having a gradient of colors for categorical variables can make interpretation difficult. Closeness in color can imply closeness in value - which doesn’t make sense for discrete categories. However, I don’t want to manually type in colors for all 11 of our compounds. We can get around this with RColorBrewer, which is a popular color palette package in R. Many of their color palettes are colorblind friendly (though we won’t be using one here because it doesn’t have enough colors for us).</p>
+<p>Second, R has reordered all our samples alphabetically, which isn’t that useful for presenting our data in this situation.</p>
+<p>Let’s tackle the colors first.</p>
+<pre class="r"><code>colorCount &lt;-length(unique(data$variable)) #count how many different colors we will need
+getPalette = colorRampPalette(brewer.pal(11, &quot;Set3&quot;)) #a function for getting our palette.</code></pre>
+<p>Can you figure out what the getPalette function is doing? Try Googling colorRampPalette() and brewer.pal(). Also, Set3 is my favorite color palette, but feel free to change it to <a href="https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html">other palettes RColorBrewer has.</a> I recommend focusing on qualitative palettes for this dataset. Why would sequential or diverging palettes not work for our current data?</p>
+<p>Next, R has automatically reordered our samples to be alphabetical. I don’t think this representation is useful, so we must reorder the samples ourselves. You’ve done factor reordering in previous lessons, so the code below may look familiar to you. Since the data is already “in order” in our original data file, that is the order I will have R order it.</p>
+<pre class="r"><code>data$Sample &lt;- factor(data$Sample, levels = unique(data$Sample)) # Tell R what order my samples go in</code></pre>
+<p>Now that we’re done with the aesthetic changes, let’s run our graph again.</p>
+<pre class="r"><code>day4 &lt;- subset(data, data$Day==&quot;4&quot;) #Our previous day4 object was not ordered, so subset again.
+
+p4 &lt;-ggplot()+ #initialize the graph
+           geom_bar(data=day4, aes(y=value,x=Sample,fill=variable),stat=&quot;identity&quot;) + #specify that we want a bar graph
+           theme_classic() + #make it pretty
+           theme(axis.text.x=element_text(angle=45, hjust=1)) + #rotate the x-axis labels so we can read it
+           ylab(&quot;g/L&quot;) +  #add a descriptive y-axis label
+           labs(fill=&#39;Compound&#39;) + #change the legend title
+           scale_fill_manual(values=getPalette(colorCount)) #add our specified color palette
+p4</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>This graph looks better! At least to me, because our control treatment is listed first while our experimental treatments are listed next. Additionally, each color is distinct from its neighbor which makes identifying it in the graph easier. Let’s starting interpreting:</p>
+<ol style="list-style-type: decimal">
+<li>How do the controls (replicate X) look? Do they make sense given the treatment?</li>
+<li>How do the inoculated samples look? How do they compare within treatment? Between treatments?</li>
+<li>Does this data change any conclusions you made from the COD data?</li>
+</ol>
+</div>
+<div id="part-4-graph-the-remaining-data." class="section level1">
+<h1>Part 4: Graph the remaining data.</h1>
+<p>We focused on Day 4 first because that’s the day we had COD data for. Let’s look at the remaining samples. Remember how we made a function that would graph our data in lesson one? Let’s revisit that skill.</p>
+<pre class="r"><code>myplotmaker&lt;- function(...){
+  return(... %&gt;%
+           ggplot()+
+           geom_bar(aes(y=value,x=Sample,fill=variable),stat=&quot;identity&quot;) +
+           theme_classic() +
+           theme(axis.text.x=element_text(angle=45, hjust=1)) +
+           ylab(&quot;g/L&quot;) +
+           labs(fill=&#39;Compound&#39;) +
+           scale_fill_manual(values=getPalette(colorCount)))}</code></pre>
+<p>Let’s double check that this function works how we want. If it does, it should give us an identical plot to Day 4 graph we just made.</p>
+<pre class="r"><code>p4 &lt;- myplotmaker(day4)
+p4</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>It does! Let’s do the rest.</p>
+<pre class="r"><code>day1 &lt;- subset(data, data$Day==&quot;1&quot;)
+p1&lt;- myplotmaker(day1) +ggtitle(&quot;Day 1&quot;)
+day2 &lt;- subset(data, data$Day==&quot;2&quot;)
+p2&lt;- myplotmaker(day2) +ggtitle(&quot;Day 2&quot;)
+day3 &lt;- subset(data, data$Day==&quot;3&quot;)
+p3&lt;- myplotmaker(day3) +ggtitle(&quot;Day 3&quot;)
+day4 &lt;- subset(data, data$Day==&quot;4&quot;)
+p4&lt;- myplotmaker(day4) +ggtitle(&quot;Day 4&quot;)
+day5 &lt;- subset(data, data$Day==&quot;5&quot;)
+p5&lt;- myplotmaker(day5) +ggtitle(&quot;Day 5&quot;)
+day6 &lt;- subset(data, data$Day==&quot;6&quot;)
+p6&lt;- myplotmaker(day6) +ggtitle(&quot;Day 6&quot;)
+day7 &lt;- subset(data, data$Day==&quot;7&quot;)
+p7&lt;- myplotmaker(day7) +ggtitle(&quot;Day 7&quot;)</code></pre>
+<p>We have all our graphs made. We could put them all onto the same image, but it look squished.</p>
+<pre class="r"><code>ggarrange(p1, p2, p3, p4, p5, p6, p7, #add all the graphs we want
+          ncol=4, nrow=2, # specify the number of columns and rows
+          legend=&quot;right&quot;, # move the legend to the bottom
+          common.legend=TRUE) # these graphs all have the same legend, so tell R that</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>This graph can be hard to interpret as is, but you can zoom into the plot on RStudio if you wish. Since this is an exploratory analysis, we could also look at each graph individually.</p>
+<pre class="r"><code>p1</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+<pre class="r"><code>p3</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-12-3.png" width="672" /></p>
+<pre class="r"><code>p4</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-12-4.png" width="672" /></p>
+<pre class="r"><code>p5</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-12-5.png" width="672" /></p>
+<pre class="r"><code>p6</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-12-6.png" width="672" /></p>
+<pre class="r"><code>p7</code></pre>
+<p><img src="HPLC_lesson_files/figure-html/unnamed-chunk-12-7.png" width="672" /></p>
+<p>Whatever you chose to do, review the questions:</p>
+<ol style="list-style-type: decimal">
+<li>How do the controls look? Do they look the same across time?</li>
+<li>Are there any samples that stand out to you? For example, are there any samples where the measured compounds don’t make sense?</li>
+<li>Given your answer from 1 and 2, which samples should be sent back for re-analysis?</li>
+<li>What biological conclusions can we take from this data? Are the communities behaving differently with the measured compounds based on their treatmeant?</li>
+</ol>
+<p>I hope everyone is feeling more comfortable with R. Next week we will begin 16S amplicon sequence analysis with a dataset that was generated last year.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

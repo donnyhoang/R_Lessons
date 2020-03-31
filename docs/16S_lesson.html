@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Donny Hoang" />
+
+
+<title>16S_Lesson</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="pH_lesson.html">1: R basics</a>
+</li>
+<li>
+  <a href="COD_lesson.html">2: Basic Stats in R</a>
+</li>
+<li>
+  <a href="HPLC_lesson.html">3: Exploratory HPLC Analysis</a>
+</li>
+<li>
+  <a href="16S_lesson.html">4: 16S Amplicon Analysis</a>
+</li>
+<li>
+  <a href="alpha_div.html">5: Community Analysis: Alpha Diversity</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">16S_Lesson</h1>
+<h4 class="author">Donny Hoang</h4>
+<h4 class="date">3/25/2020</h4>
+
+</div>
+
+
+<div id="goal-familiarize-yourself-with-16s-amplicon-sequence-analysis." class="section level2">
+<h2>Goal: Familiarize yourself with 16S Amplicon sequence analysis.</h2>
+<p>We will achieve this goal by following along the <a href="https://benjjneb.github.io/dada2/tutorial.html">dada2 pipeline.</a> I have copied it here, but with our own data, so following along should be easier. Tbh, a lot of the nitty-gritty is over my head, but I’ll try my best to answer your questions as you go through this. If you are curious, I recommend checking <a href="https://www.nature.com/articles/nmeth.3869#methods">their paper.</a></p>
+<p>We are working with raw sequences. Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.</p>
+</div>
+<div id="dataset" class="section level2">
+<h2>Dataset</h2>
+<p>We are working with a 16S rRNA sequencing dataset. This technique is based on the amplification of hypervariable regions with the 16S rRNA gene, and these sequences can be compared to databases for taxonomic identification. 16S amplicon sequencing is typically used to survey the bacterial and/or archael composition of a sample.</p>
+<p>A former Currie Lab graduate student, Dr. Gina Lewin, experimentally evolved a bacterial community to degrade cellulose more quickly. These communities were transferred approxiamtely every 3-4 days for the first 73 transfers, then every 7 days following that. We wanted to know if these communities followed different successional patterns throughout the course of their maintenance. Lindsay and I regrew this community from freeezer stocks at transfer 56 (before the change), 73 (at the change), 94 (after the change), and 110 (way after the change). Then, we destructively sampled over the course of one week starting on Day 2. These samples were sent out for 16S amplicon sequencing using Illumina MiSeq 2x300 bp. You will analyze one set of samples (to save space on your computer) and we will compare our results to each other at the end of this lesson.</p>
+<p>Broadly, we want to trim+filter poor quality reads, denoise our F and R reads, merge our F and R reads, remove chimeras, and then assign taxonomy to the sequences.</p>
+</div>
+<div id="excercise" class="section level2">
+<h2>Excercise</h2>
+<div id="load-dada2-and-your-data" class="section level3">
+<h3>Load dada2 and your data</h3>
+<p>Your output may look different than what is presented here, because you will be working with different sets of data.</p>
+<p>We have a lot more data than we did the previous lessons. My data is stored in a folder called “110_16S”. I recommend storing your data in it’s own folder accessible from your working directory.</p>
+<pre class="r"><code>library(dada2) #load dada2 package
+path &lt;-&quot;110_16S/&quot; #set path to folder containing data files
+list.files(path) #view files</code></pre>
+<pre><code>##  [1] &quot;110-2A_S126_L001_R1_001.fastq.gz&quot; &quot;110-2A_S126_L001_R2_001.fastq.gz&quot;
+##  [3] &quot;110-2B_S127_L001_R1_001.fastq.gz&quot; &quot;110-2B_S127_L001_R2_001.fastq.gz&quot;
+##  [5] &quot;110-2C_S128_L001_R1_001.fastq.gz&quot; &quot;110-2C_S128_L001_R2_001.fastq.gz&quot;
+##  [7] &quot;110-3A_S129_L001_R1_001.fastq.gz&quot; &quot;110-3A_S129_L001_R2_001.fastq.gz&quot;
+##  [9] &quot;110-3B_S130_L001_R1_001.fastq.gz&quot; &quot;110-3B_S130_L001_R2_001.fastq.gz&quot;
+## [11] &quot;110-3C_S131_L001_R1_001.fastq.gz&quot; &quot;110-3C_S131_L001_R2_001.fastq.gz&quot;
+## [13] &quot;110-4A_S132_L001_R1_001.fastq.gz&quot; &quot;110-4A_S132_L001_R2_001.fastq.gz&quot;
+## [15] &quot;110-4B_S133_L001_R1_001.fastq.gz&quot; &quot;110-4B_S133_L001_R2_001.fastq.gz&quot;
+## [17] &quot;110-4C_S134_L001_R1_001.fastq.gz&quot; &quot;110-4C_S134_L001_R2_001.fastq.gz&quot;
+## [19] &quot;110-5A_S135_L001_R1_001.fastq.gz&quot; &quot;110-5A_S135_L001_R2_001.fastq.gz&quot;
+## [21] &quot;110-5B_S136_L001_R1_001.fastq.gz&quot; &quot;110-5B_S136_L001_R2_001.fastq.gz&quot;
+## [23] &quot;110-5C_S137_L001_R1_001.fastq.gz&quot; &quot;110-5C_S137_L001_R2_001.fastq.gz&quot;
+## [25] &quot;110-6A_S138_L001_R1_001.fastq.gz&quot; &quot;110-6A_S138_L001_R2_001.fastq.gz&quot;
+## [27] &quot;110-6B_S139_L001_R1_001.fastq.gz&quot; &quot;110-6B_S139_L001_R2_001.fastq.gz&quot;
+## [29] &quot;110-6C_S140_L001_R1_001.fastq.gz&quot; &quot;110-6C_S140_L001_R2_001.fastq.gz&quot;
+## [31] &quot;110-7A_S141_L001_R1_001.fastq.gz&quot; &quot;110-7A_S141_L001_R2_001.fastq.gz&quot;
+## [33] &quot;110-7B_S142_L001_R1_001.fastq.gz&quot; &quot;110-7B_S142_L001_R2_001.fastq.gz&quot;
+## [35] &quot;110-7C_S143_L001_R1_001.fastq.gz&quot; &quot;110-7C_S143_L001_R2_001.fastq.gz&quot;</code></pre>
+<p>What I hope you notice is that every sample has two files: a forward read, and a reverse read. This is denoted by "_R1_001.fastq.gz" and "_R2_001.fastq.gz" respectively.</p>
+<p>Next, let’s import the files.</p>
+<pre class="r"><code>fnFs &lt;- sort(list.files(path, pattern=&quot;_R1_001.fastq.gz&quot;, full.names = TRUE)) #import forward reads
+fnRs &lt;- sort(list.files(path, pattern=&quot;_R2_001.fastq.gz&quot;, full.names = TRUE)) #import reverse reads
+sample.names &lt;- sapply(strsplit(basename(fnFs), &quot;_&quot;), `[`, 1) #extract sample names</code></pre>
+<p>Here, we are storing our F and R reads into their own object, and storing sample names. Can you figure out what the sapply() function is doing? We are extracting sample names only from the fnFs object because the fnRs object woul have the same name.</p>
+</div>
+<div id="quality-check-our-reads" class="section level3">
+<h3>Quality check our reads</h3>
+<pre class="r"><code>plotQualityProfile(fnFs[1:2]) #plot quality score of forward reads</code></pre>
+<p><img src="16S_lesson_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Here, the y-axis represents the frequency of the quality at the base position. The x-axis is the base position of the sequenced fragment. The dotted green line represents mean quality score, and the dotted orange line represents the quartiles of the the quality score distribubtion. The important thing to note from this graph is where along the sequence the quality score drops. For the forward reads the quality score drops around basepair 280.</p>
+<p>Let’s look at the reverse reads.</p>
+<pre class="r"><code>plotQualityProfile(fnRs[1:2]) #plot quality score of reverse reads</code></pre>
+<p><img src="16S_lesson_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>lol these are so much worse. I’m gonna chop it off at the 225 position. Your data will have the same cutoffs as they were done on the same sequencing run.</p>
+</div>
+<div id="trim-and-merge-our-reads" class="section level3">
+<h3>Trim and merge our reads</h3>
+<pre class="r"><code>filtFs &lt;- file.path(path, &quot;filtered&quot;, paste0(sample.names, &quot;_F_filt.fastq.gz&quot;)) #create object holding filtered F reads.
+filtRs &lt;- file.path(path, &quot;filtered&quot;, paste0(sample.names, &quot;_R_filt.fastq.gz&quot;)) #create object holding filtered R reads
+names(filtFs) &lt;- sample.names #name
+names(filtRs) &lt;- sample.names #name
+
+
+#This following step will take a few minutes. Get a drink or take a small break!
+out &lt;- filterAndTrim(fnFs, filtFs, fnRs, filtRs, #specify input+output
+                     truncLen=c(280,225), #where we are cutting off our sequences
+                     trimLeft = c(17,21), #explanation below
+                     maxN=0, maxEE=c(2,2), truncQ=2, rm.phix=TRUE, #default parameters
+                     compress=TRUE, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC</code></pre>
+<pre><code>## Creating output directory: 110_16S//filtered</code></pre>
+<pre class="r"><code>head(out)</code></pre>
+<pre><code>##                                  reads.in reads.out
+## 110-2A_S126_L001_R1_001.fastq.gz    59243     51665
+## 110-2B_S127_L001_R1_001.fastq.gz    72317     63230
+## 110-2C_S128_L001_R1_001.fastq.gz    66174     58107
+## 110-3A_S129_L001_R1_001.fastq.gz    65095     56647
+## 110-3B_S130_L001_R1_001.fastq.gz    64767     56062
+## 110-3C_S131_L001_R1_001.fastq.gz    74984     65443</code></pre>
+<p>trimLeft() will trim off any primer sequences from our amplicon, because primers can disrupt downstream processing. I ran through this pipeline a couple times with different numbers, and (17,21) seems to work best for this particular dataset. Some datasets may not require any trimming, and others many require more or less trimming.</p>
+<p>Looks like I’ve kept most of my reads. Great! Let’s move on to learning error rates.</p>
+</div>
+<div id="learn-error-rates" class="section level3">
+<h3>Learn error rates</h3>
+<pre class="r"><code>#The following steps will take a few minutes. Relax and enjoy the downtime!
+
+errF &lt;- learnErrors(filtFs, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC</code></pre>
+<pre><code>## 109792506 total bases in 417462 reads from 7 samples will be used for learning the error rates.</code></pre>
+<pre class="r"><code>errR &lt;- learnErrors(filtRs, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC</code></pre>
+<pre><code>## 105453924 total bases in 516931 reads from 9 samples will be used for learning the error rates.</code></pre>
+<pre class="r"><code>plotErrors(errF, nominalQ=TRUE)</code></pre>
+<pre><code>## Warning: Transformation introduced infinite values in continuous y-axis
+
+## Warning: Transformation introduced infinite values in continuous y-axis</code></pre>
+<p><img src="16S_lesson_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Here, we estimated error rates. The y-axis is error rate frequency, and the x-axis represents the consensus quality score. The black line is our estimated error rate, and the dots are the observed error rate. Importantly, the estimated error rate seems like a good fit for our observed error rates. Let’s move forward.</p>
+</div>
+<div id="sample-inference" class="section level3">
+<h3>Sample inference</h3>
+<pre class="r"><code>#This step also takes a couple minutes. Hope you&#39;re comfortable!
+
+dadaFs &lt;- dada(filtFs, err=errF, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC</code></pre>
+<pre><code>## Sample 1 - 51665 reads in 4041 unique sequences.
+## Sample 2 - 63230 reads in 4704 unique sequences.
+## Sample 3 - 58107 reads in 4371 unique sequences.
+## Sample 4 - 56647 reads in 4861 unique sequences.
+## Sample 5 - 56062 reads in 4250 unique sequences.
+## Sample 6 - 65443 reads in 5110 unique sequences.
+## Sample 7 - 66308 reads in 5355 unique sequences.
+## Sample 8 - 49852 reads in 4656 unique sequences.
+## Sample 9 - 49617 reads in 4756 unique sequences.
+## Sample 10 - 53387 reads in 5308 unique sequences.
+## Sample 11 - 66726 reads in 5407 unique sequences.
+## Sample 12 - 62860 reads in 5793 unique sequences.
+## Sample 13 - 69778 reads in 6120 unique sequences.
+## Sample 14 - 30973 reads in 3837 unique sequences.
+## Sample 15 - 75331 reads in 6910 unique sequences.
+## Sample 16 - 58942 reads in 8065 unique sequences.
+## Sample 17 - 56204 reads in 7731 unique sequences.
+## Sample 18 - 56812 reads in 6886 unique sequences.</code></pre>
+<pre class="r"><code>dadaRs &lt;- dada(filtRs, err=errR, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC</code></pre>
+<pre><code>## Sample 1 - 51665 reads in 5217 unique sequences.
+## Sample 2 - 63230 reads in 5886 unique sequences.
+## Sample 3 - 58107 reads in 5395 unique sequences.
+## Sample 4 - 56647 reads in 5853 unique sequences.
+## Sample 5 - 56062 reads in 5845 unique sequences.
+## Sample 6 - 65443 reads in 6673 unique sequences.
+## Sample 7 - 66308 reads in 6940 unique sequences.
+## Sample 8 - 49852 reads in 5941 unique sequences.
+## Sample 9 - 49617 reads in 6523 unique sequences.
+## Sample 10 - 53387 reads in 6616 unique sequences.
+## Sample 11 - 66726 reads in 6874 unique sequences.
+## Sample 12 - 62860 reads in 7312 unique sequences.
+## Sample 13 - 69778 reads in 8153 unique sequences.
+## Sample 14 - 30973 reads in 4406 unique sequences.
+## Sample 15 - 75331 reads in 8213 unique sequences.
+## Sample 16 - 58942 reads in 8631 unique sequences.
+## Sample 17 - 56204 reads in 8280 unique sequences.
+## Sample 18 - 56812 reads in 7609 unique sequences.</code></pre>
+<pre class="r"><code>dadaFs[[1]]</code></pre>
+<pre><code>## dada-class: object describing DADA2 denoising results
+## 45 sequence variants were inferred from 4041 input unique sequences.
+## Key parameters: OMEGA_A = 1e-40, OMEGA_C = 1e-40, BAND_SIZE = 16</code></pre>
+<p>The dada2 algorithm has inferred that I have 45 “true sequence variants”, which are inferred from the 4041 sequences in inputted. What does your output say?</p>
+</div>
+<div id="merge-paired-reads." class="section level3">
+<h3>Merge paired reads.</h3>
+<pre class="r"><code>mergers &lt;- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=FALSE) #merge paired reads
+head(mergers[[1]]) # inspect the merger data.frame from the first sample</code></pre>
+<pre><code>##                                                                                                                                                                                                                                                                                                                                                                                                                                     sequence
+## 1 TGGGGAATATTGGACAATGGGGGCAACCCTGATCCAGCCATGCCGCGTGTGTGAAGAAGGCCCTAGGGTTGTAAAGCACTTTCAGTGGGGAGAAAGGTAATTTACCTAATACGTAAGTTAATTGATGTTACCCACAGAAGAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCACGTAGGTGGTTTGCTAAGTCAGCTGTGAAATCCCTGGGCTCAACCTGGGCACTGCAGTTGAAACTGGCAAGCTAGAGTAGGGTAGAGGGGTGTGGAATTCCAGGTGTAGCGGTGAAATGCGTAGATATCTGGAGGAACATCAGTGGCGAAGGCGACACCCTGGACTCATACTGACACTGAGGTGCGAAAGCGTGGGGAGCAAAC
+## 2                          TGGGGAATCTTGCGCAATGGGCGAAAGCCTGACGCAGCCATGCCGCGTGAATGATGAAGGTCTTAGGATTGTAAAATTCTTTCAGCAGGGACGATAATGACGGTACCTGCAGAAGAAGCCCCGGCTAACTTCGTGCCAGCAGCCGCGGTAATACGAAGGGGGCTAGCGTTGCTCGGAATTACTGGGCGTAAAGGGAGCGTAGGCGGGTTATCAAGTTGGAGGTGAAAGCCCAGGGCTCAACCTTGGAATTGCCTTCAAAACTGATAGCCTAGAGTATGATAGAGGTAAGTGGAACTCCGAGTGTAGAGGTGAAATTCGTAGATATTCGGAAGAACACCAGTGGCGAAGGCGACTTACTGGATCATGACTGACGCTGAGGCTCGAAAGCGTGGGGAGCAAAC
+## 3      TGAGGAATATTGGTCAATGGACGGAAGTCTGAACCAGCCATGCCGCGTGAAGGATGAAGGCGTTCTGCGTTGTAAACTTCTTTTATCTGGGAAGAAACCACAGATTTCTATTTGTGTTGACGGTACCAGAAGAATAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCGAGCGTTATCCGGATTTACTGGGTTTAAAGGGTGCGTAGGCGGGCTATTAAGTCAGAGGTGAAATCTCCGGGCTCAACCTGGAAACTGCCTTTGATACTATTAGCCTTGAATTATGTTGAGGTTGGCGGAATATAACATGTAGCGGTGAAATGCTTAGATATGTTATGGAACACCGATTGCGAAGGCAGCTGGCTAAACATATATTGACGCTGATGCACGAAAGCGTGGGTAGCGAAC
+## 4 TGGGGAATATTGGACAATGGGCGAAAGCCTGATCCAGCCATGCCGCGTGTGTGAAGAAGGTCTTCGGATTGTAAAGCACTTTAAGTTGGGAGGAAGGGCAGTAAGTTAATACCTTGCTGTTTTGACGTTACCGACAGAATAAGCACCGGCTAACTTCGTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCGTTAAGTTGGATGTGAAAGCCCCGGGCTCAACCTGGGAACTGCATCCAAAACTGGCGAGCTAGAGTACGGTAGAGGGTGGTGGAATTTCCTGTGTAGCGGTGAAATGCGTAGATATAGGAAGGAACACCAGTGGCGAAGGCGACCACCTGGACTGATACTGACACTGAGGTGCGAAAGCGTGGGGAGCAAAC
+## 5      TAGGGAATATTGGGCAATGGAGGCAACTCTGACCCAGCCATGCCGCGTGCAGGAAGACGGTCCTCTGGATTGTAAACTGCTTTTGAATGGGAAGAACTATACTCTTGCGAGAGTATTTGACGGTACTATTAGAATAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGTAGGCGGCTTTATAAGTCGGGGGTTAAAGGCAGCCGCTTAACGGTGTGTATGCCTTCGATACTGTAGAGCTTGAGTGACCTGGAGGTAGCTGGAATTCCCTGTGTAGCGGTGAAATGCATAGATACGGGGAGGAATACCGATTGCGAAGGCATGTTACTACGGGTAAACTGACGCTGATGCACGAAAGCGTGGGGATCAAAC
+## 6      TAAGGAATATTGGTCAATGGACGAAAGTCTGAACCAGCTATGCCGCGTGGAGGATGAAGGCCCTCTGGGTTGTAAACTTCTTTTATATGGGACGAAAAAGGGACTTTCTAGTTCAACTGACGGTACCATGTGAATAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATCCGGATTCACTGGGTTTAAAGGGTGCGTAGGTGGGTTGGTAAGTCAGTGGTGAAATCCCCGAGCTTAACTCGGGAACTGCCATTGATACTATCAGTCTTGAATACCGTGGAGGTTAGCGGAATATGTCATGTAGCGGTGAAATGCTTAGATATGACATAGAACACCAATTGCGAAGGCAGCTGGCTACACGAATATTGACACTGAGGCACGAAAGCGTGGGGATCAAAC
+##   abundance forward reverse nmatch nmismatch nindel prefer accept
+## 1     46035       1       1     41         0      0      1   TRUE
+## 2      1476       2       2     66         0      0      2   TRUE
+## 3      1216       3       3     46         0      0      1   TRUE
+## 4       806       4       4     41         0      0      1   TRUE
+## 5       441       5       5     46         0      0      1   TRUE
+## 6       244       6       7     46         0      0      1   TRUE</code></pre>
+<p>The mergers object we created contains a list of data.frames. Each data.frame contains a column for the merged sequence, its abundance, and the indices of the F and R sequence varients that got merged.</p>
+</div>
+<div id="construct-sequence-table-and-remove-chimeras" class="section level3">
+<h3>Construct sequence table and remove chimeras</h3>
+<pre class="r"><code>seqtab &lt;- makeSequenceTable(mergers) #create sequence table that is imput for chimera removing function
+dim(seqtab) #Check number of ASV&#39;s before chimera removal</code></pre>
+<pre><code>## [1]  18 375</code></pre>
+<pre class="r"><code>seqtab.nochim &lt;- removeBimeraDenovo(seqtab, method=&quot;consensus&quot;, multithread=FALSE, verbose=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC
+
+dim(seqtab.nochim)#check number of ASV&#39;s after chimera removal</code></pre>
+<pre><code>## [1]  18 107</code></pre>
+<pre class="r"><code>sum(seqtab.nochim)/sum(seqtab) #check abundance of chimeras</code></pre>
+<pre><code>## [1] 0.9899817</code></pre>
+<p>In my 18 samples, I had 375 ASVs before removing chimeras and 107 ASVs after removing chimeras. That means approximately 72% of my unique sequence variants are chimeras. However, they make about 1% of my sequences in terms of abundance. The number of chimeras seems high initially, but they make up such a small proportion of the ASVs that I’m not worried about them. Additionally, this number can vary depending on the dataset.</p>
+<p>How do your numbers compare? How many of your ASVs were chimeras? What was their abundance?</p>
+</div>
+<div id="track-reads-through-the-pipeline" class="section level3">
+<h3>Track reads through the pipeline</h3>
+<p>For progress’ sake, let’s check how many reads we’ve lost throughout this process.</p>
+<pre class="r"><code>getN &lt;- function(x) sum(getUniques(x))
+track &lt;- cbind(out, sapply(dadaFs, getN), sapply(dadaRs, getN), sapply(mergers, getN), rowSums(seqtab.nochim))
+
+colnames(track) &lt;- c(&quot;input&quot;, &quot;filtered&quot;, &quot;denoisedF&quot;, &quot;denoisedR&quot;, &quot;merged&quot;, &quot;nonchim&quot;)
+rownames(track) &lt;- sample.names
+head(track)</code></pre>
+<pre><code>##        input filtered denoisedF denoisedR merged nonchim
+## 110-2A 59243    51665     51603     51599  51368   51298
+## 110-2B 72317    63230     63130     63169  62838   62772
+## 110-2C 66174    58107     58041     58055  57798   57723
+## 110-3A 65095    56647     56559     56567  56274   55648
+## 110-3B 64767    56062     56007     55979  55697   55609
+## 110-3C 74984    65443     65359     65364  64994   64782</code></pre>
+<p>Looks like we’ve kept most of our reads throughout this process. I don’t see a step where we ended up losing a majority of our reads.</p>
+<p>How do your numbers compare? Are they similar? Do you see any points along the pipeline where you lost a bunch of reads?</p>
+</div>
+<div id="assign-taxonomy" class="section level3">
+<h3>Assign taxonomy</h3>
+<p>We have identied all our unqiue ASVs and their abundance. Now it’s time to assign taxonomy to their sequences, and see what microbes they came from.</p>
+<pre class="r"><code>#This step takes a few minutes.
+
+taxa &lt;- assignTaxonomy(seqtab.nochim, &quot;tax/silva_nr_v132_train_set.fa.gz&quot;, multithread=FALSE) #my multitread is set to FALSE bc I run on Windows. Set yours to TRUE if you&#39;re on a MAC
+taxa.print &lt;- taxa # Removing sequence rownames for display only
+rownames(taxa.print) &lt;- NULL
+head(taxa.print)</code></pre>
+<pre><code>##      Kingdom    Phylum           Class                 Order                  
+## [1,] &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot; &quot;Cellvibrionales&quot;      
+## [2,] &quot;Bacteria&quot; &quot;Bacteroidetes&quot;  &quot;Bacteroidia&quot;         &quot;Chitinophagales&quot;      
+## [3,] &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot; &quot;Betaproteobacteriales&quot;
+## [4,] &quot;Bacteria&quot; &quot;Bacteroidetes&quot;  &quot;Bacteroidia&quot;         &quot;Chitinophagales&quot;      
+## [5,] &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Gammaproteobacteria&quot; &quot;Pseudomonadales&quot;      
+## [6,] &quot;Bacteria&quot; &quot;Proteobacteria&quot; &quot;Alphaproteobacteria&quot; &quot;Caulobacterales&quot;      
+##      Family             Genus          
+## [1,] &quot;Cellvibrionaceae&quot; &quot;Cellvibrio&quot;   
+## [2,] &quot;Chitinophagaceae&quot; &quot;Taibaiella&quot;   
+## [3,] &quot;Rhodocyclaceae&quot;   &quot;Azonexus&quot;     
+## [4,] &quot;Chitinophagaceae&quot; &quot;Terrimonas&quot;   
+## [5,] &quot;Pseudomonadaceae&quot; &quot;Pseudomonas&quot;  
+## [6,] &quot;Caulobacteraceae&quot; &quot;Asticcacaulis&quot;</code></pre>
+<p>The majority of my reads are from <em>Cellvibrio</em>, a known cellulose degrader. I think this finding makes sense, since we sequenced a cellulose degrading community.</p>
+<p>One last thing before we finish for today. Let’s save our outputs so we can use them for the next lesson. We want:</p>
+<ol style="list-style-type: decimal">
+<li><p>The fasta file has each of our ASVs, and their corresponding sequence.</p></li>
+<li><p>The count table tells us how many of each sequence we have in each sample.</p></li>
+<li><p>The taxonomy table tells us the taxonomic assignment of each ASV.</p></li>
+</ol>
+<pre class="r"><code>#give seq headers more manageable names (ASV_1, ASV_2...)
+seqs &lt;- colnames(seqtab.nochim)
+headers &lt;- vector(dim(seqtab.nochim)[2], mode=&quot;character&quot;)
+
+for (i in 1:dim(seqtab.nochim)[2]) {
+  headers[i] &lt;- paste(&quot;&gt;ASV&quot;, i, sep=&quot;_&quot;)
+}
+
+#fasta file
+fasta &lt;- c(rbind(headers, seqs)) #make fasta file
+write(fasta, &quot;110_seqs.fa&quot;) #write out as .fasta file
+
+#count table
+count_tab &lt;- t(seqtab.nochim) #make count table
+row.names(count_tab) &lt;- sub(&quot;&gt;&quot;, &quot;&quot;, headers) #replace rownames with something that is easy to follow
+write.csv(count_tab, &quot;110_counts.csv&quot;, row.names=TRUE) #write out as .csv file
+
+
+# tax table:
+tax &lt;- taxa #make taxonomy table
+row.names(tax) &lt;- sub(&quot;&gt;&quot;, &quot;&quot;, headers) #replace rownames with something that is easy to follow
+write.csv(tax, &quot;110_taxonomy.csv&quot;, row.names=TRUE) #write out as .csv file</code></pre>
+<p>You should now have three files written out to your working directory. Click on each of them to see what they contain. These are plain text documents, so you will be able to open them with Notepad or some equivalent.</p>
+<ol style="list-style-type: decimal">
+<li><p>What are the top 5 most abundant microbes in your samples? Do they match what your partner(s) got?</p></li>
+<li><p>Do the abundant microbes make sense? Google the genus real quick if you are unfamiliar.</p></li>
+<li><p>Do these top 5 change over time in your set? Don’t look to closely, we will look more closely next lesson.</p></li>
+</ol>
+<p>Please email me your files, and I’ll look them over before next lesson.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
