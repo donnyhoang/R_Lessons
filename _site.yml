@@ -11,7 +11,7 @@ navbar:
         - text: "Lesson 2: Basic Stats in R"
           href: COD_lesson.html
         - text: "Lesson 3: Exploratory HPLC Analysis"
-          href: COD_lesson.html
+          href: HPLC_lesson.html
         - text: "Lesson 4: 16S Amplicon Analysis"
           href: 16S_lesson.html
         - text: "Lesson 5: Community Analysis: Alpha Diversity"
