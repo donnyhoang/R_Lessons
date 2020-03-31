@@ -4,14 +4,15 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "1: R basics"
-      href: pH_lesson.html
-    - text: "2: Basic Stats in R"
-      href: COD_lesson.html
-    - text: "3: Exploratory HPLC Analysis"
-      href: HPLC_lesson.html
-    - text: "4: 16S Amplicon Analysis"
-      href: 16S_lesson.html
-    - text: "5: Community Analysis: Alpha Diversity"
-      href: alpha_div.html
-
+    - text: "Lessons"
+      menu:
+        - text: "Lesson 1: R basics"
+          href: pH_lesson.html
+        - text: "Lesson 2: Basic Stats in R"
+          href: COD_lesson.html
+        - text: "Lesson 3: Exploratory HPLC Analysis"
+          href: COD_lesson.html
+        - text: "Lesson 4: 16S Amplicon Analysis"
+          href: 16S_lesson.html
+        - text: "Lesson 5: Community Analysis: Alpha Diversity"
+          href: alpha_div.html
