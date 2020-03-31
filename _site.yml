@@ -12,4 +12,6 @@ navbar:
       href: HPLC_lesson.html
     - text: "Lesson 4: 16S Amplicon Analysis"
       href: 16S_lesson.html
+    - text: "Lesson 5: 16S Amplicon Analysis"
+      href: 16S_vis.html
 
