@@ -125,7 +125,7 @@ getPalette = colorRampPalette(brewer.pal(12, "Set3")) #worth noting that this pa
 
 ```
 
-Our data is formatted, and our color palette has been set. Let's take a look!
+Our data is formatted, and our color palette has been set. Let's take a look! Zoom in on your graph if that helps.
 
 ```{r}
 plot_bar(ps.top20, x="sample", fill="Genus") + #initialie graph
