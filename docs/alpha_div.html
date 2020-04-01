@@ -580,8 +580,8 @@ plot_richness(ps,&quot;day&quot;, color=&quot;day&quot;, measures=c(&quot;Chao1&
 <p>I think it’s important to evaluate the alpha diversity of a dataset before moving onto relative abundance graphs. By examining how the community holistically changes over time, we can get a sense of what to expect from the relative abundance data - which can often be overwhelming to look at.</p>
 <p>Again, we will use phyloseq to plot this data. Before we begin, we will need to take our abundance data and turn it into relatve abundance. We also want to only graph the 20 most abundant microbes (or anything less that the 70-ish unique genera we have now) for easier visualization. Most of the groups are less than 1% abundant so they would not impact the graph much.</p>
 <pre class="r"><code>top20 &lt;- names(sort(taxa_sums(ps), decreasing=TRUE))[1:20] #store value of 20 most abundance ASVs
-ps.top20 &lt;- transform_sample_counts(ps, function(OTU) OTU/sum(OTU)) #format data into relative abundance
-ps.top20 &lt;- prune_taxa(top20, ps.top20) #create a new phyloseq object with only the top 20
+ps.top20 &lt;- transform_sample_counts(ps, function(OTU) OTU/sum(OTU)) #create new phyloseq object where data is expressed as relative amounts
+ps.top20 &lt;- prune_taxa(top20, ps.top20) #trim the new phyloseq object to only the top 20
 
 
 colorCount &lt;- 20 #remember this code? I&#39;m storing the value 20, because we&#39;re only looking at 20 groups.
