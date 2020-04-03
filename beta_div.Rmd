@@ -92,7 +92,7 @@ Next, how do we interpret the plot? Quite simply, points that are closer togethe
 plot_ordination(ps, ord.nmds.bray, color="broke")
 ```
 
-"broke" is the day the community broke the cellulose filter paper. In Dr. Gina Lewin's original setup, this was the phenotype the selected for. This information was recorded, because I was curious if the community composition was more similar based on the day the filter paper broke. Sort of looks like there is, but we need to performs stats to know for sure. Let's explore the other variables.
+"broke" is the day the community broke the cellulose filter paper. In Dr. Gina Lewin's original setup, this was the phenotype they selected for. This information was recorded, because I was curious if the community composition was more similar based on the day the filter paper broke. Sort of looks like there is, but we need to performs stats to know for sure. Let's explore the other variables.
 
 ```{r}
 plot_ordination(ps, ord.nmds.bray, color="day")
