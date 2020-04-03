@@ -16,3 +16,5 @@ navbar:
           href: 16S_lesson.html
         - text: "Lesson 5: Community Analysis: Alpha Diversity"
           href: alpha_div.html
+        - text: "Lesson 6: Community Analysis: Beta Diversity"
+          href: beta_div.html

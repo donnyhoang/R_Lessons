@@ -1,0 +1,131 @@
+---
+title: "Community Analysis: Ordination"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'beta_div.html'))})
+author: "Donny Hoang"
+date: "4/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goal: Familiarize yourself with ordination tools in R
+
+We are continuing our 16S amplicon sequence analysis. Last time, we worked on measuring and analyzing alpha diversity. Today, we are moving onto beta diversity. I want to remind you that the goal of this experiment was to understand if these communities followed different successional patterns throughout the course of their maintenance.
+
+## Dataset
+
+You are working with the same dataset, and the same datafiles as last lesson. You will need a new package, vegan. It is available through CRAN so you can download it normally if you do not already have it.
+
+
+## Excercise
+# Load packages and data.
+
+```{r}
+library(phyloseq)
+library(ggplot2)
+library(vegan)
+
+#re-load the data if you didn't save your workspace
+tax <- read.csv("taxonomy.csv", header=TRUE, row.names=1)
+counts <- read.csv("counts.csv", header=TRUE, row.names = 1)
+metadata <- read.csv("metadata.csv", header=TRUE)
+```
+
+Skip this next part if you still have your phyloseq object from last time.
+
+```{r}
+
+#these three lines will make our numeric values into characters
+metadata$source <- as.character(metadata$source)
+metadata$day <- as.character(metadata$day)
+metadata$broke <- as.character(metadata$broke)
+
+#reorder our "source" variable so it graphs in an intuitive way
+metadata$source <- factor(metadata$source, levels = c("56", "73", "94", "110"))
+
+count.ps <- otu_table(as.matrix(counts),taxa_are_rows = TRUE) #define our count table as our otu table
+tax.ps <- tax_table(as.matrix(tax)) #define our taxonomy table as a taxonomy table for phyloseq to use
+meta.ps <- sample_data(metadata) #define our metadata as sample information
+ps <- phyloseq(count.ps, tax.ps, meta.ps) #put them all together into a phyloseq object
+```
+
+# Beta diversity and ordination
+
+Alpha diversity is a measure of diversity, such as the diversity of an environment or one sample. Beta diversity is the measure of diversity between samples, or how different the composition in one environment is to the other. One way to do that is with ordination. Ordination groups objects (our communities) that are characterized by many variables.
+
+In today's lesson, we want to know whether or not our communities are different - and if they are, how are they different? There are many dissimilarity/distance methods to use and we choose ones based on our data and what we want to say. Our data is abundance data, so we will have several "0"s or NULLs in the dataset. As a result, we cannot use Euclidean distances. This narrows our choices down, though we still need to to some choosing. Our data also includes abundance information, so we know how much of each thing we have. Thus, I think Bray-Curtis disiminilarity will be best to use. If we did not have abundane information and only had presence/absence data then Jaccard may be more appropriate.
+
+**Before moving on, how does considering the abundance vs. presence/absence change your analysis?**
+
+We also have options for which methods we use to create these dissimilarity/distance matrices, but today we will focus only on non-metric multidimensional scaling (NMDS). We do this because NMDS will take any dissimilarity/distance matrix we want.
+
+If you are curious about distance matrices, and choosing ordination methods, check out these two links:
+
+[A layman-explanation for PCA.](https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues) Although this answer is for PCA, some ideas carryover to ordination in general. At least enough of it does for our purposes.
+
+[A short explanation on choosing which ordination method and distance matrix to use](https://www.researchgate.net/post/How_to_choose_ordination_method_such_as_PCA_CA_PCoA_and_NMDS)
+
+
+# Ordination and plotting
+
+```{r}
+theme_set(theme_classic()) #make our graphs pretty
+
+ord.nmds.bray <- ordinate(ps, method="NMDS", distance="bray") #run the ordination
+```
+
+When you ran the ordinate() command, you likely noticed how your console reported a stress value. In ordination, stress tells you how distorted the data is. Generally, we want a stress value under 0.20. Now that we've run the ordination, let's make our plot.
+
+```{r}
+plot_ordination(ps, ord.nmds.bray)
+```
+
+Next, how do we interpret the plot? Quite simply, points that are closer together represent more similar communities. The axes and plot rotation are arbitrary. Currently, the points are not colored in. We can specify to a color to see what variables the points group by.
+
+```{r}
+plot_ordination(ps, ord.nmds.bray, color="broke")
+```
+
+"broke" is the day the community broke the cellulose filter paper. In Dr. Gina Lewin's original setup, this was the phenotype the selected for. This information was recorded, because I was curious if the community composition was more similar based on the day the filter paper broke. Sort of looks like there is, but we need to performs stats to know for sure. Let's explore the other variables.
+
+```{r}
+plot_ordination(ps, ord.nmds.bray, color="day")
+```
+
+As a reminder, the goal of this experiment was to understand whether this community followed different successional patterns over the course of their maintenance. If the community had the same successional pattern from transfer 56 to 110, then the communities would group by the day we sampled. Do you see a pattern when we color them in by day?
+
+Let's color them in by "source", or the transfer freeze stock we grew the communities from.
+
+```{r}
+plot_ordination(ps, ord.nmds.bray, color="source")
+```
+
+Here, the communities seem to group better by the transfer stock we thawed them from. What does that suggest about community assembly patterns in this community over time?
+
+Now, this has all been eyeballed so far. We will need to perform some stats to make definitive conclusions.
+
+# PERMANOVA
+
+When we look at our "source" plot, we can see how there are distinct clusters of points but there is still some overlap. We want to statistically determine if the centroids (center) of these clusters differ. We can do this with a PERMANOVA. It allows us to test the null hypothesis that our groups are equivalent. To perform a PERMANOVA, we will use the adonis() function from the package vegan. A PERMANOVA works on the distance matrix, not the ordination. We will need to make a separate distance matrix before using the adonis() function.
+
+```{r}
+psbray <- phyloseq::distance(ps, method="bray") #create just the distance matrix
+adonis(psbray ~ source, data=metadata) #run PERMANOVA with "source" variable
+adonis(psbray ~ day, data=metadata) #run PERMANOVA with "day" variable
+```
+
+There are two important values here: the p-value, and the R2. The p-value is significant in each instance, thus we reject the null hypothesis that our groupings are equivalent.
+
+The next important output is the R2 value. It tells us how much of our variation is explained by the variable we chose. Here, 48% of our variation is explained by transfer and 18% is explained by the day we sampled. If we were to present these figures, we woud ordination's stress value, and the PERMANOVA's p-value and R2 value.
+
+1. What variable better explains how our data points are clustered? 
+
+2. What does that say about community dynamics as this cellulose-degrading community was maintained over the course of transfer 56 to 110?
+
+3. Rerun your PERMANOVA with the "extracted" variable. This data tells who, of two people, extracted the samples. What strong is the extractor effect on the data? How can we limit its effect in future experiments?
