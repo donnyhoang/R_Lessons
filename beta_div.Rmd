@@ -128,4 +128,4 @@ The next important output is the R2 value. It tells us how much of our variation
 
 2. What does that say about community dynamics as this cellulose-degrading community was maintained over the course of transfer 56 to 110?
 
-3. Rerun your PERMANOVA with the "extracted" variable. This data tells who, of two people, extracted the samples. What strong is the extractor effect on the data? How can we limit its effect in future experiments?
+3. Rerun your PERMANOVA with the "extracted" variable. This data tells who, of two people, extracted the DNA from these samples. How strong is the extractor effect on the data? How can we limit its effect in future experiments?
