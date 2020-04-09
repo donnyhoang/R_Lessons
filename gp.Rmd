@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Goal: Work more independently within R.
 
-Thus far, I have provided code for you to follow along with. The goal if your you to become comfortable working in R on your own. We will begin with using sample data from phyloseq, and will work within phyloseq to make things easier.
+Thus far, I have provided code for you to follow along with. The goal today is for you to become comfortable working in R on your own. We will begin with using sample data from phyloseq, and will work within phyloseq to make things easier.
 
 
 ## Dataset
