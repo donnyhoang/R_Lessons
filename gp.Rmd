@@ -1,0 +1,71 @@
+---
+title: "Playing with Global Patterns"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'gp.html'))})
+author: "Donny Hoang"
+date: "4/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Goal: Work more independently within R.
+
+Thus far, I have provided code for you to follow along with. The goal if your you to become comfortable working in R on your own. We will begin with using sample data from phyloseq, and will work within phyloseq to make things easier.
+
+
+## Dataset
+
+We are using the Global Patterns dataset that is in the phyloseq package. This dataset came from the Caporaso et al. paper we read last time.
+
+## Excercises
+
+# Familiarize yourself with the dataset.
+
+```{r}
+library(phyloseq)
+data("GlobalPatterns")
+```
+
+You should now have a phyloseq object loaded in your environment. Poke around it in, and answer the following questions.
+
+1. How many samples and taxa are in this dataset?
+
+2. What are some sample variables within this dataset?
+
+3. Within the "SampleType" variable, how many factors (or groups) are there?
+
+# Examine the alpha diversity
+
+This dataset contains community composition information from a variety of environmental sources and bodysites. Plot both the Chao1 estimated richness, and the Shannon index for the data and color by SampleType.
+
+1. How does overall diversity compare between sample types? Do they match your expectations or what you've heard about for those environments?
+
+2. Take a look at the richness and evenness of Freshwater (creek) samples. What can you conclude from just the richness, and just the evenness? Taken together, what does that suggest about the commonity composition of these Freshwater (creek) samples?
+
+
+# Bargraphs
+
+There's a lot of data in GlobalPatterns, and trying to plot the abundance without focusing on a subset of samples or groups will take a long time.
+
+Since we're in the Currie Lab, let's look at just the Family "Streptomycetaceae". Use the subset_taxa() function to create a new phyloseq object containing only the "Streptomycetaceae" family. Then, plot an abundance graph that show the abundance of "Streptomycetaceae" genera and facet the graph by "SampleType".
+
+1. Where are most Streptomyces found? What other sample types are they "abundant" in? Does that make sense with what you know of Streptomyces?
+
+
+Since the dataset is so large, let's filter out some of the taxa. Here is some code that found from a phyloseq tutorial.
+
+```{r}
+gp <- transform_sample_counts(GlobalPatterns, function(OTU) OTU/sum(OTU)) #make new phyloseq object where data is now relative abundance
+gp <- filter_taxa(gp, function(x) mean(x) > 1e-5, TRUE) #filter very rare taxa
+```
+
+1. Compare the otu_table of the GlobalPatterns object and otu_table of the new gp object. How many taxa did you remove?
+
+2. Plot an abundance bar graph of the new gp object, and color the it in by Phylum. What are the most abundant phyla in each SampleType? Does this make sense with what you already know about these types of environments?

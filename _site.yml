@@ -18,3 +18,5 @@ navbar:
           href: alpha_div.html
         - text: "Lesson 6: Community Analysis: Beta Diversity"
           href: beta_div.html
+        - text: "playing around in phyloseq"
+          href: gp.html
