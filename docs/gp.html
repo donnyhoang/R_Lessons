@@ -534,7 +534,7 @@ data(&quot;GlobalPatterns&quot;)</code></pre>
 <div id="examine-the-alpha-diversity" class="section level1">
 <h1>Examine the alpha diversity</h1>
 <p>This dataset contains community composition information from a variety of environmental sources and bodysites. Plot both the Chao1 estimated richness, and the Shannon index for the data and color by SampleType.</p>
-<ol style="list-style-type: decimal">
+<ol start="4" style="list-style-type: decimal">
 <li><p>How does overall diversity compare between sample types? Do they match your expectations or what you’ve heard about for those environments?</p></li>
 <li><p>Take a look at the richness and evenness of Freshwater (creek) samples. What can you conclude from just the richness, and just the evenness? Taken together, what does that suggest about the commonity composition of these Freshwater (creek) samples?</p></li>
 </ol>
@@ -543,13 +543,13 @@ data(&quot;GlobalPatterns&quot;)</code></pre>
 <h1>Bargraphs</h1>
 <p>There’s a lot of data in GlobalPatterns, and trying to plot the abundance without focusing on a subset of samples or groups will take a long time.</p>
 <p>Since we’re in the Currie Lab, let’s look at just the Family “Streptomycetaceae”. Use the subset_taxa() function to create a new phyloseq object containing only the “Streptomycetaceae” family. Then, plot an abundance graph that show the abundance of “Streptomycetaceae” genera and facet the graph by “SampleType”.</p>
-<ol style="list-style-type: decimal">
+<ol start="6" style="list-style-type: decimal">
 <li>Where are most Streptomyces found? What other sample types are they “abundant” in? Does that make sense with what you know of Streptomyces?</li>
 </ol>
 <p>Since the dataset is so large, let’s filter out some of the taxa. Here is some code that found from a phyloseq tutorial.</p>
 <pre class="r"><code>gp &lt;- transform_sample_counts(GlobalPatterns, function(OTU) OTU/sum(OTU)) #make new phyloseq object where data is now relative abundance
 gp &lt;- filter_taxa(gp, function(x) mean(x) &gt; 1e-5, TRUE) #filter very rare taxa</code></pre>
-<ol style="list-style-type: decimal">
+<ol start="7" style="list-style-type: decimal">
 <li><p>Compare the otu_table of the GlobalPatterns object and otu_table of the new gp object. How many taxa did you remove?</p></li>
 <li><p>Plot an abundance bar graph of the new gp object, and color the it in by Phylum. What are the most abundant phyla in each SampleType? Does this make sense with what you already know about these types of environments?</p></li>
 </ol>
