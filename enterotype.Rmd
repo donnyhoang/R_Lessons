@@ -68,6 +68,8 @@ Repeat your analysis above with both Bray-Curtis and Jaccard dissimilarity matri
 
 Hopefully you've concluded that SeqTech better describes this dataset than Enterotype. If you haven't, let me know.
 
+# Subset the data by SeqTech, and reevaluate
+
 Let's look within a specific SeqTech dataset. Subset the data to your favorite SeqTech variable, using the command subset_samples()
 
 Repeat your plotting and statistical analysis above, using "jsd" and "bray" for your dissimilarity matrices.
