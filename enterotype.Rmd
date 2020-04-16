@@ -1,0 +1,84 @@
+---
+title: "Playing with Enterotypes"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'enterotypes.html'))})
+author: "Donny Hoang"
+date: "4/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goal: Work more independently within R.
+
+Today's goal is the same as last week's: for you to become comfortable working in R on your own. We will begin with using sample data from phyloseq, and will work within phyloseq to make things easier.
+
+On Wednesday, we discussed reanalyzing the enterotype dataset within phyloseq to see if we accept the authors' definition of "enterotype."
+
+## Excercises
+
+# Load packages, data, and familiarize yourself with the dataset.
+
+```{r}
+library(vegan)
+library(ggplot2)
+library(phyloseq)
+library(RColorBrewer)
+
+data("enterotype")
+```
+
+You should now have the "enterotypes" phyloseq object loaded into your environment.
+
+1) How many samples do you have? You can use the nsamples() function.
+2) How many OTUs do you have? You can use the ntaxa() function.
+3) What are some of the variables in the sam_data file? You can use the sample_variables() function.
+
+This data set has some "NA" values in the "Enterotype" variable that will complicate downstream calculations. It also contans many unassigned oTUs. Let's remove those data.
+
+```{r}
+ent<-subset_samples(enterotype, !is.na(Enterotype))
+ent <- subset_taxa(ent, Genus != "-1")
+```
+
+# Create and ordinate distance matrices
+
+In the ordination lesson, we created a Bray-Curtis dissimilarity matrix, and used NMDS to ordinate. I ran into trouble trying to ordinate with NMDS, and some brief googling suggested it was because the dataset contains too many zeros and/or many species were observed only once or too few times between samples. We will ordinate with MDS/PCoA instead, using a variety of dissimilarity matrices. The paper we read used Jensen-Shannon dissimilarity. Let's compare it to Bray-Curtis (which we've used and it considers abundance), and Jaccard (which only considers presence/absence).
+
+Let's try Jensen-Shannon first. Ordinate the data with "PCoA" as your ordination method and "jsd" as your dissimilarity/distance. Once the ordination has finished, plot it and color the data in by "SeqTech" and shape it by "Enterotype".
+
+4) From eyeballing the graph, which variable better explains the data?
+
+Let's do some stats to make more definitive conclusions. You'll need to use the function adonis() from the vegan package for this. Additionally, you will need to write out the sam_data from within the phyloseq object into a separte data frame. Use the code below to do that. Remember that adonis only works on a distance matrix, so you will need to create a separate distance matrix. Run your analysis of variance on both the "SeqTech" and the "Enterotype" variable.
+
+```{r}
+metadata<-as(sample_data(ent), "data.frame")
+```
+
+5) Which variable better describes the data? What does this result suggest to you about the concept of enterotypes?
+
+Repeat your analysis above with both Bray-Curtis and Jaccard dissimilarity matrices. You will specify "bray" and "jaccard", respectively, in your code. Creating the plots is optional, you can just run the variance analysis.
+
+6) How do the results compare between the dissimilarity matrices? Are your conclusions the same? What does this result suggest to you about the concept of enterotypes?
+
+Hopefully you've concluded that SeqTech better describes this dataset than Enterotype. If you haven't, let me know.
+
+Let's look within a specific SeqTech dataset. Subset the data to your favorite SeqTech variable, using the command subset_samples()
+
+Repeat your plotting and statistical analysis above, using "jsd" and "bray" for your dissimilarity matrices.
+
+7) How well is the data explained by the "Enterotype" variable? What do you conclude about the enterotype concept now?
+
+
+As Marge suggested on Wednesday, we should take a closer look the community composition as well. Since there are 500+ taxa in this dataset, subset down to the top 20 before plotting the abundances with a bar plot. Facet your plot by "Enterotype".
+
+8) Does your abundance bar plot support your ordination plot?
+9) The enterotypes paper claimed that enterotypes could be based on the abundance of Bacteroides, Prevotella, and Ruminoccocus. Which enterotype corresponds to which genus?
+10) How do you currently feel about the enterotype concept? What data would you need to support or contradict your current conclusions?
+
+

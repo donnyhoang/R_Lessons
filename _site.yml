@@ -20,3 +20,5 @@ navbar:
           href: beta_div.html
         - text: "playing around in phyloseq"
           href: gp.html
+        - text: "more fun in phyloseq"
+          href: enterotypes.html
