@@ -519,9 +519,8 @@ $(document).ready(function () {
 </div>
 <div id="excercises" class="section level2">
 <h2>Excercises</h2>
-</div>
-<div id="load-packages-data-and-familiarize-yourself-with-the-dataset." class="section level1">
-<h1>Load packages, data, and familiarize yourself with the dataset.</h1>
+<div id="load-packages-data-and-familiarize-yourself-with-the-dataset." class="section level3">
+<h3>Load packages, data, and familiarize yourself with the dataset.</h3>
 <pre class="r"><code>library(vegan)</code></pre>
 <pre><code>## Loading required package: permute</code></pre>
 <pre><code>## Loading required package: lattice</code></pre>
@@ -541,8 +540,8 @@ data(&quot;enterotype&quot;)</code></pre>
 <pre class="r"><code>ent&lt;-subset_samples(enterotype, !is.na(Enterotype))
 ent &lt;- subset_taxa(ent, Genus != &quot;-1&quot;)</code></pre>
 </div>
-<div id="create-and-ordinate-distance-matrices" class="section level1">
-<h1>Create and ordinate distance matrices</h1>
+<div id="create-and-ordinate-distance-matrices" class="section level3">
+<h3>Create and ordinate distance matrices</h3>
 <p>In the ordination lesson, we created a Bray-Curtis dissimilarity matrix, and used NMDS to ordinate. I ran into trouble trying to ordinate with NMDS, and some brief googling suggested it was because the dataset contains too many zeros and/or many species were observed only once or too few times between samples. We will ordinate with MDS/PCoA instead, using a variety of dissimilarity matrices. The paper we read used Jensen-Shannon dissimilarity. Let’s compare it to Bray-Curtis (which we’ve used and it considers abundance), and Jaccard (which only considers presence/absence).</p>
 <p>Let’s try Jensen-Shannon first. Ordinate the data with “PCoA” as your ordination method and “jsd” as your dissimilarity/distance. Once the ordination has finished, plot it and color the data in by “SeqTech” and shape it by “Enterotype”.</p>
 <ol start="4" style="list-style-type: decimal">
@@ -556,22 +555,24 @@ ent &lt;- subset_taxa(ent, Genus != &quot;-1&quot;)</code></pre>
 <p>Repeat your analysis above with both Bray-Curtis and Jaccard dissimilarity matrices. You will specify “bray” and “jaccard”, respectively, in your code. Creating the plots is optional, you can just run the variance analysis.</p>
 <ol start="6" style="list-style-type: decimal">
 <li>How do the results compare between the dissimilarity matrices? Are your conclusions the same? What does this result suggest to you about the concept of enterotypes?</li>
+<li>Bray-Curtis dissimilarity is typically used when abundance information is available. Jaccard is used when only presence/absence data is availabile. How does your Bray-Curtis and Jaccard results compare? Conceptually, what’s different when you only consider presence/absence vs. abundance?</li>
 </ol>
 <p>Hopefully you’ve concluded that SeqTech better describes this dataset than Enterotype. If you haven’t, let me know.</p>
 </div>
-<div id="subset-the-data-by-seqtech-and-reevaluate" class="section level1">
-<h1>Subset the data by SeqTech, and reevaluate</h1>
+<div id="subset-the-data-by-seqtech-and-reevaluate" class="section level3">
+<h3>Subset the data by SeqTech, and reevaluate</h3>
 <p>Let’s look within a specific SeqTech dataset. Subset the data to your favorite SeqTech variable, using the command subset_samples()</p>
 <p>Repeat your plotting and statistical analysis above, using “jsd” and “bray” for your dissimilarity matrices.</p>
-<ol start="7" style="list-style-type: decimal">
+<ol start="8" style="list-style-type: decimal">
 <li>How well is the data explained by the “Enterotype” variable? What do you conclude about the enterotype concept now?</li>
 </ol>
 <p>As Marge suggested on Wednesday, we should take a closer look the community composition as well. Since there are 500+ taxa in this dataset, subset down to the top 20 before plotting the abundances with a bar plot. Facet your plot by “Enterotype”.</p>
-<ol start="8" style="list-style-type: decimal">
+<ol start="9" style="list-style-type: decimal">
 <li>Does your abundance bar plot support your ordination plot?</li>
 <li>The enterotypes paper claimed that enterotypes could be based on the abundance of Bacteroides, Prevotella, and Ruminoccocus. Which enterotype corresponds to which genus?</li>
 <li>How do you currently feel about the enterotype concept? What data would you need to support or contradict your current conclusions?</li>
 </ol>
+</div>
 </div>
 
 

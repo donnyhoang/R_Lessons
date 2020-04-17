@@ -22,7 +22,7 @@ On Wednesday, we discussed reanalyzing the enterotype dataset within phyloseq to
 
 ## Excercises
 
-# Load packages, data, and familiarize yourself with the dataset.
+### Load packages, data, and familiarize yourself with the dataset.
 
 ```{r}
 library(vegan)
@@ -46,7 +46,7 @@ ent<-subset_samples(enterotype, !is.na(Enterotype))
 ent <- subset_taxa(ent, Genus != "-1")
 ```
 
-# Create and ordinate distance matrices
+### Create and ordinate distance matrices
 
 In the ordination lesson, we created a Bray-Curtis dissimilarity matrix, and used NMDS to ordinate. I ran into trouble trying to ordinate with NMDS, and some brief googling suggested it was because the dataset contains too many zeros and/or many species were observed only once or too few times between samples. We will ordinate with MDS/PCoA instead, using a variety of dissimilarity matrices. The paper we read used Jensen-Shannon dissimilarity. Let's compare it to Bray-Curtis (which we've used and it considers abundance), and Jaccard (which only considers presence/absence).
 
@@ -65,22 +65,23 @@ metadata<-as(sample_data(ent), "data.frame")
 Repeat your analysis above with both Bray-Curtis and Jaccard dissimilarity matrices. You will specify "bray" and "jaccard", respectively, in your code. Creating the plots is optional, you can just run the variance analysis.
 
 6) How do the results compare between the dissimilarity matrices? Are your conclusions the same? What does this result suggest to you about the concept of enterotypes?
+7) Bray-Curtis dissimilarity is typically used when abundance information is available. Jaccard is used when only presence/absence data is availabile. How does your Bray-Curtis and Jaccard results compare? Conceptually, what's different when you only consider presence/absence vs. abundance?
 
 Hopefully you've concluded that SeqTech better describes this dataset than Enterotype. If you haven't, let me know.
 
-# Subset the data by SeqTech, and reevaluate
+### Subset the data by SeqTech, and reevaluate
 
 Let's look within a specific SeqTech dataset. Subset the data to your favorite SeqTech variable, using the command subset_samples()
 
 Repeat your plotting and statistical analysis above, using "jsd" and "bray" for your dissimilarity matrices.
 
-7) How well is the data explained by the "Enterotype" variable? What do you conclude about the enterotype concept now?
+8) How well is the data explained by the "Enterotype" variable? What do you conclude about the enterotype concept now?
 
 
 As Marge suggested on Wednesday, we should take a closer look the community composition as well. Since there are 500+ taxa in this dataset, subset down to the top 20 before plotting the abundances with a bar plot. Facet your plot by "Enterotype".
 
-8) Does your abundance bar plot support your ordination plot?
-9) The enterotypes paper claimed that enterotypes could be based on the abundance of Bacteroides, Prevotella, and Ruminoccocus. Which enterotype corresponds to which genus?
-10) How do you currently feel about the enterotype concept? What data would you need to support or contradict your current conclusions?
+9) Does your abundance bar plot support your ordination plot?
+10) The enterotypes paper claimed that enterotypes could be based on the abundance of Bacteroides, Prevotella, and Ruminoccocus. Which enterotype corresponds to which genus?
+11) How do you currently feel about the enterotype concept? What data would you need to support or contradict your current conclusions?
 
 
