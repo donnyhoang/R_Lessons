@@ -22,3 +22,5 @@ navbar:
           href: gp.html
         - text: "more fun in phyloseq"
           href: enterotypes.html
+        - text: "Cellulose enrichment and ANI intro"
+          href: cellulo_contam.html

@@ -1,0 +1,80 @@
+---
+title: "Cellulose Enriched Community"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'cellulo_contam.html'))})
+author: "Donny Hoang"
+date: "4/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goals: Work more independently within R
+
+So far, we've done a lot of community analysis entirely in phyloseq. I think phyloseq is a great tool for that, but I'd like you to try making figures and doing analyses outside of that package as well. This way, you can be more comfortable working with R when you do not have community data. By working through this dataset, I hope you find some commonalities between what you do today and what you do in phyloseq.
+
+## Dataset
+
+Today's data is taxonomically classified metagenomic reads from three of the cellulose enriched communities we readabout: 1B, 2B, and 3A. We will also work with an average nucleotide identity analysis (more on that later) of a subset of this dataset.
+
+## Excercises
+### Load packages, and familiarize yourself with the data.
+
+```{r}
+library(ggplot2)
+library(RColorBrewer)
+library(ggpubr)
+library(reshape2)
+
+data <-read.csv("tax_total.csv", header=TRUE)
+data$Transfer <-factor(data$Transfer, levels = c("0", "1","5","20","50","110","150", "200"), labels=c("0", "1","5","20","50","110","150", "200")) #Order factors for easier graphing later. You can just copy+paste this code to avoid tpying it out yourself.
+
+```
+
+Read in just the metaphlan2_total.csv file for now, and familiarize yourself with it.
+
+1) What are the different variables (columns) of this dataset?
+
+2) How many different communities are we looking at? How many transfers?
+
+Create a bar graph, using ggplot2, of the dataset. You will have abundance (percentage) on the y-axis, and each column should represent a different transfer. Facet your graph by community. You can revisit your code from the HPLC lesson to refresh yourself on making bar graphs.
+
+3) Describe the abundance changes in each community. Don't worry about all the different groups. Focus on *Cellvibrio*, *Cellumononas*, and *Asticcacaulis*.
+
+4) The paper we read followed these communities up to transfer 60. Do the abundance changes after transfer 60 make sense to you, know what you do about the communities?
+
+5) Focus on community 3A, between transfer 50 and 110. What is going on there? What do you think may have caused that change in community composition?
+
+
+### Average nucleotide (ANI) analysis
+
+I'm eager to read what you thought happened in community 3A. However, one of the thoughts I had was that *Asticcacaulis* represents contamination. *Asticcacaulis* is highly abundant in community 1B, but wasn't present in 3A until some time after trasnfer 50. These communities were maintained for multiple years by many people, so I don't think contamination is out of the question.
+
+How can we tell if *Asticcacaulis* in 1B contaminated 3A? We can compare their genomes. This dataset is metagenomic, so we can [bin the contigs into metagenome assembled genomes (MAGs)](http://merenlab.org/momics/03-reconstructing-genomes-from-metagenomes.gif) that *should* represent a single taxon. I was only able to get *Asticcacaulis* MAGs from some of the metagenomes, but luckily I got enough to tackle the question: are *Asticcacaulis* from 1B equivalent to 3A?
+
+To answer this question, I did an average nucleotide identity (ANI) analysis. Briefly, it compares the coding regions of two genomes, and tells us how similar they are. I higher percentage means higher similarity. We can compare that similarity, and evaluate whether the genomes are the same or not.
+
+#Load the ANI dataset, and familiarize yourself with it.
+
+```{r}
+data.ani <-read.csv("asti_ani.csv", header = TRUE)
+data.ani <-as.data.frame(data.ani) #make our data into a data.frame for easier plotting later on.
+```
+
+
+6) What do the columns in this dataset represent? What is MAG.1 and MAG.2? Why are *half* of the values in the "ANI" column NA?
+
+I think a heatmap would best represent this dataset. Use similar code to your ggplot2 plots, specify the y-axis as MAG.1 and the x-axis as MAG.2. Your "fill" will be "ANI".  This time add in a "+ geom_tile()" to your code instead of "+ geom_bar()" or "+ geom_point()".
+
+7) What are all the genomes you are comparing here? Why is there an *Asticcacaulis excentricus* genome in this analysis?
+
+8) Compare all the 1B genomes to each other. How similar are they?
+
+9) Compare the 1B genomes to the 3A genomes. How similar are they? You should google what similarity cutoffs are to consider bacteria the same "species." Do you think 1B contaminated 3A?
+
+10) Compare 3A000 to 3A150 and 3A200. How similar are they? What do you think happened here? Is 3A000 the same as 3A150 or 3A200?
