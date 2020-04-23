@@ -491,6 +491,9 @@ $(document).ready(function () {
     <li>
       <a href="enterotypes.html">more fun in phyloseq</a>
     </li>
+    <li>
+      <a href="cellulo_contam.html">Cellulose enrichment and ANI intro</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -528,11 +531,9 @@ $(document).ready(function () {
 library(RColorBrewer)
 library(ggpubr)</code></pre>
 <pre><code>## Loading required package: magrittr</code></pre>
-<pre class="r"><code>library(reshape2)
-
-data &lt;-read.csv(&quot;tax_total.csv&quot;, header=TRUE)
+<pre class="r"><code>data &lt;-read.csv(&quot;tax_total.csv&quot;, header=TRUE)
 data$Transfer &lt;-factor(data$Transfer, levels = c(&quot;0&quot;, &quot;1&quot;,&quot;5&quot;,&quot;20&quot;,&quot;50&quot;,&quot;110&quot;,&quot;150&quot;, &quot;200&quot;), labels=c(&quot;0&quot;, &quot;1&quot;,&quot;5&quot;,&quot;20&quot;,&quot;50&quot;,&quot;110&quot;,&quot;150&quot;, &quot;200&quot;)) #Order factors for easier graphing later. You can just copy+paste this code to avoid tpying it out yourself.</code></pre>
-<p>Read in just the metaphlan2_total.csv file for now, and familiarize yourself with it.</p>
+<p>Read in just the tax_total.csv file for now, and familiarize yourself with it.</p>
 <ol style="list-style-type: decimal">
 <li><p>What are the different variables (columns) of this dataset?</p></li>
 <li><p>How many different communities are we looking at? How many transfers?</p></li>
@@ -546,10 +547,10 @@ data$Transfer &lt;-factor(data$Transfer, levels = c(&quot;0&quot;, &quot;1&quot;
 </div>
 <div id="average-nucleotide-ani-analysis" class="section level3">
 <h3>Average nucleotide (ANI) analysis</h3>
-<p>I’m eager to read what you thought happened in community 3A. However, one of the thoughts I had was that <em>Asticcacaulis</em> represents contamination. <em>Asticcacaulis</em> is highly abundant in community 1B, but wasn’t present in 3A until some time after trasnfer 50. These communities were maintained for multiple years by many people, so I don’t think contamination is out of the question.</p>
-<p>How can we tell if <em>Asticcacaulis</em> in 1B contaminated 3A? We can compare their genomes. This dataset is metagenomic, so we can <a href="http://merenlab.org/momics/03-reconstructing-genomes-from-metagenomes.gif">bin the contigs into metagenome assembled genomes (MAGs)</a> that <em>should</em> represent a single taxon. I was only able to get <em>Asticcacaulis</em> MAGs from some of the metagenomes, but luckily I got enough to tackle the question: are <em>Asticcacaulis</em> from 1B equivalent to 3A?</p>
-<p>To answer this question, I did an average nucleotide identity (ANI) analysis. Briefly, it compares the coding regions of two genomes, and tells us how similar they are. I higher percentage means higher similarity. We can compare that similarity, and evaluate whether the genomes are the same or not.</p>
-<p>#Load the ANI dataset, and familiarize yourself with it.</p>
+<p>I’m eager to read what you thought happened in community 3A. One of the thoughts I had was that <em>Asticcacaulis</em> represents contamination. <em>Asticcacaulis</em> is highly abundant in community 1B, but wasn’t present in 3A until some time after transfer 50. These communities were maintained for multiple years by many people, so I don’t think contamination is out of the question.</p>
+<p>How can we tell if <em>Asticcacaulis</em> in 1B contaminated 3A? We can compare their genomes. If 1B <em>Asticcacaulis</em> genomes are the same or very similar to 3A <em>Asticcacaulis</em> genomes, then I would think they are the same organism.</p>
+<p>This dataset is metagenomic, so we can <a href="http://merenlab.org/momics/03-reconstructing-genomes-from-metagenomes.gif">bin the contigs into metagenome assembled genomes (MAGs)</a> that <em>should</em> represent a single taxon. I was only able to get <em>Asticcacaulis</em> MAGs from some of the metagenomes, but luckily I got enough to tackle the question: are <em>Asticcacaulis</em> from 1B equivalent to 3A?</p>
+<p>To answer this question, I did an average nucleotide identity (ANI) analysis. Briefly, it compares two genomes, and tells us how similar they are. Higher percentage means higher similarity. We can compare that similarity, and evaluate whether the genomes are the same or not. Let’s try it.</p>
 <pre class="r"><code>data.ani &lt;-read.csv(&quot;asti_ani.csv&quot;, header = TRUE)
 data.ani &lt;-as.data.frame(data.ani) #make our data into a data.frame for easier plotting later on.</code></pre>
 <ol start="6" style="list-style-type: decimal">
@@ -557,9 +558,9 @@ data.ani &lt;-as.data.frame(data.ani) #make our data into a data.frame for easie
 </ol>
 <p>I think a heatmap would best represent this dataset. Use similar code to your ggplot2 plots, specify the y-axis as MAG.1 and the x-axis as MAG.2. Your “fill” will be “ANI”. This time add in a “+ geom_tile()” to your code instead of “+ geom_bar()” or “+ geom_point()”.</p>
 <ol start="7" style="list-style-type: decimal">
-<li><p>What are all the genomes you are comparing here? Why is there an <em>Asticcacaulis excentricus</em> genome in this analysis?</p></li>
-<li><p>Compare all the 1B genomes to each other. How similar are they?</p></li>
-<li><p>Compare the 1B genomes to the 3A genomes. How similar are they? You should google what similarity cutoffs are to consider bacteria the same “species.” Do you think 1B contaminated 3A?</p></li>
+<li><p>What are all the genomes you are comparing here? Why do you think I added an <em>Asticcacaulis excentricus</em> genome in this analysis? This genome was previously published, and I pulled it from NCBI.</p></li>
+<li><p>Compare all the 1B <em>Asticcacaulis</em> genomes to each other. How similar are they?</p></li>
+<li><p>Compare the 1B <em>Asticcacaulis</em> genomes to the 3A <em>Asticcacaulis</em> genomes. How similar are they? You should google what similarity cutoffs are to consider bacteria the same “species.” Do you think 1B contaminated 3A?</p></li>
 <li><p>Compare 3A000 to 3A150 and 3A200. How similar are they? What do you think happened here? Is 3A000 the same as 3A150 or 3A200?</p></li>
 </ol>
 </div>

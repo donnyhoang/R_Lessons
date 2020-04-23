@@ -29,14 +29,14 @@ Today's data is taxonomically classified metagenomic reads from three of the cel
 library(ggplot2)
 library(RColorBrewer)
 library(ggpubr)
-library(reshape2)
+
 
 data <-read.csv("tax_total.csv", header=TRUE)
 data$Transfer <-factor(data$Transfer, levels = c("0", "1","5","20","50","110","150", "200"), labels=c("0", "1","5","20","50","110","150", "200")) #Order factors for easier graphing later. You can just copy+paste this code to avoid tpying it out yourself.
 
 ```
 
-Read in just the metaphlan2_total.csv file for now, and familiarize yourself with it.
+Read in just the tax_total.csv file for now, and familiarize yourself with it.
 
 1) What are the different variables (columns) of this dataset?
 
@@ -53,7 +53,7 @@ Create a bar graph, using ggplot2, of the dataset. You will have abundance (perc
 
 ### Average nucleotide (ANI) analysis
 
-I'm eager to read what you thought happened in community 3A. However, one of the thoughts I had was that *Asticcacaulis* represents contamination. *Asticcacaulis* is highly abundant in community 1B, but wasn't present in 3A until some time after trasnfer 50. These communities were maintained for multiple years by many people, so I don't think contamination is out of the question.
+I'm eager to read what you thought happened in community 3A. One of the thoughts I had was that *Asticcacaulis* represents contamination. *Asticcacaulis* is highly abundant in community 1B, but wasn't present in 3A until some time after transfer 50. These communities were maintained for multiple years by many people, so I don't think contamination is out of the question.
 
 How can we tell if *Asticcacaulis* in 1B contaminated 3A? We can compare their genomes. This dataset is metagenomic, so we can [bin the contigs into metagenome assembled genomes (MAGs)](http://merenlab.org/momics/03-reconstructing-genomes-from-metagenomes.gif) that *should* represent a single taxon. I was only able to get *Asticcacaulis* MAGs from some of the metagenomes, but luckily I got enough to tackle the question: are *Asticcacaulis* from 1B equivalent to 3A?
 
@@ -71,10 +71,10 @@ data.ani <-as.data.frame(data.ani) #make our data into a data.frame for easier p
 
 I think a heatmap would best represent this dataset. Use similar code to your ggplot2 plots, specify the y-axis as MAG.1 and the x-axis as MAG.2. Your "fill" will be "ANI".  This time add in a "+ geom_tile()" to your code instead of "+ geom_bar()" or "+ geom_point()".
 
-7) What are all the genomes you are comparing here? Why is there an *Asticcacaulis excentricus* genome in this analysis?
+7) What are all the genomes you are comparing here? Why do you think I added an *Asticcacaulis excentricus* genome in this analysis? This genome was previously published, and I pulled it from NCBI.
 
-8) Compare all the 1B genomes to each other. How similar are they?
+8) Compare all the 1B *Asticcacaulis* genomes to each other. How similar are they?
 
-9) Compare the 1B genomes to the 3A genomes. How similar are they? You should google what similarity cutoffs are to consider bacteria the same "species." Do you think 1B contaminated 3A?
+9) Compare the 1B *Asticcacaulis* genomes to the 3A *Asticcacaulis* genomes. How similar are they? You should google what similarity cutoffs are to consider bacteria the same "species." Do you think 1B contaminated 3A?
 
 10) Compare 3A000 to 3A150 and 3A200. How similar are they? What do you think happened here? Is 3A000 the same as 3A150 or 3A200?
