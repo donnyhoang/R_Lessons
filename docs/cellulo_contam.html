@@ -517,7 +517,7 @@ $(document).ready(function () {
 
 <div id="goals-work-more-independently-within-r" class="section level2">
 <h2>Goals: Work more independently within R</h2>
-<p>So far, we’ve done a lot of community analysis entirely in phyloseq. I think phyloseq is a great tool for that, but I’d like you to try making figures and doing analyses outside of that package as well. This way, you can be more comfortable working with R when you do not have community data. By working through this dataset, I hope you find some commonalities between what you do today and what you do in phyloseq.</p>
+<p>So far, we’ve done a lot of community analysis entirely in phyloseq. I think phyloseq is a great tool for that, but I’d like you to try making figures and doing analyses outside of that package as well. By working through this dataset, I hope you find some commonalities between what you do today and what you do in phyloseq.</p>
 </div>
 <div id="dataset" class="section level2">
 <h2>Dataset</h2>
@@ -528,10 +528,8 @@ $(document).ready(function () {
 <div id="load-packages-and-familiarize-yourself-with-the-data." class="section level3">
 <h3>Load packages, and familiarize yourself with the data.</h3>
 <pre class="r"><code>library(ggplot2)
-library(RColorBrewer)
-library(ggpubr)</code></pre>
-<pre><code>## Loading required package: magrittr</code></pre>
-<pre class="r"><code>data &lt;-read.csv(&quot;tax_total.csv&quot;, header=TRUE)
+
+data &lt;-read.csv(&quot;tax_total.csv&quot;, header=TRUE)
 data$Transfer &lt;-factor(data$Transfer, levels = c(&quot;0&quot;, &quot;1&quot;,&quot;5&quot;,&quot;20&quot;,&quot;50&quot;,&quot;110&quot;,&quot;150&quot;, &quot;200&quot;), labels=c(&quot;0&quot;, &quot;1&quot;,&quot;5&quot;,&quot;20&quot;,&quot;50&quot;,&quot;110&quot;,&quot;150&quot;, &quot;200&quot;)) #Order factors for easier graphing later. You can just copy+paste this code to avoid tpying it out yourself.</code></pre>
 <p>Read in just the tax_total.csv file for now, and familiarize yourself with it.</p>
 <ol style="list-style-type: decimal">
@@ -541,15 +539,15 @@ data$Transfer &lt;-factor(data$Transfer, levels = c(&quot;0&quot;, &quot;1&quot;
 <p>Create a bar graph, using ggplot2, of the dataset. You will have abundance (percentage) on the y-axis, and each column should represent a different transfer. Facet your graph by community. You can revisit your code from the HPLC lesson to refresh yourself on making bar graphs.</p>
 <ol start="3" style="list-style-type: decimal">
 <li><p>Describe the abundance changes in each community. Don’t worry about all the different groups. Focus on <em>Cellvibrio</em>, <em>Cellumononas</em>, and <em>Asticcacaulis</em>.</p></li>
-<li><p>The paper we read followed these communities up to transfer 60. Do the abundance changes after transfer 60 make sense to you, know what you do about the communities?</p></li>
-<li><p>Focus on community 3A, between transfer 50 and 110. What is going on there? What do you think may have caused that change in community composition?</p></li>
+<li><p>The paper we read followed these communities up to transfer 60. Do the abundance changes after transfer 60 make sense to you, based on what you know about the communities?</p></li>
+<li><p>Focus on community 3A between transfer 50 and 110. What is going on there? What do you think may have caused that change in community composition?</p></li>
 </ol>
 </div>
 <div id="average-nucleotide-ani-analysis" class="section level3">
 <h3>Average nucleotide (ANI) analysis</h3>
 <p>I’m eager to read what you thought happened in community 3A. One of the thoughts I had was that <em>Asticcacaulis</em> represents contamination. <em>Asticcacaulis</em> is highly abundant in community 1B, but wasn’t present in 3A until some time after transfer 50. These communities were maintained for multiple years by many people, so I don’t think contamination is out of the question.</p>
 <p>How can we tell if <em>Asticcacaulis</em> in 1B contaminated 3A? We can compare their genomes. If 1B <em>Asticcacaulis</em> genomes are the same or very similar to 3A <em>Asticcacaulis</em> genomes, then I would think they are the same organism.</p>
-<p>This dataset is metagenomic, so we can <a href="http://merenlab.org/momics/03-reconstructing-genomes-from-metagenomes.gif">bin the contigs into metagenome assembled genomes (MAGs)</a> that <em>should</em> represent a single taxon. I was only able to get <em>Asticcacaulis</em> MAGs from some of the metagenomes, but luckily I got enough to tackle the question: are <em>Asticcacaulis</em> from 1B equivalent to 3A?</p>
+<p>This dataset is metagenomic, so we can <a href="http://merenlab.org/momics/03-reconstructing-genomes-from-metagenomes.gif">bin the contigs into metagenome assembled genomes (MAGs)</a> that <em>should</em> represent a single taxon. I was only able to get <em>Asticcacaulis</em> MAGs from some of the metagenomes, but luckily I got enough to tackle the question: are <em>Asticcacaulis</em> from 1B the same as those from 3A?</p>
 <p>To answer this question, I did an average nucleotide identity (ANI) analysis. Briefly, it compares two genomes, and tells us how similar they are. Higher percentage means higher similarity. We can compare that similarity, and evaluate whether the genomes are the same or not. Let’s try it.</p>
 <pre class="r"><code>data.ani &lt;-read.csv(&quot;asti_ani.csv&quot;, header = TRUE)
 data.ani &lt;-as.data.frame(data.ani) #make our data into a data.frame for easier plotting later on.</code></pre>
@@ -560,8 +558,8 @@ data.ani &lt;-as.data.frame(data.ani) #make our data into a data.frame for easie
 <ol start="7" style="list-style-type: decimal">
 <li><p>What are all the genomes you are comparing here? Why do you think I added an <em>Asticcacaulis excentricus</em> genome in this analysis? This genome was previously published, and I pulled it from NCBI.</p></li>
 <li><p>Compare all the 1B <em>Asticcacaulis</em> genomes to each other. How similar are they?</p></li>
-<li><p>Compare the 1B <em>Asticcacaulis</em> genomes to the 3A <em>Asticcacaulis</em> genomes. How similar are they? You should google what similarity cutoffs are to consider bacteria the same “species.” Do you think 1B contaminated 3A?</p></li>
-<li><p>Compare 3A000 to 3A150 and 3A200. How similar are they? What do you think happened here? Is 3A000 the same as 3A150 or 3A200?</p></li>
+<li><p>Compare the 1B <em>Asticcacaulis</em> genomes to the 3A <em>Asticcacaulis</em> genomes. How similar are they? You should google what the similarity cutoffs are to consider bacteria the same “species.” Do you think 1B contaminated 3A?</p></li>
+<li><p>Compare 3A000 to 3A150 and 3A200. How similar are they? What do you think happened here? Is 3A000 the same as 3A150 or 3A200? You may want to consider how abundant <em>Asticcacaulis</em> is in 3A000 vs 3A150 and 3A200.</p></li>
 </ol>
 </div>
 </div>
