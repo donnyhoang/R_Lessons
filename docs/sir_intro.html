@@ -624,7 +624,7 @@ p1</code></pre>
 </div>
 <div id="write-sir-simulator" class="section level2">
 <h2>Write SIR simulator</h2>
-<p>We have simulated the SIR model with arbitraty numbers, however, we want to change our parameters to understand how they interact and change the model’s predictions. Instead of manually changing our parameters and manually graphing the results, let’s write a simulator that takes whatever paramters we give it and outputs a graph. Below, is a new function that runs the previous function we wrote above and graphs it for us.</p>
+<p>We have simulated the SIR model with arbitraty numbers, however, we want to change our parameters to understand how they interact and change the model’s predictions. Instead of manually changing our parameters and manually graphing the results, let’s write a simulator that takes whatever paramters we give it and outputs a graph with the plotmaker function written above.</p>
 <pre class="r"><code>sir_sim &lt;- function(beta, gamma, S0, I0, R0, time) {
   require(deSolve) # because we need the ode() function
   
