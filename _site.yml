@@ -24,3 +24,5 @@ navbar:
           href: enterotypes.html
         - text: "Cellulose enrichment and ANI intro"
           href: cellulo_contam.html
+        - text: "Intro to SIR models"
+          href: sir_intro.html
