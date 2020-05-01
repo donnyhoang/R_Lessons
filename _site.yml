@@ -26,3 +26,5 @@ navbar:
           href: cellulo_contam.html
         - text: "Intro to SIR models"
           href: sir_intro.html
+        - text: "SIR and covid-19"
+          href: sir_covid.html
