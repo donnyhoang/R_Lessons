@@ -1,0 +1,175 @@
+---
+title: "Playing with SIR and covid-19 data"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'sir_covid.html'))})
+author: "Donny Hoang"
+date: "4/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goal: Fit SIR model with publicly available covid-19 data.
+
+Last time, we learned about SIR models and used arbitrary numbers to play with our simulations. Today, we'll use covid-19 data, available through [RamiKrispin's Github](https://github.com/RamiKrispin/coronavirus). This workflow references [this Learning Machines blog post](https://blog.ephorie.de/epidemiology-how-contagious-is-novel-coronavirus-2019-ncov) and this [COVID-19 stats in R blog post.](https://www.statsandr.com/blog/covid-19-in-belgium/)
+
+This type of analysis has been done many times over, and much more sophisticatedly than what we are today today. However, I hope this gives you a sense of how to write and fit models.
+
+###Load packages and data
+
+We'll be using several new packages today, which will help us handle the data a bit more easily.
+
+```{r}
+#install.packages('coronavirus') #uncomment if uninstalled
+#install.packages('magrittr') #uncomment if uninstalled
+#install.packages('dplyr') #uncomment if uninstalled
+#install.packages('tidyr') #uncomment if uninstalled
+#install.packages('ggplot2') #uncomment if uninstalled
+#install.packages('deSolve') #uncomment if uninstalled
+#install.packages('lubridate') #uncomment if uninstalled
+
+library(coronavirus)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(deSolve)
+library(lubridate)
+
+data("coronavirus")
+```
+
+Familarize yourself with the data set. Play around with head(), tail(), and str().
+
+1) When did the data first start getting collected? What is the most recent date that data was collected for?
+
+
+In order to fit a SIR model to the data, we need to optimize the values of our unknown values: β and γ. We can do this by calculating the residual sum of squars (RSS). It will measure the distance between our SIR model and the data, and will help us decide of the model is a good fit for the data. Before we calculate the RSS, let's create a vector of daily incidence in your country of choice. I'll look at the US here.
+
+```{r}
+coronaus <- coronavirus %>%
+  filter(Country.Region == "US") %>% #change to country of your choice
+  group_by(date, type) %>% #groups data so following operations are performed by grouping
+  summarise(total = sum(cases, na.rm = TRUE)) %>% #add up number of cases, remove NA
+  pivot_wider(  #increase number of columns
+    names_from = type,
+    values_from = total
+  ) %>%
+  arrange(date) %>% #reorder by date
+  ungroup() %>% #ungroup previous group_by, operations no longer performed by grouping
+  mutate(active = confirmed - death - recovered) %>% #add new variable "active"
+  mutate(
+    confirmed_cum = cumsum(confirmed), #add new variable
+    death_cum = cumsum(death), #add new variable
+    recovered_cum = cumsum(recovered), #add new variable
+    active_cum = cumsum(active) #add new variable
+  )
+
+head(coronaus) #take a look at the transformed data
+```
+
+In order to optimize β and γ, we need to know our times, the population size, and the number of infected people. Choose the start and end date from the vector you just created, and look up your country's population. The number of infected people can be calculated from the vector you created.
+
+```{r}
+sir_start_date <- "2020-01-24"
+sir_end_date <- "2020-04-28"
+
+N <- 328200000 #approximation of US population, make sure to change this for your country
+
+Infected <- subset(coronaus, date >= ymd(sir_start_date) & date <= ymd(sir_end_date))$active_cum
+
+Day <- 1:(length(Infected)) #vector of days that is the same length as your other one
+
+init <- init <- c(  #define initial values for your sir model
+  S = N - Infected[1],
+  I = Infected[1],
+  R = 0)
+```
+
+Next, let's write our our SIR function and  RSS function. 
+```{r}
+SIR <- function(time, state, parameters) { #write SIR
+  par <- as.list(c(state, parameters))
+  with(par, {
+    dS <- -beta/N * I * S
+    dI <- beta/N * I * S - gamma * I
+    dR <- gamma * I
+    list(c(dS, dI, dR))
+  })
+}
+
+
+RSS <- function(parameters) { #write RSS
+  names(parameters) <- c("beta", "gamma")
+  out <- ode(y = init, times = Day, func = SIR, parms = parameters)
+  fit <- out[, 3]
+  sum((Infected - fit)^2)
+}
+```
+
+Now, we can fit the SIR model to covid-19 data. We will use optim() from the package deSolve. This function will find β and γ that minimize the RSS between the SIR model and the observed data.
+
+```{r}
+Opt <- optim(c(0.5, 0.5),
+             RSS,
+             method = "L-BFGS-B",
+             lower = c(0, 0),
+             upper = c(1, 1)
+)
+
+# check for convergence
+Opt$message
+Opt_par <- setNames(Opt$par, c("beta", "gamma"))
+Opt_par
+```
+
+2) What are the β and γ that you got for your country?
+
+Let's start graphing. 
+
+```{r}
+# time in days for predictions
+t <- 1:as.integer(ymd(sir_end_date) + 1 - ymd(sir_start_date))
+
+# get the fitted values from our SIR model
+fitted_cumulative_incidence <- data.frame(ode(
+  y = init, times = t,
+  func = SIR, parms = Opt_par
+))
+
+# add a Date column and the observed incidence data
+fitted_cumulative_incidence <- fitted_cumulative_incidence %>%
+  mutate(
+    Date = ymd(sir_start_date) + days(t - 1),
+    cumulative_incident_cases = Infected
+  )
+
+p <- ggplot(fitted_cumulative_incidence, aes(x=Date)) +
+  geom_line(aes(y=I), color="#E69F00") +
+  geom_point(aes(y=cumulative_incident_cases), color="#56B4E9") +
+  labs(
+    y="Incidence",
+    title= "Observed vs fitted SIR model of cumulative COVID-19 incidence, US",
+    subtitle= "(orange = fitted from model, blue = observed")
+
+p + theme_classic()
+```
+
+Looks like the observed data (blue) rises more quickly late-March to mid-April, but seems to rise less quickly than the fitted line (orange) in late-April.
+
+3) How does the observed and expected data look for your country of choice?
+
+Let's calculate the R<sub>0</sub>. 
+```{r}
+R0 <- as.numeric(Opt_par[1] / Opt_par[2])
+R0
+```
+
+The calculated R<sub>0</sub> for the US, with this current dataset, is 1.33.
+
+4) Do a quick googling. How does the R<sub>0</sub> for the US and your country of choice compare to the estimated R<sub>0</sub> of covid-19? How does it compare to other viruses like H1N1 flu, or the 1918 flu?
